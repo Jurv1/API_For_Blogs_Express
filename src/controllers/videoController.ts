@@ -15,7 +15,11 @@ function isIsoDate(str : string) {
     if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false;
 }
 
-let videos: Video[] = [];
+export let videos: Video[] = [];
+
+export const getStart = async (req: Request, res: Response) => {
+    res.send("Hi")
+}
 
 export const getAll = async (req: Request, res: Response) => {
     try {
@@ -104,7 +108,7 @@ export const createOne = async (req: Request, res: Response) => {
     } catch (err) {
         console.log(err)
         res.status(404).json({
-            message: "Can't create el"
+            message: "Something is wrong"
         })
     }
 }
@@ -185,7 +189,7 @@ export const updateOne = async (req: Request, res: Response) => {
     } catch (err) {
         console.log(err)
         res.status(404).json({
-            message: "Can't update el"
+            message: "Something is wrong"
         })
     }
 }
@@ -202,10 +206,14 @@ export const deleteOne = async (req: Request, res: Response) => {
     } catch (err) {
         console.log(err)
         res.status(404).json({
-            message: "Can't update el"
+            message: "Something is wrong"
         })
     }
 }
 
+export const deleteAll = async (req: Request, res: Response) => {
+    videos = []
+    res.send(204)
+}
 
 

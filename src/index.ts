@@ -20,15 +20,16 @@ const options: cors.CorsOptions = {
 app.use(cors(options));
 
 
-
+app.get('/', VideoController.getStart)
 app.get('/videos', VideoController.getAll)
 app.get('/videos/:id', VideoController.getOne)
 
-app.post('/videos',   VideoController.createOne)
+app.post('/videos', VideoController.createOne)
 
-app.put('/videos/:id', videoValidation, handleErr, VideoController.updateOne)
+app.put('/videos/:id', VideoController.updateOne)
 
 app.delete('/videos/:id', VideoController.deleteOne)
+app.delete('/testing/all-data', VideoController.deleteAll)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
