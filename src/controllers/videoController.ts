@@ -40,6 +40,7 @@ export const getOne = async (req: Request, res: Response) => {
         res.status(200).send(foundedEl)
         return;
     }
+    res.status(404).send("Not OK")
     } catch (err){
         console.log(err)
         res.status(404).json({
@@ -186,7 +187,7 @@ export const updateOne = async (req: Request, res: Response) => {
             res.status(204).send(foundedEl)
             return;
         }
-        res.send(404)
+        res.status(404).send("Not Ok")
     } catch (err) {
         console.log(err)
         res.status(404).json({
@@ -205,7 +206,7 @@ export const deleteOne = async (req: Request, res: Response) => {
             }
 
         }
-    res.send(404)
+    res.status(404).send('Not Ok')
 }
 
 export const deleteAll = async (req: Request, res: Response) => {
