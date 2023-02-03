@@ -22,13 +22,18 @@ export const getStart = async (req: Request, res: Response) => {
 }
 
 export const getAll = async (req: Request, res: Response) => {
-
+    try {
         res.json(videos)
-
+    } catch (err) {
+        console.log(err)
+        res.status(404).json({
+            errorsMessages: "Не удалось найти нужную информацию"
+        })
+    }
 }
 
 export const getOne = async (req: Request, res: Response) => {
-
+    try {
     const id = req.params.id
     const foundedEl = videos.find(el => el?.id === +id)
     if(foundedEl) {
@@ -36,11 +41,16 @@ export const getOne = async (req: Request, res: Response) => {
         return;
     }
     res.status(404).send("Not OK")
-
+    } catch (err){
+        console.log(err)
+        res.status(404).json({
+            message: "Can't find el"
+        })
+    }
 }
 
 export const createOne = async (req: Request, res: Response) => {
-
+    try {
         if(!(typeof req.body.title === 'string') || req.body.title.length > 40){
             return res.status(400).json({
                 "errorsMessages": [
@@ -96,11 +106,16 @@ export const createOne = async (req: Request, res: Response) => {
         newVideo = Object.assign(newVideo, videoTmp)
         videos.push(newVideo)
         res.status(201).send(newVideo)
-
+    } catch (err) {
+        console.log(err)
+        res.status(404).json({
+            message: "Something is wrong"
+        })
+    }
 }
 
 export const updateOne = async (req: Request, res: Response) => {
-
+    try {
         if(req.body.title === null || !(typeof req.body.title === 'string') || req.body.title.length > 40){
             return res.status(400).json({
                 "errorsMessages": [
@@ -172,12 +187,17 @@ export const updateOne = async (req: Request, res: Response) => {
             res.status(204).send(foundedEl)
             return;
         }
-        res.status(404).send("Not Ok")
-
+        res.status(404).send("Not ok")
+    } catch (err) {
+        console.log(err)
+        res.status(404).json({
+            message: "Something is wrong"
+        })
+    }
 }
 
 export const deleteOne = async (req: Request, res: Response) => {
-
+    try {
         for (let i = 0; i < videos.length; i++){
             if (videos[i]?.id === +req.params.id){
                 videos.splice(i, 1)
@@ -186,12 +206,25 @@ export const deleteOne = async (req: Request, res: Response) => {
             }
 
         }
-    res.status(404).send('Not Ok')
+        res.status(404).send('Not Ok')
+    } catch (err) {
+        console.log(err)
+        res.status(404).json({
+            message: "Something is wrong"
+        })
+    }
 }
 
 export const deleteAll = async (req: Request, res: Response) => {
-    videos = []
-    res.send(204)
+    try {
+        videos = []
+        res.send(204)
+    } catch (err) {
+        console.log(err)
+        res.status(404).json({
+            message: "Something is wrong"
+        })
+    }
 }
 
 
