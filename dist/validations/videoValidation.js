@@ -12,8 +12,16 @@ let availableResolutions = [
     "P1440",
     "P2160"
 ];
+let title = (0, express_validator_1.body)('title');
+console.log(title);
 exports.videoValidation = [
-    (0, express_validator_1.body)('title').isString().withMessage({ message: "ssssss" }).isLength({ max: 40 }).withMessage("safasfasfsafsafsafsa"),
+    (0, express_validator_1.body)('title').isString().withMessage({
+        message: `${title}`,
+        errorCode: 1,
+    }).isLength({ max: 40 }).withMessage({
+        message: 'Not an email',
+        errorCode: 1,
+    }),
     (0, express_validator_1.body)('author').isString().isLength({ max: 20 }),
     (0, express_validator_1.body)('canBeDownloaded').optional().isBoolean(),
     (0, express_validator_1.body)('minAgeRestriction').isLength({ min: 1, max: 18 }).optional({ nullable: true }),

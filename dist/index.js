@@ -44,7 +44,7 @@ const options = {
 app.use((0, cors_1.default)(options));
 app.get('/videos', VideoController.getAll);
 app.get('/videos/:id', VideoController.getOne);
-app.post('/videos', videoValidation_1.videoValidation, handleErr_1.default, VideoController.createOne);
+app.post('/videos', VideoController.createOne);
 app.put('/videos/:id', videoValidation_1.videoValidation, handleErr_1.default, VideoController.updateOne);
 app.delete('/videos/:id', VideoController.deleteOne);
 app.listen(port, () => {

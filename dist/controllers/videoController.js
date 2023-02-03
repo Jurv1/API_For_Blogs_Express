@@ -10,6 +10,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteOne = exports.updateOne = exports.createOne = exports.getOne = exports.getAll = void 0;
+function isIsoDate(str) {
+    if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str))
+        return false;
+}
 let videos = [];
 const getAll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -42,6 +46,36 @@ const getOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getOne = getOne;
 const createOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        if (!(typeof req.body.title === 'string') || req.body.title.length > 40) {
+            return res.status(400).json({
+                "errorsMessages": [
+                    {
+                        "message": "title",
+                        "field": "title"
+                    }
+                ]
+            });
+        }
+        if (!(typeof req.body.author === 'string') || req.body.author > 20) {
+            return res.status(400).json({
+                "errorsMessages": [
+                    {
+                        "message": "author",
+                        "field": "author"
+                    }
+                ]
+            });
+        }
+        if (req.body.availableResolutions != null && (!(req.body.availableResolutions.length > 0) || req.body.availableResolutions > 40)) {
+            return res.status(400).json({
+                "errorsMessages": [
+                    {
+                        "message": "availableResolutions",
+                        "field": "availableResolutions"
+                    }
+                ]
+            });
+        }
         let newVideo = {
             id: +(new Date()),
             title: req.body.title,
@@ -53,16 +87,16 @@ const createOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             publicationDate: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString()
         };
         let videoTmp = {
-            id: null,
-            title: null,
-            author: null,
-            availableResolutions: null,
+            id: +(new Date()),
+            title: req.body.title,
+            author: req.body.author,
+            availableResolutions: req.body.availableResolutions,
             canBeDownloaded: false,
             minAgeRestriction: null,
             createdAt: (new Date()).toISOString(),
             publicationDate: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString()
         };
-        newVideo = Object.assign(videoTmp, newVideo);
+        newVideo = Object.assign(newVideo, videoTmp);
         videos.push(newVideo);
         res.status(201).send(newVideo);
     }
@@ -76,6 +110,66 @@ const createOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.createOne = createOne;
 const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        if (req.body.title === null || !(typeof req.body.title === 'string') || req.body.title.length > 40) {
+            return res.status(400).json({
+                "errorsMessages": [
+                    {
+                        "message": "title",
+                        "field": "title"
+                    }
+                ]
+            });
+        }
+        if (req.body.author === null || !(typeof req.body.author === 'string') || req.body.author > 20) {
+            return res.status(400).json({
+                "errorsMessages": [
+                    {
+                        "message": "author",
+                        "field": "author"
+                    }
+                ]
+            });
+        }
+        if (req.body.availableResolutions != null && (!(req.body.availableResolutions.length > 0) || req.body.availableResolutions > 40)) {
+            return res.status(400).json({
+                "errorsMessages": [
+                    {
+                        "message": "availableResolutions",
+                        "field": "availableResolutions"
+                    }
+                ]
+            });
+        }
+        if (req.body.canBeDownloaded != null && (!(typeof req.body.canBeDownloaded === 'boolean'))) {
+            return res.status(400).json({
+                "errorsMessages": [
+                    {
+                        "message": "availableResolutions",
+                        "field": "availableResolutions"
+                    }
+                ]
+            });
+        }
+        if (req.body.minAgeRestriction != null && (!(typeof req.body.minAgeRestriction === 'number') || req.body.minAgeRestriction > 18 || req.body.minAgeRestriction < 1)) {
+            return res.status(400).json({
+                "errorsMessages": [
+                    {
+                        "message": "minAgeRestriction",
+                        "field": "minAgeRestriction"
+                    }
+                ]
+            });
+        }
+        if (!(req.body.publicationDate !== null) && isIsoDate(req.body.publicationDate)) {
+            return res.status(400).json({
+                "errorsMessages": [
+                    {
+                        "message": "minAgeRestriction",
+                        "field": "minAgeRestriction"
+                    }
+                ]
+            });
+        }
         const id = req.params.id;
         let foundedEl = videos.find(el => (el === null || el === void 0 ? void 0 : el.id) === +id);
         if (foundedEl) {

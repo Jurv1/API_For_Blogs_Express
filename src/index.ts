@@ -24,7 +24,7 @@ app.use(cors(options));
 app.get('/videos', VideoController.getAll)
 app.get('/videos/:id', VideoController.getOne)
 
-app.post('/videos',  videoValidation, handleErr, VideoController.createOne)
+app.post('/videos',   VideoController.createOne)
 
 app.put('/videos/:id', videoValidation, handleErr, VideoController.updateOne)
 
