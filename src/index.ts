@@ -21,15 +21,15 @@ app.use(cors(options));
 
 
 app.get('/', VideoController.getStart)
-app.get('/videos', VideoController.getAll)
-app.get('/videos/:id', VideoController.getOne)
+app.get('/api/videos', VideoController.getAll)
+app.get('/api/videos/:id', VideoController.getOne)
 
-app.post('/videos', VideoController.createOne)
+app.post('/api/videos', VideoController.createOne)
 
-app.put('/videos/:id', VideoController.updateOne)
+app.put('/api/videos/:id', VideoController.updateOne)
 
-app.delete('/videos/:id', VideoController.deleteOne)
-app.delete('/testing/all-data', VideoController.deleteAll)
+app.delete('/api/videos/:id', VideoController.deleteOne)
+app.delete('/api/testing/all-data', VideoController.deleteAll)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
