@@ -29,9 +29,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
-const videoValidation_1 = require("./validations/videoValidation");
 const VideoController = __importStar(require("./controllers/videoController"));
-const handleErr_1 = __importDefault(require("./utils/handleErr"));
 const app = (0, express_1.default)();
 const port = 3003;
 const parserMiddleware = (0, body_parser_1.default)({});
@@ -42,11 +40,13 @@ const options = {
 };
 // Then pass these options to cors:
 app.use((0, cors_1.default)(options));
+app.get('/', VideoController.getStart);
 app.get('/videos', VideoController.getAll);
 app.get('/videos/:id', VideoController.getOne);
 app.post('/videos', VideoController.createOne);
-app.put('/videos/:id', videoValidation_1.videoValidation, handleErr_1.default, VideoController.updateOne);
+app.put('/videos/:id', VideoController.updateOne);
 app.delete('/videos/:id', VideoController.deleteOne);
+app.delete('/testing/all-data', VideoController.deleteAll);
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });

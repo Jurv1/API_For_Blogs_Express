@@ -60,7 +60,7 @@ export const createOne = async (req: Request, res: Response) => {
                 ]
             })
         }
-        if(!(typeof req.body.author === 'string') || req.body.author > 20){
+        if(!(typeof req.body.author === 'string') || req.body.author.length > 20){
             return res.status(400).json({
                 "errorsMessages": [
                     {
@@ -70,7 +70,7 @@ export const createOne = async (req: Request, res: Response) => {
                 ]
             })
         }
-        if( req.body.availableResolutions != null && (!(req.body.availableResolutions.length > 0) || req.body.availableResolutions > 40)){
+        if( req.body.availableResolutions != null && (!(req.body.availableResolutions.length > 0))){
             return res.status(400).json({
                 "errorsMessages": [
                     {
@@ -125,7 +125,7 @@ export const updateOne = async (req: Request, res: Response) => {
                 ]
             })
         }
-        if( req.body.author === null || !(typeof req.body.author === 'string') || req.body.author > 20){
+        if( req.body.author === null || !(typeof req.body.author === 'string') || req.body.author.length > 20){
             return res.status(400).json({
                 "errorsMessages": [
                     {
@@ -135,7 +135,7 @@ export const updateOne = async (req: Request, res: Response) => {
                 ]
             })
         }
-        if( req.body.availableResolutions != null && (!(req.body.availableResolutions.length > 0) || req.body.availableResolutions > 40)){
+        if( req.body.availableResolutions != null && (!(req.body.availableResolutions.length > 0))){
             return res.status(400).json({
                 "errorsMessages": [
                     {
@@ -195,20 +195,16 @@ export const updateOne = async (req: Request, res: Response) => {
 }
 
 export const deleteOne = async (req: Request, res: Response) => {
-    try {
+
         for (let i = 0; i < videos.length; i++){
             if (videos[i]?.id === +req.params.id){
                 videos.splice(i, 1)
                 res.send(204)
                 return;
             }
+
         }
-    } catch (err) {
-        console.log(err)
-        res.status(404).json({
-            message: "Something is wrong"
-        })
-    }
+    res.send(404)
 }
 
 export const deleteAll = async (req: Request, res: Response) => {

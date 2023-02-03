@@ -9,15 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteOne = exports.updateOne = exports.createOne = exports.getOne = exports.getAll = void 0;
+exports.deleteAll = exports.deleteOne = exports.updateOne = exports.createOne = exports.getOne = exports.getAll = exports.getStart = exports.videos = void 0;
 function isIsoDate(str) {
     if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str))
         return false;
 }
-let videos = [];
+exports.videos = [];
+const getStart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.send("Hi");
+});
+exports.getStart = getStart;
 const getAll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        res.json(videos);
+        res.json(exports.videos);
     }
     catch (err) {
         console.log(err);
@@ -30,7 +34,7 @@ exports.getAll = getAll;
 const getOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.params.id;
-        const foundedEl = videos.find(el => (el === null || el === void 0 ? void 0 : el.id) === +id);
+        const foundedEl = exports.videos.find(el => (el === null || el === void 0 ? void 0 : el.id) === +id);
         if (foundedEl) {
             res.status(200).send(foundedEl);
             return;
@@ -56,7 +60,7 @@ const createOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 ]
             });
         }
-        if (!(typeof req.body.author === 'string') || req.body.author > 20) {
+        if (!(typeof req.body.author === 'string') || req.body.author.length > 20) {
             return res.status(400).json({
                 "errorsMessages": [
                     {
@@ -66,7 +70,7 @@ const createOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 ]
             });
         }
-        if (req.body.availableResolutions != null && (!(req.body.availableResolutions.length > 0) || req.body.availableResolutions > 40)) {
+        if (req.body.availableResolutions != null && (!(req.body.availableResolutions.length > 0))) {
             return res.status(400).json({
                 "errorsMessages": [
                     {
@@ -97,13 +101,13 @@ const createOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             publicationDate: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString()
         };
         newVideo = Object.assign(newVideo, videoTmp);
-        videos.push(newVideo);
+        exports.videos.push(newVideo);
         res.status(201).send(newVideo);
     }
     catch (err) {
         console.log(err);
         res.status(404).json({
-            message: "Can't create el"
+            message: "Something is wrong"
         });
     }
 });
@@ -120,7 +124,7 @@ const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 ]
             });
         }
-        if (req.body.author === null || !(typeof req.body.author === 'string') || req.body.author > 20) {
+        if (req.body.author === null || !(typeof req.body.author === 'string') || req.body.author.length > 20) {
             return res.status(400).json({
                 "errorsMessages": [
                     {
@@ -130,7 +134,7 @@ const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 ]
             });
         }
-        if (req.body.availableResolutions != null && (!(req.body.availableResolutions.length > 0) || req.body.availableResolutions > 40)) {
+        if (req.body.availableResolutions != null && (!(req.body.availableResolutions.length > 0))) {
             return res.status(400).json({
                 "errorsMessages": [
                     {
@@ -171,11 +175,11 @@ const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             });
         }
         const id = req.params.id;
-        let foundedEl = videos.find(el => (el === null || el === void 0 ? void 0 : el.id) === +id);
+        let foundedEl = exports.videos.find(el => (el === null || el === void 0 ? void 0 : el.id) === +id);
         if (foundedEl) {
-            const index = videos.indexOf(foundedEl);
+            const index = exports.videos.indexOf(foundedEl);
             foundedEl = Object.assign(foundedEl, req.body);
-            videos[index] = foundedEl;
+            exports.videos[index] = foundedEl;
             res.status(204).send(foundedEl);
             return;
         }
@@ -183,27 +187,25 @@ const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     catch (err) {
         console.log(err);
         res.status(404).json({
-            message: "Can't update el"
+            message: "Something is wrong"
         });
     }
 });
 exports.updateOne = updateOne;
 const deleteOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    try {
-        for (let i = 0; i < videos.length; i++) {
-            if (((_a = videos[i]) === null || _a === void 0 ? void 0 : _a.id) === +req.params.id) {
-                videos.splice(i, 1);
-                res.send(204);
-                return;
-            }
+    for (let i = 0; i < exports.videos.length; i++) {
+        if (((_a = exports.videos[i]) === null || _a === void 0 ? void 0 : _a.id) === +req.params.id) {
+            exports.videos.splice(i, 1);
+            res.send(204);
+            return;
         }
     }
-    catch (err) {
-        console.log(err);
-        res.status(404).json({
-            message: "Can't update el"
-        });
-    }
+    res.send(404);
 });
 exports.deleteOne = deleteOne;
+const deleteAll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    exports.videos = [];
+    res.send(204);
+});
+exports.deleteAll = deleteAll;
