@@ -186,6 +186,7 @@ export const updateOne = async (req: Request, res: Response) => {
             res.status(204).send(foundedEl)
             return;
         }
+        res.send(404)
     } catch (err) {
         console.log(err)
         res.status(404).json({

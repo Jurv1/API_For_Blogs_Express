@@ -183,6 +183,7 @@ const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             res.status(204).send(foundedEl);
             return;
         }
+        res.send(404);
     }
     catch (err) {
         console.log(err);
