@@ -54,8 +54,8 @@ export const createOne = async (req: Request, res: Response) => {
         let message: {message: string, field: string}[] = []
         if(!(typeof req.body.title === 'string') || req.body.title.length > 40){
             message.push({
-                "message": "title",
-                "field": "title"
+                message: "title",
+                field: "title"
             })
             // return res.status(400).json({
             //     "errorsMessages": [
@@ -68,8 +68,8 @@ export const createOne = async (req: Request, res: Response) => {
         }
         if(!(typeof req.body.author === 'string') || req.body.author.length > 20){
             message.push({
-                "message": "author",
-                "field": "author"
+                message: "author",
+                field: "author"
             })
             // return res.status(400).json({
             //     "errorsMessages": [
@@ -82,8 +82,8 @@ export const createOne = async (req: Request, res: Response) => {
         }
         if( req.body.availableResolutions != null && (!(req.body.availableResolutions.length > 0))){
             message.push({
-                "message": "availableResolutions",
-                "field": "availableResolutions"
+                message: "availableResolutions",
+                field: "availableResolutions"
             })
             // return res.status(400).json({
             //     "errorsMessages": [
@@ -95,7 +95,7 @@ export const createOne = async (req: Request, res: Response) => {
             // })
         }
 
-        if(message.length > 0) return res.status(400).json({"errorsMessages": message})
+        if(message.length > 0) return res.status(400).json({errorsMessages: message})
 
         let newVideo = {
             id: +(new Date()),
@@ -134,8 +134,8 @@ export const updateOne = async (req: Request, res: Response) => {
         let message: {message: string, field: string}[] = []
         if(req.body.title === null || !(typeof req.body.title === 'string') || req.body.title.length > 40){
             message.push({
-                "message": "title",
-                "field": "title"
+                message: "title",
+                field: "title"
             })
             // return res.status(400).json({
             //     "errorsMessages": [
@@ -148,8 +148,8 @@ export const updateOne = async (req: Request, res: Response) => {
         }
         if( req.body.author === null || !(typeof req.body.author === 'string') || req.body.author.length > 20){
             message.push({
-                "message": "author",
-                "field": "author"
+                message: "author",
+                field: "author"
             })
             // return res.status(400).json({
             //     "errorsMessages": [
@@ -162,8 +162,8 @@ export const updateOne = async (req: Request, res: Response) => {
         }
         if( req.body.availableResolutions != null && (!(req.body.availableResolutions.length > 0))){
             message.push( {
-                "message": "availableResolutions",
-                "field": "availableResolutions"
+                message: "availableResolutions",
+                field: "availableResolutions"
             })
             // return res.status(400).json({
             //     "errorsMessages": [
@@ -176,8 +176,8 @@ export const updateOne = async (req: Request, res: Response) => {
         }
         if( req.body.canBeDownloaded != null && (!(typeof req.body.canBeDownloaded === 'boolean'))){
             message.push({
-                "message": "availableResolutions",
-                "field": "availableResolutions"
+                message: "availableResolutions",
+                field: "availableResolutions"
             })
             // return res.status(400).json({
             //     "errorsMessages": [
@@ -190,8 +190,8 @@ export const updateOne = async (req: Request, res: Response) => {
         }
         if( req.body.minAgeRestriction != null && (!(typeof req.body.minAgeRestriction === 'number') || req.body.minAgeRestriction > 18 || req.body.minAgeRestriction < 1)){
             message.push({
-                "message": "minAgeRestriction",
-                "field": "minAgeRestriction"
+                message: "minAgeRestriction",
+                field: "minAgeRestriction"
             })
             // return res.status(400).json({
             //     "errorsMessages": [
@@ -204,8 +204,8 @@ export const updateOne = async (req: Request, res: Response) => {
         }
         if ( !(req.body.publicationDate !== null) && isIsoDate(req.body.publicationDate) ){
             message.push({
-                "message": "minAgeRestriction",
-                "field": "minAgeRestriction"
+                message: "minAgeRestriction",
+                field: "minAgeRestriction"
             })
             // return res.status(400).json({
             //     "errorsMessages": [
@@ -219,7 +219,7 @@ export const updateOne = async (req: Request, res: Response) => {
 
         if (message.length > 0){
             return res.status(400).json({
-                "errorsMessages": message
+                errorsMessages: message
             })
         }
         const id = req.params.id

@@ -54,8 +54,8 @@ const createOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         let message = [];
         if (!(typeof req.body.title === 'string') || req.body.title.length > 40) {
             message.push({
-                "message": "title",
-                "field": "title"
+                message: "title",
+                field: "title"
             });
             // return res.status(400).json({
             //     "errorsMessages": [
@@ -68,8 +68,8 @@ const createOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         if (!(typeof req.body.author === 'string') || req.body.author.length > 20) {
             message.push({
-                "message": "author",
-                "field": "author"
+                message: "author",
+                field: "author"
             });
             // return res.status(400).json({
             //     "errorsMessages": [
@@ -82,8 +82,8 @@ const createOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         if (req.body.availableResolutions != null && (!(req.body.availableResolutions.length > 0))) {
             message.push({
-                "message": "availableResolutions",
-                "field": "availableResolutions"
+                message: "availableResolutions",
+                field: "availableResolutions"
             });
             // return res.status(400).json({
             //     "errorsMessages": [
@@ -95,7 +95,7 @@ const createOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             // })
         }
         if (message.length > 0)
-            return res.status(400).json({ "errorsMessages": message });
+            return res.status(400).json({ errorsMessages: message });
         let newVideo = {
             id: +(new Date()),
             title: req.body.title,
@@ -133,8 +133,8 @@ const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         let message = [];
         if (req.body.title === null || !(typeof req.body.title === 'string') || req.body.title.length > 40) {
             message.push({
-                "message": "title",
-                "field": "title"
+                message: "title",
+                field: "title"
             });
             // return res.status(400).json({
             //     "errorsMessages": [
@@ -147,8 +147,8 @@ const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         if (req.body.author === null || !(typeof req.body.author === 'string') || req.body.author.length > 20) {
             message.push({
-                "message": "author",
-                "field": "author"
+                message: "author",
+                field: "author"
             });
             // return res.status(400).json({
             //     "errorsMessages": [
@@ -161,8 +161,8 @@ const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         if (req.body.availableResolutions != null && (!(req.body.availableResolutions.length > 0))) {
             message.push({
-                "message": "availableResolutions",
-                "field": "availableResolutions"
+                message: "availableResolutions",
+                field: "availableResolutions"
             });
             // return res.status(400).json({
             //     "errorsMessages": [
@@ -175,8 +175,8 @@ const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         if (req.body.canBeDownloaded != null && (!(typeof req.body.canBeDownloaded === 'boolean'))) {
             message.push({
-                "message": "availableResolutions",
-                "field": "availableResolutions"
+                message: "availableResolutions",
+                field: "availableResolutions"
             });
             // return res.status(400).json({
             //     "errorsMessages": [
@@ -189,8 +189,8 @@ const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         if (req.body.minAgeRestriction != null && (!(typeof req.body.minAgeRestriction === 'number') || req.body.minAgeRestriction > 18 || req.body.minAgeRestriction < 1)) {
             message.push({
-                "message": "minAgeRestriction",
-                "field": "minAgeRestriction"
+                message: "minAgeRestriction",
+                field: "minAgeRestriction"
             });
             // return res.status(400).json({
             //     "errorsMessages": [
@@ -203,8 +203,8 @@ const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         if (!(req.body.publicationDate !== null) && isIsoDate(req.body.publicationDate)) {
             message.push({
-                "message": "minAgeRestriction",
-                "field": "minAgeRestriction"
+                message: "minAgeRestriction",
+                field: "minAgeRestriction"
             });
             // return res.status(400).json({
             //     "errorsMessages": [
@@ -217,7 +217,7 @@ const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         if (message.length > 0) {
             return res.status(400).json({
-                "errorsMessages": message
+                errorsMessages: message
             });
         }
         const id = req.params.id;
