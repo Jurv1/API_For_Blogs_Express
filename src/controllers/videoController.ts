@@ -232,10 +232,10 @@ export const updateOne = async (req: Request, res: Response) => {
             //     ]
             // })
         }
-        if ( !(req.body.publicationDate !== null) && isIsoDate(req.body.publicationDate) ){
+        if ( (req.body.publicationDate === null) && !(isIsoDate(req.body.publicationDate)) ){
             message.push({
-                message: "minAgeRestriction",
-                field: "minAgeRestriction"
+                message: "publicationDate",
+                field: "publicationDate"
             })
             // return res.status(400).json({
             //     "errorsMessages": [
