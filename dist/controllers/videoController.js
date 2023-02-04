@@ -51,36 +51,51 @@ const getOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getOne = getOne;
 const createOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        let message = [];
         if (!(typeof req.body.title === 'string') || req.body.title.length > 40) {
-            return res.status(400).json({
-                "errorsMessages": [
-                    {
-                        "message": "title",
-                        "field": "title"
-                    }
-                ]
+            message.push({
+                "message": "title",
+                "field": "title"
             });
+            // return res.status(400).json({
+            //     "errorsMessages": [
+            //         {
+            //             "message": "title",
+            //             "field": "title"
+            //         }
+            //     ]
+            // })
         }
         if (!(typeof req.body.author === 'string') || req.body.author.length > 20) {
-            return res.status(400).json({
-                "errorsMessages": [
-                    {
-                        "message": "author",
-                        "field": "author"
-                    }
-                ]
+            message.push({
+                "message": "author",
+                "field": "author"
             });
+            // return res.status(400).json({
+            //     "errorsMessages": [
+            //         {
+            //             "message": "author",
+            //             "field": "author"
+            //         }
+            //     ]
+            // })
         }
         if (req.body.availableResolutions != null && (!(req.body.availableResolutions.length > 0))) {
-            return res.status(400).json({
-                "errorsMessages": [
-                    {
-                        "message": "availableResolutions",
-                        "field": "availableResolutions"
-                    }
-                ]
+            message.push({
+                "message": "availableResolutions",
+                "field": "availableResolutions"
             });
+            // return res.status(400).json({
+            //     "errorsMessages": [
+            //         {
+            //             "message": "availableResolutions",
+            //             "field": "availableResolutions"
+            //         }
+            //     ]
+            // })
         }
+        if (message.length > 0)
+            return res.status(400).json({ "errorsMessages": message });
         let newVideo = {
             id: +(new Date()),
             title: req.body.title,
@@ -115,64 +130,94 @@ const createOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.createOne = createOne;
 const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        let message = [];
         if (req.body.title === null || !(typeof req.body.title === 'string') || req.body.title.length > 40) {
-            return res.status(400).json({
-                "errorsMessages": [
-                    {
-                        "message": "title",
-                        "field": "title"
-                    }
-                ]
+            message.push({
+                "message": "title",
+                "field": "title"
             });
+            // return res.status(400).json({
+            //     "errorsMessages": [
+            //         {
+            //             "message": "title",
+            //             "field": "title"
+            //         }
+            //     ]
+            // })
         }
         if (req.body.author === null || !(typeof req.body.author === 'string') || req.body.author.length > 20) {
-            return res.status(400).json({
-                "errorsMessages": [
-                    {
-                        "message": "author",
-                        "field": "author"
-                    }
-                ]
+            message.push({
+                "message": "author",
+                "field": "author"
             });
+            // return res.status(400).json({
+            //     "errorsMessages": [
+            //         {
+            //             "message": "author",
+            //             "field": "author"
+            //         }
+            //     ]
+            // })
         }
         if (req.body.availableResolutions != null && (!(req.body.availableResolutions.length > 0))) {
-            return res.status(400).json({
-                "errorsMessages": [
-                    {
-                        "message": "availableResolutions",
-                        "field": "availableResolutions"
-                    }
-                ]
+            message.push({
+                "message": "availableResolutions",
+                "field": "availableResolutions"
             });
+            // return res.status(400).json({
+            //     "errorsMessages": [
+            //         {
+            //             "message": "availableResolutions",
+            //             "field": "availableResolutions"
+            //         }
+            //     ]
+            // })
         }
         if (req.body.canBeDownloaded != null && (!(typeof req.body.canBeDownloaded === 'boolean'))) {
-            return res.status(400).json({
-                "errorsMessages": [
-                    {
-                        "message": "availableResolutions",
-                        "field": "availableResolutions"
-                    }
-                ]
+            message.push({
+                "message": "availableResolutions",
+                "field": "availableResolutions"
             });
+            // return res.status(400).json({
+            //     "errorsMessages": [
+            //         {
+            //             "message": "availableResolutions",
+            //             "field": "availableResolutions"
+            //         }
+            //     ]
+            // })
         }
         if (req.body.minAgeRestriction != null && (!(typeof req.body.minAgeRestriction === 'number') || req.body.minAgeRestriction > 18 || req.body.minAgeRestriction < 1)) {
-            return res.status(400).json({
-                "errorsMessages": [
-                    {
-                        "message": "minAgeRestriction",
-                        "field": "minAgeRestriction"
-                    }
-                ]
+            message.push({
+                "message": "minAgeRestriction",
+                "field": "minAgeRestriction"
             });
+            // return res.status(400).json({
+            //     "errorsMessages": [
+            //         {
+            //             "message": "minAgeRestriction",
+            //             "field": "minAgeRestriction"
+            //         }
+            //     ]
+            // })
         }
         if (!(req.body.publicationDate !== null) && isIsoDate(req.body.publicationDate)) {
+            message.push({
+                "message": "minAgeRestriction",
+                "field": "minAgeRestriction"
+            });
+            // return res.status(400).json({
+            //     "errorsMessages": [
+            //         {
+            //             "message": "minAgeRestriction",
+            //             "field": "minAgeRestriction"
+            //         }
+            //     ]
+            // })
+        }
+        if (message.length > 0) {
             return res.status(400).json({
-                "errorsMessages": [
-                    {
-                        "message": "minAgeRestriction",
-                        "field": "minAgeRestriction"
-                    }
-                ]
+                "errorsMessages": message
             });
         }
         const id = req.params.id;
