@@ -160,10 +160,25 @@ const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             // })
         }
         if (req.body.availableResolutions != null && (!(req.body.availableResolutions.length > 0))) {
-            message.push({
-                message: "availableResolutions",
-                field: "availableResolutions"
-            });
+            for (let i = 0; i < req.body.availableResolutions.length; i++) {
+                let availableResolutions = [
+                    "P144",
+                    "P240",
+                    "P360",
+                    "P480",
+                    "P720",
+                    "P1080",
+                    "P1440",
+                    "P2160"
+                ];
+                if (!(req.body.availableResolutions[i] in availableResolutions)) {
+                    message.push({
+                        message: "availableResolutions",
+                        field: "availableResolutions"
+                    });
+                    break;
+                }
+            }
             // return res.status(400).json({
             //     "errorsMessages": [
             //         {
@@ -175,8 +190,8 @@ const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         if (req.body.canBeDownloaded != null && (!(typeof req.body.canBeDownloaded === 'boolean'))) {
             message.push({
-                message: "availableResolutions",
-                field: "availableResolutions"
+                message: "canBeDownloaded",
+                field: "canBeDownloaded"
             });
             // return res.status(400).json({
             //     "errorsMessages": [
