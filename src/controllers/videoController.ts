@@ -80,7 +80,7 @@ export const createOne = async (req: Request, res: Response) => {
             //     ]
             // })
         }
-        if( req.body.availableResolutions != null && (!(req.body.availableResolutions.length > 0))){
+        if( req.body.availableResolutions != null && (req.body.availableResolutions.length > 0)){
             for (let i = 0; i < req.body.availableResolutions.length; i++){
                 let availableResolutions: string[] =[
                     "P144",
@@ -92,7 +92,7 @@ export const createOne = async (req: Request, res: Response) => {
                     "P1440",
                     "P2160"
                 ]
-                if (!(req.body.availableResolutions[i] in availableResolutions)){
+                if (!(availableResolutions.includes(req.body.availableResolutions[i]))){
                     message.push( {
                         message: "availableResolutions",
                         field: "availableResolutions"
@@ -175,7 +175,7 @@ export const updateOne = async (req: Request, res: Response) => {
             //     ]
             // })
         }
-        if( req.body.availableResolutions != null && (!(req.body.availableResolutions.length > 0))){
+        if( req.body.availableResolutions != null && (req.body.availableResolutions.length > 0)){
             for (let i = 0; i < req.body.availableResolutions.length; i++){
                 let availableResolutions: string[] =[
                     "P144",
@@ -187,7 +187,7 @@ export const updateOne = async (req: Request, res: Response) => {
                     "P1440",
                     "P2160"
                 ]
-                if (!(req.body.availableResolutions[i] in availableResolutions)){
+                if (!(availableResolutions.includes(req.body.availableResolutions[i]))){
                     message.push( {
                         message: "availableResolutions",
                         field: "availableResolutions"
@@ -232,7 +232,7 @@ export const updateOne = async (req: Request, res: Response) => {
             //     ]
             // })
         }
-        if ( (req.body.publicationDate === null) && !(isIsoDate(req.body.publicationDate)) ){
+        if ( (req.body.publicationDate !== null) && !(isIsoDate(req.body.publicationDate.toString())) ){
             message.push({
                 message: "publicationDate",
                 field: "publicationDate"

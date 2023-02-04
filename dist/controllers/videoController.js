@@ -80,7 +80,7 @@ const createOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             //     ]
             // })
         }
-        if (req.body.availableResolutions != null && (!(req.body.availableResolutions.length > 0))) {
+        if (req.body.availableResolutions != null && (req.body.availableResolutions.length > 0)) {
             for (let i = 0; i < req.body.availableResolutions.length; i++) {
                 let availableResolutions = [
                     "P144",
@@ -92,7 +92,7 @@ const createOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                     "P1440",
                     "P2160"
                 ];
-                if (!(req.body.availableResolutions[i] in availableResolutions)) {
+                if (!(availableResolutions.includes(req.body.availableResolutions[i]))) {
                     message.push({
                         message: "availableResolutions",
                         field: "availableResolutions"
@@ -174,7 +174,7 @@ const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             //     ]
             // })
         }
-        if (req.body.availableResolutions != null && (!(req.body.availableResolutions.length > 0))) {
+        if (req.body.availableResolutions != null && (req.body.availableResolutions.length > 0)) {
             for (let i = 0; i < req.body.availableResolutions.length; i++) {
                 let availableResolutions = [
                     "P144",
@@ -186,7 +186,7 @@ const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                     "P1440",
                     "P2160"
                 ];
-                if (!(req.body.availableResolutions[i] in availableResolutions)) {
+                if (!(availableResolutions.includes(req.body.availableResolutions[i]))) {
                     message.push({
                         message: "availableResolutions",
                         field: "availableResolutions"
@@ -231,7 +231,7 @@ const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             //     ]
             // })
         }
-        if ((req.body.publicationDate === null) && !(isIsoDate(req.body.publicationDate))) {
+        if ((req.body.publicationDate !== null) && !(isIsoDate(req.body.publicationDate.toString()))) {
             message.push({
                 message: "publicationDate",
                 field: "publicationDate"
