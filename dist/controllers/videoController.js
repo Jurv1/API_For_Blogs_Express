@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteAll = exports.deleteOne = exports.updateOne = exports.createOne = exports.getOne = exports.getAll = exports.getStart = exports.videos = void 0;
+const re = new RegExp(/\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/);
 function isIsoDate(str) {
     if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str))
         return false;
@@ -231,7 +232,7 @@ const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             //     ]
             // })
         }
-        if ((req.body.publicationDate !== null) && !(isIsoDate(req.body.publicationDate.toString()))) {
+        if ((req.body.publicationDate !== null) && (!(typeof req.body.publicationDate === 'string') || !(re.test(req.body.publicationDate)))) {
             message.push({
                 message: "publicationDate",
                 field: "publicationDate"
