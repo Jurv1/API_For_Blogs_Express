@@ -1,9 +1,9 @@
 import express from 'express'
 import bodyParser from "body-parser";
 import cors from 'cors'
-import {videoValidation} from "./validations/videoValidation";
 import * as VideoController from "./controllers/videoController";
-import handleErr from "./utils/handleErr";
+import  { createVideoValid } from "./validations/createVideoValid";
+import { updateVideoValid } from "./validations/updateVideoValid";
 
 const app = express()
 const port = 3003
@@ -21,12 +21,13 @@ app.use(cors(options));
 
 
 app.get('/', VideoController.getStart)
+
 app.get('/videos', VideoController.getAll)
 app.get('/videos/:id', VideoController.getOne)
 
-app.post('/videos', VideoController.createOne)
+app.post('/videos', createVideoValid, VideoController.createOne)
 
-app.put('/videos/:id', VideoController.updateOne)
+app.put('/videos/:id', updateVideoValid, VideoController.updateOne)
 
 app.delete('/videos/:id', VideoController.deleteOne)
 app.delete('/testing/all-data', VideoController.deleteAll)

@@ -14,6 +14,8 @@ let availableResolutions: string[] =[
 let title = body('title')
 console.log(title)
 
+
+
 export const videoValidation = [
     body('title').isString().withMessage({
         message: `${title}`,

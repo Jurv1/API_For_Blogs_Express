@@ -10,11 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteAll = exports.deleteOne = exports.updateOne = exports.createOne = exports.getOne = exports.getAll = exports.getStart = exports.videos = void 0;
-const re = new RegExp(/\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/);
-function isIsoDate(str) {
-    if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str))
-        return false;
-}
 exports.videos = [];
 const getStart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.send("Hi");
@@ -52,66 +47,6 @@ const getOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getOne = getOne;
 const createOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let message = [];
-        if (!(typeof req.body.title === 'string') || req.body.title.length > 40) {
-            message.push({
-                message: "title",
-                field: "title"
-            });
-            // return res.status(400).json({
-            //     "errorsMessages": [
-            //         {
-            //             "message": "title",
-            //             "field": "title"
-            //         }
-            //     ]
-            // })
-        }
-        if (!(typeof req.body.author === 'string') || req.body.author.length > 20) {
-            message.push({
-                message: "author",
-                field: "author"
-            });
-            // return res.status(400).json({
-            //     "errorsMessages": [
-            //         {
-            //             "message": "author",
-            //             "field": "author"
-            //         }
-            //     ]
-            // })
-        }
-        if (req.body.availableResolutions != null && (req.body.availableResolutions.length > 0)) {
-            for (let i = 0; i < req.body.availableResolutions.length; i++) {
-                let availableResolutions = [
-                    "P144",
-                    "P240",
-                    "P360",
-                    "P480",
-                    "P720",
-                    "P1080",
-                    "P1440",
-                    "P2160"
-                ];
-                if (!(availableResolutions.includes(req.body.availableResolutions[i]))) {
-                    message.push({
-                        message: "availableResolutions",
-                        field: "availableResolutions"
-                    });
-                    break;
-                }
-            }
-            // return res.status(400).json({
-            //     "errorsMessages": [
-            //         {
-            //             "message": "availableResolutions",
-            //             "field": "availableResolutions"
-            //         }
-            //     ]
-            // })
-        }
-        if (message.length > 0)
-            return res.status(400).json({ errorsMessages: message });
         let newVideo = {
             id: +(new Date()),
             title: req.body.title,
@@ -146,111 +81,6 @@ const createOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.createOne = createOne;
 const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let message = [];
-        if (req.body.title === null || !(typeof req.body.title === 'string') || req.body.title.length > 40) {
-            message.push({
-                message: "title",
-                field: "title"
-            });
-            // return res.status(400).json({
-            //     "errorsMessages": [
-            //         {
-            //             "message": "title",
-            //             "field": "title"
-            //         }
-            //     ]
-            // })
-        }
-        if (req.body.author === null || !(typeof req.body.author === 'string') || req.body.author.length > 20) {
-            message.push({
-                message: "author",
-                field: "author"
-            });
-            // return res.status(400).json({
-            //     "errorsMessages": [
-            //         {
-            //             "message": "author",
-            //             "field": "author"
-            //         }
-            //     ]
-            // })
-        }
-        if (req.body.availableResolutions != null && (req.body.availableResolutions.length > 0)) {
-            for (let i = 0; i < req.body.availableResolutions.length; i++) {
-                let availableResolutions = [
-                    "P144",
-                    "P240",
-                    "P360",
-                    "P480",
-                    "P720",
-                    "P1080",
-                    "P1440",
-                    "P2160"
-                ];
-                if (!(availableResolutions.includes(req.body.availableResolutions[i]))) {
-                    message.push({
-                        message: "availableResolutions",
-                        field: "availableResolutions"
-                    });
-                    break;
-                }
-            }
-            // return res.status(400).json({
-            //     "errorsMessages": [
-            //         {
-            //             "message": "availableResolutions",
-            //             "field": "availableResolutions"
-            //         }
-            //     ]
-            // })
-        }
-        if (req.body.canBeDownloaded != null && (!(typeof req.body.canBeDownloaded === 'boolean'))) {
-            message.push({
-                message: "canBeDownloaded",
-                field: "canBeDownloaded"
-            });
-            // return res.status(400).json({
-            //     "errorsMessages": [
-            //         {
-            //             "message": "availableResolutions",
-            //             "field": "availableResolutions"
-            //         }
-            //     ]
-            // })
-        }
-        if (req.body.minAgeRestriction != null && (!(typeof req.body.minAgeRestriction === 'number') || req.body.minAgeRestriction > 18 || req.body.minAgeRestriction < 1)) {
-            message.push({
-                message: "minAgeRestriction",
-                field: "minAgeRestriction"
-            });
-            // return res.status(400).json({
-            //     "errorsMessages": [
-            //         {
-            //             "message": "minAgeRestriction",
-            //             "field": "minAgeRestriction"
-            //         }
-            //     ]
-            // })
-        }
-        if ((req.body.publicationDate !== null) && (!(typeof req.body.publicationDate === 'string') || !(re.test(req.body.publicationDate)))) {
-            message.push({
-                message: "publicationDate",
-                field: "publicationDate"
-            });
-            // return res.status(400).json({
-            //     "errorsMessages": [
-            //         {
-            //             "message": "minAgeRestriction",
-            //             "field": "minAgeRestriction"
-            //         }
-            //     ]
-            // })
-        }
-        if (message.length > 0) {
-            return res.status(400).json({
-                errorsMessages: message
-            });
-        }
         const id = req.params.id;
         let foundedEl = exports.videos.find(el => (el === null || el === void 0 ? void 0 : el.id) === +id);
         if (foundedEl) {
