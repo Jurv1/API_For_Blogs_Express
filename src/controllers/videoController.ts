@@ -1,5 +1,6 @@
 import {Request, Response} from "express";
-import {Video} from "../schemas/schemas";
+import {Video} from "../schemas/videoSchemas";
+import findEl from "../utils/findEl";
 
 export let videos: Video[] = [];
 
@@ -20,14 +21,8 @@ export const getAll = async (req: Request, res: Response) => {
 
 export const getOne = async (req: Request, res: Response) => {
     try {
-    const id = req.params.id
-    const foundedEl = videos.find(el => el?.id === +id)
-    if(foundedEl) {
-        res.status(200).send(foundedEl)
-        return;
-    }
-    res.status(404).send("Not OK")
-    } catch (err){
+        findEl(req, res,videos)
+    } catch (err) {
         console.log(err)
         res.status(404).json({
             message: "Can't find el"
@@ -92,8 +87,8 @@ export const updateOne = async (req: Request, res: Response) => {
 
 export const deleteOne = async (req: Request, res: Response) => {
     try {
-        for (let i = 0; i < videos.length; i++){
-            if (videos[i]?.id === +req.params.id){
+        for (let i = 0; i < videos.length; i++) {
+            if (videos[i]?.id === +req.params.id) {
                 videos.splice(i, 1)
                 res.send(204)
                 return;

@@ -6,5 +6,5 @@ export type Video = {
     minAgeRestriction?: number | null,
     createdAt?: string,
     publicationDate?: string,
-    availableResolutions?:  string[]
+    availableResolutions?: string[]
 } | undefined

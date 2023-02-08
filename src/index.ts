@@ -1,9 +1,14 @@
 import express from 'express'
 import bodyParser from "body-parser";
 import cors from 'cors'
+
 import * as VideoController from "./controllers/videoController";
-import  { createVideoValid } from "./validations/createVideoValid";
-import { updateVideoValid } from "./validations/updateVideoValid";
+import * as BlogController from "./controllers/blogController";
+import * as PostController from "./controllers/postController"
+
+import {createVideoValid} from "./validations/createVideoValid";
+import {updateVideoValid} from "./validations/updateVideoValid";
+import checkAuth from './utils/checkAuth.js'
 
 const app = express()
 const port = 3003
@@ -13,7 +18,7 @@ app.use(parserMiddleware)
 const allowedOrigins = ['http://localhost:3003'];
 
 const options: cors.CorsOptions = {
-  origin: allowedOrigins
+    origin: allowedOrigins
 };
 
 // Then pass these options to cors:
@@ -30,8 +35,22 @@ app.post('/videos', createVideoValid, VideoController.createOne)
 app.put('/videos/:id', updateVideoValid, VideoController.updateOne)
 
 app.delete('/videos/:id', VideoController.deleteOne)
+
 app.delete('/testing/all-data', VideoController.deleteAll)
 
+app.get('/blogs', BlogController.getAll)
+app.get('/blogs/:id', BlogController.getOne)
+app.post('/blogs', checkAuth, BlogController.createOne)
+app.put('/blogs/:id', checkAuth, BlogController.updateOne)
+app.delete('/blogs/:id', checkAuth, BlogController.deleteOne)
+
+app.get('/posts', PostController.getAll)
+app.get('/posts/:id', PostController.getOne)
+app.post('/posts', checkAuth, PostController.createOne)
+app.put('/posts/:id', checkAuth, PostController.updateOne)
+app.delete('/posts/:id', checkAuth, PostController.deleteOne)
+
+
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+    console.log(`Example app listening on port ${port}`)
 })
