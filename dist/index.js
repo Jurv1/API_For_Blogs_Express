@@ -32,6 +32,7 @@ const cors_1 = __importDefault(require("cors"));
 const VideoController = __importStar(require("./controllers/videoController"));
 const BlogController = __importStar(require("./controllers/blogController"));
 const PostController = __importStar(require("./controllers/postController"));
+const testingController = __importStar(require("./controllers/testingController"));
 const postValidator_1 = require("./validations/postValidator");
 const blogValidator_1 = require("./validations/blogValidator");
 const videoValidation_1 = require("./validations/videoValidation");
@@ -63,7 +64,7 @@ app.get('/posts/:id', PostController.getOne);
 app.post('/posts', checkAuth_js_1.default, postValidator_1.postValidation, handleErr_1.default, PostController.createOne);
 app.put('/posts/:id', checkAuth_js_1.default, postValidator_1.postValidation, handleErr_1.default, PostController.updateOne);
 app.delete('/posts/:id', checkAuth_js_1.default, PostController.deleteOne);
-app.delete('/testing/all-data', VideoController.deleteAll);
+app.delete('/testing/all-data', testingController.deleteAll);
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });

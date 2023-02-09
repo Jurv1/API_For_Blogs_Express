@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteAll = exports.deleteOne = exports.updateOne = exports.createOne = exports.getOne = exports.getAll = exports.getStart = exports.videos = void 0;
+exports.deleteOne = exports.updateOne = exports.createOne = exports.getOne = exports.getAll = exports.getStart = exports.videos = void 0;
 const findEl_1 = __importDefault(require("../utils/findEl"));
 exports.videos = [];
 const getStart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -118,16 +118,3 @@ const deleteOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.deleteOne = deleteOne;
-const deleteAll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        exports.videos = [];
-        res.send(204);
-    }
-    catch (err) {
-        console.log(err);
-        res.status(404).json({
-            message: "Something is wrong"
-        });
-    }
-});
-exports.deleteAll = deleteAll;
