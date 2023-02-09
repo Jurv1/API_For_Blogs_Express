@@ -6,8 +6,11 @@ import {posts} from "./postController";
 
 export const deleteAll = async (req: Request, res: Response) => {
     try {
-        if(videos.length === 0 && blogs.length === 0 && posts.length === 0) return res.status(204)
+        if(videos.length === 0 && blogs.length === 0 && posts.length === 0)  {
+            res.status(204)
             .json({"EW": "WE"})
+            return;
+        }
         else {
             // @ts-ignore
             videos = []
