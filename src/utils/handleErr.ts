@@ -3,7 +3,10 @@ import {Request, Response, NextFunction} from "express";
 
 export default (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req).array()
-    if (errors.length === 0) {
+    if (JSON.stringify(req.body) === '{}') {
+        res.send(401)
+        return;
+    } else if(errors.length === 0){
         next()
     } else {
         let errorsArray: { message: string, field: string }[] = []
