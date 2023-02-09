@@ -34,7 +34,7 @@ export const createOne = (req: Request, res: Response) => {
             description: req.body.description,
             websiteUrl: req.body.websiteUrl
         }
-        blogs.push(newBlogTmp)
+        blogs = [...blogs, newBlogTmp]
         res.status(201).send(newBlogTmp)
     } catch (err) {
         console.log(err)

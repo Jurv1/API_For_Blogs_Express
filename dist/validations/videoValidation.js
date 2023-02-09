@@ -12,13 +12,12 @@ let availableResolutions = [
     "P1440",
     "P2160"
 ];
-let title = (0, express_validator_1.body)('title');
-console.log(title);
 exports.videoValidation = [
     (0, express_validator_1.body)('title').isString().isLength({ max: 40 }),
     (0, express_validator_1.body)('author').isString().isLength({ max: 20 }),
     (0, express_validator_1.body)('canBeDownloaded').optional().isBoolean(),
-    (0, express_validator_1.body)('minAgeRestriction').isLength({ min: 1, max: 18 }).optional({ nullable: true }),
-    (0, express_validator_1.body)('publicationDate').optional().isISO8601(),
-    (0, express_validator_1.body)('availableResolutions').isArray().isIn(availableResolutions).optional({ nullable: true })
+    (0, express_validator_1.body)('minAgeRestriction').optional({ nullable: true }).isLength({ min: 1, max: 18 }),
+    (0, express_validator_1.body)('publicationDate').optional().isISO4217().isISO8601(),
+    (0, express_validator_1.body)('availableResolutions').optional({ nullable: true }).isArray(),
+    (0, express_validator_1.body)('availableResolutions.*').isIn(availableResolutions)
 ];

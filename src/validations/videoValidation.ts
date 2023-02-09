@@ -11,15 +11,12 @@ let availableResolutions: string[] = [
     "P2160"
 ]
 
-let title = body('title')
-console.log(title)
-
-
 export const videoValidation = [
     body('title').isString().isLength({max: 40}),
     body('author').isString().isLength({max: 20}),
     body('canBeDownloaded').optional().isBoolean(),
-    body('minAgeRestriction').isLength({min: 1, max: 18}).optional({nullable: true}),
-    body('publicationDate').optional().isISO8601(),
-    body('availableResolutions').isArray().isIn(availableResolutions).optional({nullable: true})
+    body('minAgeRestriction').optional({nullable: true}).isLength({min: 1, max: 18}),
+    body('publicationDate').optional().isISO4217().isISO8601(),
+    body('availableResolutions').optional({nullable: true}).isArray(),
+    body('availableResolutions.*').isIn(availableResolutions)
 ]
