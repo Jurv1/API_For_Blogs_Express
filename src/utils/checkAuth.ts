@@ -10,12 +10,12 @@ export default (req: Request, res: Response, next: NextFunction) => {
                 next()
             }
         } catch (err) {
-            return res.status(403).json(
+            return res.status(401).json(
                 {message: 'Нет доступа'}
             )
         }
     } else {
-        return res.status(403).json({
+        return res.status(401).json({
             message: 'Нет доступа'
         })
     }

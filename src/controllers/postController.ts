@@ -1,7 +1,8 @@
 import {Request, Response} from "express";
 import findEl from "../utils/findEl";
+import {Post} from "../schemas/postSchemas";
 
-let posts: any[] = []
+let posts: Post[] = []
 
 export const getAll = (req: Request, res: Response) => {
     try {
@@ -27,24 +28,59 @@ export const getOne = (req: Request, res: Response) => {
 
 export const createOne = (req: Request, res: Response) => {
     try {
-
+        let newPostTmp = {
+            id: (new Date()).toString(),
+            title: req.body.title.toString(),
+            shortDescription: req.body.shortDescription.toString(),
+            content: req.body.content,
+            blogId: req.body.blogId
+        }
+        posts.push(newPostTmp)
+        res.status(201).send(newPostTmp)
     } catch (err) {
-
+        console.log(err)
+        res.status(404).json({
+            message: "Can't find el"
+        })
     }
 }
 
 export const updateOne = (req: Request, res: Response) => {
     try {
+        const id = req.params.id
+        let foundedEl = posts.find(el => el?.id === id)
 
+        if (foundedEl) {
+            const index = posts.indexOf(foundedEl)
+            foundedEl = Object.assign(foundedEl, req.body)
+            posts[index] = foundedEl
+            res.status(204).send(foundedEl)
+            return;
+        }
+        res.status(404).send("Not ok")
     } catch (err) {
-
+        console.log(err)
+        res.status(404).json({
+            message: "Can't find el"
+        })
     }
 }
 
 export const deleteOne = (req: Request, res: Response) => {
     try {
+        for (let i = 0; i < posts.length; i++) {
+            if (posts[i]?.id === req.params.id) {
+                posts.splice(i, 1)
+                res.send(204)
+                return;
+            }
 
+        }
+        res.status(404).send('Not Ok')
     } catch (err) {
-
+        console.log(err)
+        res.status(404).json({
+            message: "Can't find el"
+        })
     }
 }

@@ -8,8 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteAll = exports.deleteOne = exports.updateOne = exports.createOne = exports.getOne = exports.getAll = exports.getStart = exports.videos = void 0;
+const findEl_1 = __importDefault(require("../utils/findEl"));
 exports.videos = [];
 const getStart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.send("Hi");
@@ -29,13 +33,7 @@ const getAll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getAll = getAll;
 const getOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const id = req.params.id;
-        const foundedEl = exports.videos.find(el => (el === null || el === void 0 ? void 0 : el.id) === +id);
-        if (foundedEl) {
-            res.status(200).send(foundedEl);
-            return;
-        }
-        res.status(404).send("Not OK");
+        (0, findEl_1.default)(req, res, exports.videos);
     }
     catch (err) {
         console.log(err);

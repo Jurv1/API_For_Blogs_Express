@@ -8,7 +8,13 @@ import * as PostController from "./controllers/postController"
 
 import {createVideoValid} from "./validations/createVideoValid";
 import {updateVideoValid} from "./validations/updateVideoValid";
+
+import { postValidation } from "./validations/postValidator"
+import { blogValidation } from "./validations/blogValidator"
+import { videoValidation } from "./validations/videoValidation";
+
 import checkAuth from './utils/checkAuth.js'
+import handleErr from "./utils/handleErr";
 
 const app = express()
 const port = 3003
@@ -30,26 +36,25 @@ app.get('/', VideoController.getStart)
 app.get('/videos', VideoController.getAll)
 app.get('/videos/:id', VideoController.getOne)
 
-app.post('/videos', createVideoValid, VideoController.createOne)
+app.post('/videos', videoValidation, handleErr, VideoController.createOne)
 
-app.put('/videos/:id', updateVideoValid, VideoController.updateOne)
+app.put('/videos/:id',  videoValidation, handleErr, VideoController.updateOne)
 
 app.delete('/videos/:id', VideoController.deleteOne)
 
-app.delete('/testing/all-data', VideoController.deleteAll)
-
 app.get('/blogs', BlogController.getAll)
 app.get('/blogs/:id', BlogController.getOne)
-app.post('/blogs', checkAuth, BlogController.createOne)
-app.put('/blogs/:id', checkAuth, BlogController.updateOne)
+app.post('/blogs', checkAuth, blogValidation, handleErr, BlogController.createOne)
+app.put('/blogs/:id', checkAuth, blogValidation, handleErr, BlogController.updateOne)
 app.delete('/blogs/:id', checkAuth, BlogController.deleteOne)
 
 app.get('/posts', PostController.getAll)
 app.get('/posts/:id', PostController.getOne)
-app.post('/posts', checkAuth, PostController.createOne)
-app.put('/posts/:id', checkAuth, PostController.updateOne)
+app.post('/posts', checkAuth, postValidation, handleErr,  PostController.createOne)
+app.put('/posts/:id', checkAuth, postValidation, handleErr, PostController.updateOne)
 app.delete('/posts/:id', checkAuth, PostController.deleteOne)
 
+app.delete('/testing/all-data', VideoController.deleteAll)
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
