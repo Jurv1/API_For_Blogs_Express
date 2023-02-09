@@ -4,7 +4,8 @@ import cors from 'cors'
 
 import * as VideoController from "./controllers/videoController";
 import * as BlogController from "./controllers/blogController";
-import * as PostController from "./controllers/postController"
+import * as PostController from "./controllers/postController";
+import * as testingController from "./controllers/testingController"
 
 import {createVideoValid} from "./validations/createVideoValid";
 import {updateVideoValid} from "./validations/updateVideoValid";
@@ -54,7 +55,7 @@ app.post('/posts', checkAuth, postValidation, handleErr,  PostController.createO
 app.put('/posts/:id', checkAuth, postValidation, handleErr, PostController.updateOne)
 app.delete('/posts/:id', checkAuth, PostController.deleteOne)
 
-app.delete('/testing/all-data', VideoController.deleteAll)
+app.delete('/testing/all-data', testingController.deleteAll)
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)

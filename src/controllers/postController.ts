@@ -2,7 +2,7 @@ import {Request, Response} from "express";
 import findEl from "../utils/findEl";
 import {Post} from "../schemas/postSchemas";
 
-let posts: Post[] = []
+export let posts: Post[] = []
 
 export const getAll = (req: Request, res: Response) => {
     try {

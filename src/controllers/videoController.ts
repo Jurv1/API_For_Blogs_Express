@@ -104,16 +104,5 @@ export const deleteOne = async (req: Request, res: Response) => {
     }
 }
 
-export const deleteAll = async (req: Request, res: Response) => {
-    try {
-        videos = []
-        res.send(204)
-    } catch (err) {
-        console.log(err)
-        res.status(404).json({
-            message: "Something is wrong"
-        })
-    }
-}
 
 
