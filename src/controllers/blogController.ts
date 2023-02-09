@@ -1,8 +1,7 @@
 import {Request, Response} from "express";
 import findEl from "../utils/findEl";
 import {Blog} from "../schemas/blogSchemas";
-
-export let blogs: Blog[] = []
+import {blogs, db} from "../db/db";
 
 export const getAll = (req: Request, res: Response) => {
     try {
@@ -17,7 +16,7 @@ export const getAll = (req: Request, res: Response) => {
 
 export const getOne = (req: Request, res: Response) => {
     try {
-        findEl(req, res, blogs)
+        findEl(req, res,blogs)
     } catch (err) {
         console.log(err)
         res.status(404).json({
@@ -34,6 +33,7 @@ export const createOne = (req: Request, res: Response) => {
             description: req.body.description,
             websiteUrl: req.body.websiteUrl
         }
+        // @ts-ignore
         blogs = [...blogs, newBlogTmp]
         res.status(201).send(newBlogTmp)
     } catch (err) {

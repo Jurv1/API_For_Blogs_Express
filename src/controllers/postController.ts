@@ -1,9 +1,7 @@
 import {Request, Response} from "express";
 import findEl from "../utils/findEl";
 import {Post} from "../schemas/postSchemas";
-import {blogs} from "./blogController";
-
-export let posts: Post[] = []
+import {blogs, posts} from "../db/db";
 
 export const getAll = (req: Request, res: Response) => {
     try {
@@ -41,6 +39,7 @@ export const createOne = (req: Request, res: Response) => {
                 blogId: req.body.blogId,
                 blogName: blogName
             }
+            // @ts-ignore
             posts = [...posts ,newPostTmp]
             res.status(201).send(newPostTmp)
             return;

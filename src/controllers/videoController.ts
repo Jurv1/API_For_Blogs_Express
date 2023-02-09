@@ -1,8 +1,8 @@
 import {Request, Response} from "express";
 import {Video} from "../schemas/videoSchemas";
 import findEl from "../utils/findEl";
+import {videos} from "../db/db";
 
-export let videos: Video[] = [];
 
 export const getStart = async (req: Request, res: Response) => {
     res.send("Hi")

@@ -1,14 +1,14 @@
 import {Request, Response} from "express";
-import {videos} from "./videoController";
-import { blogs } from "./blogController"
-import {posts} from "./postController";
+import {videos} from "../db/db";
+import { blogs } from "../db/db"
+import { posts } from "../db/db";
 
 
 export const deleteAll = async (req: Request, res: Response) => {
     try {
-        if(videos.length === 0 && blogs.length === 0 && posts.length === 0)  {
+        if(videos.length == 0 && blogs.length == 0 && posts.length == 0)  {
             res.status(204)
-            .json({"EW": "WE"})
+            .send({"EW": "WE"})
             return;
         }
         else {

@@ -12,16 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteOne = exports.updateOne = exports.createOne = exports.getOne = exports.getAll = exports.getStart = exports.videos = void 0;
+exports.deleteOne = exports.updateOne = exports.createOne = exports.getOne = exports.getAll = exports.getStart = void 0;
 const findEl_1 = __importDefault(require("../utils/findEl"));
-exports.videos = [];
+const db_1 = require("../db/db");
 const getStart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.send("Hi");
 });
 exports.getStart = getStart;
 const getAll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        res.json(exports.videos);
+        res.json(db_1.videos);
     }
     catch (err) {
         console.log(err);
@@ -33,7 +33,7 @@ const getAll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getAll = getAll;
 const getOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        (0, findEl_1.default)(req, res, exports.videos);
+        (0, findEl_1.default)(req, res, db_1.videos);
     }
     catch (err) {
         console.log(err);
@@ -66,7 +66,7 @@ const createOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             publicationDate: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString()
         };
         newVideo = Object.assign(newVideo, videoTmp);
-        exports.videos.push(newVideo);
+        db_1.videos.push(newVideo);
         res.status(201).send(newVideo);
     }
     catch (err) {
@@ -80,11 +80,11 @@ exports.createOne = createOne;
 const updateOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.params.id;
-        let foundedEl = exports.videos.find(el => (el === null || el === void 0 ? void 0 : el.id) === +id);
+        let foundedEl = db_1.videos.find(el => (el === null || el === void 0 ? void 0 : el.id) === +id);
         if (foundedEl) {
-            const index = exports.videos.indexOf(foundedEl);
+            const index = db_1.videos.indexOf(foundedEl);
             foundedEl = Object.assign(foundedEl, req.body);
-            exports.videos[index] = foundedEl;
+            db_1.videos[index] = foundedEl;
             res.status(204).send(foundedEl);
             return;
         }
@@ -101,9 +101,9 @@ exports.updateOne = updateOne;
 const deleteOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
-        for (let i = 0; i < exports.videos.length; i++) {
-            if (((_a = exports.videos[i]) === null || _a === void 0 ? void 0 : _a.id) === +req.params.id) {
-                exports.videos.splice(i, 1);
+        for (let i = 0; i < db_1.videos.length; i++) {
+            if (((_a = db_1.videos[i]) === null || _a === void 0 ? void 0 : _a.id) === +req.params.id) {
+                db_1.videos.splice(i, 1);
                 res.send(204);
                 return;
             }
