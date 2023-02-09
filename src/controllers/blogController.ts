@@ -28,7 +28,14 @@ export const getOne = (req: Request, res: Response) => {
 
 export const createOne = (req: Request, res: Response) => {
     try {
-
+        let newBlogTmp = {
+            id: (+(new Date())).toString(),
+            name: req.body.name,
+            description: req.body.description,
+            websiteUrl: req.body.websiteUrl
+        }
+        blogs.push(newBlogTmp)
+        res.status(201).send(newBlogTmp)
     } catch (err) {
         console.log(err)
         res.status(404).json({

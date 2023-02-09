@@ -1,6 +1,7 @@
 import {Request, Response} from "express";
 import findEl from "../utils/findEl";
 import {Post} from "../schemas/postSchemas";
+import {blogs} from "./blogController";
 
 export let posts: Post[] = []
 
@@ -28,15 +29,27 @@ export const getOne = (req: Request, res: Response) => {
 
 export const createOne = (req: Request, res: Response) => {
     try {
-        let newPostTmp = {
-            id: (new Date()).toString(),
-            title: req.body.title.toString(),
-            shortDescription: req.body.shortDescription.toString(),
-            content: req.body.content,
-            blogId: req.body.blogId
+        const blogId = req.body.blogId
+        const foundedEl = blogs.find(el => el?.id === blogId)
+        if (foundedEl) {
+            const blogName = foundedEl.name
+            let newPostTmp = {
+                id: (+(new Date())).toString(),
+                title: req.body.title.toString(),
+                shortDescription: req.body.shortDescription.toString(),
+                content: req.body.content,
+                blogId: req.body.blogId,
+                blogName: blogName
+            }
+            posts = [...posts ,newPostTmp]
+            res.status(201).send(newPostTmp)
+            return;
+        } else {
+            res.status(404).json({
+                message: "We don't have a blog for this post"
+            })
         }
-        posts.push(newPostTmp)
-        res.status(201).send(newPostTmp)
+
     } catch (err) {
         console.log(err)
         res.status(404).json({
