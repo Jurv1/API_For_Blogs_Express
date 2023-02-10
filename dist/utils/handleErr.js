@@ -4,10 +4,6 @@ const express_validator_1 = require("express-validator");
 const db_1 = require("../db/db");
 exports.default = (req, res, next) => {
     const errors = (0, express_validator_1.validationResult)(req).array();
-    // if (JSON.stringify(req.body) === '{}') {
-    //     res.send(401)
-    //     return;
-    // } else
     if (errors.length === 0) {
         next();
     }
@@ -33,8 +29,4 @@ exports.default = (req, res, next) => {
             errorsMessages: errorsArray
         });
     }
-    //if (!errors.isEmpty()) {
-    //    return res.status(400).json({errorsMessages: errors})
-    //}
-    //next()
 };

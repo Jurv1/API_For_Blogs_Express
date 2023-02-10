@@ -9,6 +9,11 @@ export default (req: Request, res: Response, next: NextFunction) => {
             if (login === "admin" && password === "qwerty") {
                 next()
             }
+            else {
+                res.status(401).json(
+                    {message: 'Нет доступа'}
+                )
+            }
         } catch (err) {
             return res.status(401).json(
                 {message: 'Нет доступа'}

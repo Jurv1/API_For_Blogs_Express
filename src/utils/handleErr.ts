@@ -4,10 +4,6 @@ import {blogs} from "../db/db";
 
 export default (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req).array()
-    // if (JSON.stringify(req.body) === '{}') {
-    //     res.send(401)
-    //     return;
-    // } else
     if(errors.length === 0){
         next()
     } else {
@@ -33,10 +29,4 @@ export default (req: Request, res: Response, next: NextFunction) => {
             errorsMessages: errorsArray
         })
     }
-
-    //if (!errors.isEmpty()) {
-    //    return res.status(400).json({errorsMessages: errors})
-    //}
-
-    //next()
 }
