@@ -13,7 +13,8 @@ exports.default = (req, res, next) => {
     }
     else {
         let errorsArray = [];
-        if (req.method === "POST" && req.baseUrl === "/posts") {
+        if ((req.method === "POST" && req.baseUrl === "/posts")
+            || (req.method === "PUT" && req.baseUrl === `/posts`)) {
             const foundedEl = db_1.blogs.find(el => (el === null || el === void 0 ? void 0 : el.id) === req.body.blogId);
             if (!foundedEl) {
                 errorsArray.push({

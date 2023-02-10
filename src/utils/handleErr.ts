@@ -12,7 +12,9 @@ export default (req: Request, res: Response, next: NextFunction) => {
         next()
     } else {
         let errorsArray: { message: string, field: string }[] = []
-        if(req.method === "POST" && req.baseUrl === "/posts"){
+        if((req.method === "POST" && req.baseUrl === "/posts")
+                || (req.method === "PUT" && req.baseUrl === `/posts`)
+        ){
             const foundedEl = blogs.find(el => el?.id === req.body.blogId)
             if (!foundedEl) {
                 errorsArray.push({

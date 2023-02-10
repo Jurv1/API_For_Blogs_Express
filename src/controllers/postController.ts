@@ -46,7 +46,7 @@ export const createOne = (req: Request, res: Response) => {
         } else {
             res.status(400).json({ errorsMessages: [
                     {
-                        message: "Yes",
+                        message: "No such blog",
                         field: "blogId"
                     }
                 ]
