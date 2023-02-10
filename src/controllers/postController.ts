@@ -44,8 +44,13 @@ export const createOne = (req: Request, res: Response) => {
             res.status(201).send(newPostTmp)
             return;
         } else {
-            res.status(404).json({
-                message: "We don't have a blog for this post"
+            res.status(400).json({ errorsMessages: [
+                    {
+                        message: "Yes",
+                        field: "blogId"
+                    }
+                ]
+
             })
         }
 
