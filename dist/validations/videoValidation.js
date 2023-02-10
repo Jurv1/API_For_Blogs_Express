@@ -13,11 +13,11 @@ let availableResolutions = [
     "P2160"
 ];
 exports.videoValidation = [
-    (0, express_validator_1.body)('title').isString().isLength({ max: 40 }),
-    (0, express_validator_1.body)('author').isString().isLength({ max: 20 }),
-    (0, express_validator_1.body)('canBeDownloaded').optional().isBoolean(),
-    (0, express_validator_1.body)('minAgeRestriction').optional({ nullable: true }).isLength({ min: 1, max: 18 }),
-    (0, express_validator_1.body)('publicationDate').optional().isISO4217().isISO8601(),
-    (0, express_validator_1.body)('availableResolutions').optional({ nullable: true }).isArray(),
-    (0, express_validator_1.body)('availableResolutions.*').isIn(availableResolutions)
+    (0, express_validator_1.body)('title').trim().isString().isLength({ min: 1, max: 40 }),
+    (0, express_validator_1.body)('author').trim().isString().isLength({ min: 1, max: 20 }),
+    (0, express_validator_1.body)('canBeDownloaded').trim().optional().isBoolean(),
+    (0, express_validator_1.body)('minAgeRestriction').trim().optional({ nullable: true }).isLength({ min: 1, max: 18 }),
+    (0, express_validator_1.body)('publicationDate').trim().optional().isISO4217().isISO8601(),
+    (0, express_validator_1.body)('availableResolutions').trim().optional({ nullable: true }).isArray(),
+    (0, express_validator_1.body)('availableResolutions.*').trim().isIn(availableResolutions)
 ];
