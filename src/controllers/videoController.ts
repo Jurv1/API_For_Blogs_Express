@@ -1,16 +1,15 @@
 import {Request, Response} from "express";
+import {videosRepository} from "../repositories/videosRepository";
 import {Video} from "../schemas/videoSchemas";
-import findEl from "../utils/findEl";
-import {videos} from "../db/db";
-
 
 export const getStart = async (req: Request, res: Response) => {
-    res.send("Hi")
+    await res.send("Hi")
 }
 
-export const getAll = async (req: Request, res: Response) => {
+export async function getAllVideos(req: Request, res: Response) {
     try {
-        res.json(videos)
+        const allVideos = await videosRepository.getAll()
+        res.status(200).send(allVideos)
     } catch (err) {
         console.log(err)
         res.status(404).json({
@@ -19,9 +18,16 @@ export const getAll = async (req: Request, res: Response) => {
     }
 }
 
-export const getOne = async (req: Request, res: Response) => {
+export async function getOneVideo(req: Request, res: Response) {
     try {
-        findEl(req, res,videos)
+        const id = +req.params.id
+        const foundedVideo = await videosRepository.getOne(id)
+        console.log(foundedVideo)
+        if (foundedVideo){
+            res.status(200).send(foundedVideo)
+        } else {
+            res.sendStatus(404)
+        }
     } catch (err) {
         console.log(err)
         res.status(404).json({
@@ -30,31 +36,10 @@ export const getOne = async (req: Request, res: Response) => {
     }
 }
 
-export const createOne = async (req: Request, res: Response) => {
+export async function createOneVideo(req: Request, res: Response) {
     try {
-        let newVideo = {
-            id: +(new Date()),
-            title: req.body.title,
-            author: req.body.author,
-            availableResolutions: req.body.availableResolutions,
-            canBeDownloaded: req.body.canBeDownloaded,
-            minAgeRestriction: req.body.minAgeRestriction,
-            createdAt: (new Date()).toISOString(),
-            publicationDate: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString()
-        }
-
-        let videoTmp = {
-            id: +(new Date()),
-            title: req.body.title,
-            author: req.body.author,
-            availableResolutions: req.body.availableResolutions,
-            canBeDownloaded: false,
-            minAgeRestriction: null,
-            createdAt: (new Date()).toISOString(),
-            publicationDate: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString()
-        }
-        newVideo = Object.assign(newVideo, videoTmp)
-        videos.push(newVideo)
+        const newVideo = await videosRepository.createOne(req.body.title, req.body.author,
+            req.body?.availableResolutions, req.body?.canBeDownloaded, req.body?.minAgeRestriction,)
         res.status(201).send(newVideo)
     } catch (err) {
         console.log(err)
@@ -64,19 +49,14 @@ export const createOne = async (req: Request, res: Response) => {
     }
 }
 
-export const updateOne = async (req: Request, res: Response) => {
+export async function updateOneVideo(req: Request, res: Response): Promise<any> {
     try {
-        const id = req.params.id
-        let foundedEl = videos.find(el => el?.id === +id)
-
-        if (foundedEl) {
-            const index = videos.indexOf(foundedEl)
-            foundedEl = Object.assign(foundedEl, req.body)
-            videos[index] = foundedEl
-            res.status(204).send(foundedEl)
-            return;
-        }
-        res.status(404).send("Not ok")
+        const id = +req.params.id
+        const updatedEl = await videosRepository.updateOne(id, req.body.title, req.body.author,
+            req.body?.availableResolutions, req.body?.canBeDownloaded, req.body?.minAgeRestriction)
+        if (!updatedEl) return res.send(404)
+        const video = await videosRepository.getOne(id)
+        res.status(204).send(video)
     } catch (err) {
         console.log(err)
         res.status(404).json({
@@ -85,17 +65,12 @@ export const updateOne = async (req: Request, res: Response) => {
     }
 }
 
-export const deleteOne = async (req: Request, res: Response) => {
+export async function deleteOneVideo(req: Request, res: Response) {
     try {
-        for (let i = 0; i < videos.length; i++) {
-            if (videos[i]?.id === +req.params.id) {
-                videos.splice(i, 1)
-                res.send(204)
-                return;
-            }
-
-        }
-        res.status(404).send('Not Ok')
+        const id = +req.params.id
+        const result = await videosRepository.deleteOne(id)
+        if (!result) return res.send(404)
+        res.send(204)
     } catch (err) {
         console.log(err)
         res.status(404).json({
@@ -103,6 +78,5 @@ export const deleteOne = async (req: Request, res: Response) => {
         })
     }
 }
-
 
 

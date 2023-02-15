@@ -5,11 +5,11 @@ import handleErr from "../utils/handleErr";
 
 export const videoRouter = Router({})
 
-videoRouter.get('/', VideoController.getAll)
-videoRouter.get('/:id', VideoController.getOne)
+videoRouter.get('/', VideoController.getAllVideos)
+videoRouter.get('/:id', VideoController.getOneVideo)
 
-videoRouter.post('/', videoValidation, handleErr, VideoController.createOne)
+videoRouter.post('/', videoValidation, handleErr, VideoController.createOneVideo)
 
-videoRouter.put('/:id',  videoValidation, handleErr, VideoController.updateOne)
+videoRouter.put('/:id',  videoValidation, handleErr, VideoController.updateOneVideo)
 
-videoRouter.delete('/:id', VideoController.deleteOne)
+videoRouter.delete('/:id', VideoController.deleteOneVideo)

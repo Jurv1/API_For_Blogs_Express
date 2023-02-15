@@ -8,6 +8,7 @@ import * as testingController from "./controllers/testingController"
 import {postRouter} from "./routs/postRouter";
 import {blogRouter} from "./routs/blogRouter";
 import {videoRouter} from "./routs/videoRouter";
+import {runDb} from "./db/db";
 
 const app = express()
 const port = 3003
@@ -31,6 +32,11 @@ app.use('/posts', postRouter)
 
 app.delete('/testing/all-data', testingController.deleteAll)
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
+const startApp = async () => {
+    await runDb()
+    app.listen(port, () => {
+        console.log(`Example app listening on port ${port}`)
+    })
+}
+
+startApp()

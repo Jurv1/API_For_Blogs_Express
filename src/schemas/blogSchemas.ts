@@ -1,6 +1,8 @@
+import {ObjectId} from "mongodb";
+
 export type Blog = {
-    id: string,
-    name: string,
-    description: string,
-    websiteUrl: string,
-} | undefined
+    id: string
+    name: string
+    description: string
+    websiteUrl: string
+}

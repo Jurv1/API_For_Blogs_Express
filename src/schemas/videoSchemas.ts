@@ -7,4 +7,4 @@ export type Video = {
     createdAt?: string,
     publicationDate?: string,
     availableResolutions?: string[]
-} | undefined
+}

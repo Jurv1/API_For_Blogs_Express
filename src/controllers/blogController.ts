@@ -1,11 +1,11 @@
 import {Request, Response} from "express";
-import findEl from "../utils/findEl";
+import {blogsRepository} from "../repositories/blogsRepository";
 import {Blog} from "../schemas/blogSchemas";
-import {blogs, db} from "../db/db";
 
-export const getAll = (req: Request, res: Response) => {
+export async function getAllBlogs(req: Request, res: Response) {
     try {
-        res.status(200).send(blogs)
+        const allBlogs = await blogsRepository.getAll()
+        res.status(200).send(allBlogs)
     } catch (err) {
         console.log(err)
         res.status(404).json({
@@ -14,27 +14,27 @@ export const getAll = (req: Request, res: Response) => {
     }
 }
 
-export const getOne = (req: Request, res: Response) => {
-    try {
-        findEl(req, res,blogs)
-    } catch (err) {
-        console.log(err)
-        res.status(404).json({
-            message: "Can't find el"
-        })
+export async function getOneBlog(req: Request, res: Response) {
+    const id = req.params.id
+    const result: Blog | null  = await blogsRepository.getOne(id)
+    let blog: Blog | null = await result
+    if (blog) {
+        res.status(200).send(blog);
+        return
+    } else {
+        res.sendStatus(404)
+        return
     }
+
+    //console.log(result)
+    //return result
+
 }
 
-export const createOne = (req: Request, res: Response) => {
+export async function createOneBlog(req: Request, res: Response) {
     try {
-        let newBlogTmp = {
-            id: (+(new Date())).toString(),
-            name: req.body.name,
-            description: req.body.description,
-            websiteUrl: req.body.websiteUrl
-        }
-        blogs.push(newBlogTmp)
-        //blogs = [...blogs, newBlogTmp]
+        const newBlogTmp = await blogsRepository.createOne(req.body.name, req.body.description,
+            req.body.websiteUrl)
         res.status(201).send(newBlogTmp)
     } catch (err) {
         console.log(err)
@@ -44,19 +44,14 @@ export const createOne = (req: Request, res: Response) => {
     }
 }
 
-export const updateOne = (req: Request, res: Response) => {
+export async function updateOneBlog(req: Request, res: Response) {
     try {
         const id = req.params.id
-        let foundedEl = blogs.find(el => el?.id === id)
-
-        if (foundedEl) {
-            const index = blogs.indexOf(foundedEl)
-            foundedEl = Object.assign(foundedEl, req.body)
-            blogs[index] = foundedEl
-            res.status(204).send(foundedEl)
-            return;
-        }
-        res.status(404).send("Not ok")
+        const updatedEl = await blogsRepository.updateOne(id, req.body.name, req.body.description,
+            req.body.websiteUrl)
+        if (!updatedEl) res.status(404)
+        const blog = await blogsRepository.getOne(id)
+        res.status(204).send(blog)
     } catch (err) {
         console.log(err)
         res.status(404).json({
@@ -65,16 +60,12 @@ export const updateOne = (req: Request, res: Response) => {
     }
 }
 
-export const deleteOne = (req: Request, res: Response) => {
+export async function deleteOneBlog(req: Request, res: Response) {
     try {
-        for (let i = 0; i < blogs.length; i++) {
-            if (blogs[i]?.id === req.params.id) {
-                blogs.splice(i, 1)
-                res.send(204)
-                return;
-            }
-        }
-        res.status(404).send('Not Ok')
+        const id = req.params.id
+        const result = await blogsRepository.deleteOne(id)
+        if (!result) return res.send(404)
+        res.send(204)
     } catch (err) {
         console.log(err)
         res.status(404).json({

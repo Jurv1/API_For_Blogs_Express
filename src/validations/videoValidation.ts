@@ -16,7 +16,7 @@ export const videoValidation = [
     body('author').trim().isString().isLength({min: 1, max: 20}),
     body('canBeDownloaded').trim().optional().isBoolean(),
     body('minAgeRestriction').trim().optional({nullable: true}).isLength({min: 1, max: 18}),
-    body('publicationDate').trim().optional().isISO4217().isISO8601(),
-    body('availableResolutions').trim().optional({nullable: true}).isArray(),
+    body('publicationDate').trim().optional().isISO8601(),
+    body('availableResolutions').optional({nullable: true}).isArray(),
     body('availableResolutions.*').trim().isIn(availableResolutions)
 ]

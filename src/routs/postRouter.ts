@@ -6,11 +6,11 @@ import handleErr from "../utils/handleErr";
 
 export const postRouter = Router({})
 
-postRouter.get('/', PostController.getAll)
-postRouter.get('/:id', PostController.getOne)
+postRouter.get('/', PostController.getAllPosts)
+postRouter.get('/:id', PostController.getOnePost)
 
-postRouter.post('/', checkAuth, postValidation, handleErr,  PostController.createOne)
+postRouter.post('/', checkAuth, postValidation, handleErr,  PostController.createOnePost)
 
-postRouter.put('/:id', checkAuth, postValidation, handleErr, PostController.updateOne)
+postRouter.put('/:id', checkAuth, postValidation, handleErr, PostController.updateOnePost)
 
-postRouter.delete('/:id', checkAuth, PostController.deleteOne)
+postRouter.delete('/:id', checkAuth, PostController.deleteOnePost)
