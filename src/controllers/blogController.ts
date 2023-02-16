@@ -34,7 +34,7 @@ export async function getOneBlog(req: Request, res: Response) {
 export async function createOneBlog(req: Request, res: Response) {
     try {
         const newBlogTmp = await blogsRepository.createOne(req.body.name, req.body.description,
-            req.body.websiteUrl)
+            req.body.websiteUrl, req.body.isMembership)
         res.status(201).send(newBlogTmp)
     } catch (err) {
         console.log(err)

@@ -21,7 +21,8 @@ export const postsRepository = {
             shortDescription: shortDescription.toString(),
             content: content,
             blogId: blogId,
-            blogName: blogName
+            blogName: blogName,
+            createdAt: new Date().toISOString()
         }
         await postDBController.insertOne(newPostTmp)
         return await postDBController.findOne({id: id}, {projection: {_id: 0}});
