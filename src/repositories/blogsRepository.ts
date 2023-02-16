@@ -17,14 +17,14 @@ export const blogsRepository = {
 
     },
 
-    async createOne(name: string, description: string, websiteUrl: string, isMembership: boolean): Promise<Blog|null> {
+    async createOne(name: string, description: string, websiteUrl: string): Promise<Blog|null> {
         const id = (+(new Date())).toString()
         let newBlogTmp = {
             id: id,
             name: name,
             description: description,
             websiteUrl: websiteUrl,
-            isMembership: isMembership || false,
+            isMembership: false,
             createdAt: new Date().toISOString()
         }
         await blogDBController.insertOne(newBlogTmp)

@@ -13,5 +13,5 @@ export const postValidation = [
     body('blogId').exists().bail()
         .trim().isString(),
     body('blogName').trim().optional().isString(),
-    body('createdAt').matches('/\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/')
+    body('createdAt').optional().matches(/\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/)
 ]
