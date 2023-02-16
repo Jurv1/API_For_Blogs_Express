@@ -18,15 +18,15 @@ export const blogsRepository = {
     },
 
     async createOne(name: string, description: string, websiteUrl: string): Promise<Blog|null> {
-
+        const id = (+(new Date())).toString()
         let newBlogTmp = {
-            id: (+(new Date())).toString(),
+            id: id,
             name: name,
             description: description,
             websiteUrl: websiteUrl
         }
-        const result = await blogDBController.insertOne(newBlogTmp)
-        return newBlogTmp;
+        await blogDBController.insertOne(newBlogTmp)
+        return await blogDBController.findOne({id: id}, {projection: {_id: 0}});
 
     },
 

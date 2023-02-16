@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {videoDBController} from "../db/db";
+import {blogDBController, videoDBController} from "../db/db";
 import {Video} from "../schemas/videoSchemas";
 
 export const videosRepository = {
@@ -16,10 +16,11 @@ export const videosRepository = {
     },
 
     async createOne(title: string, author: string, availableResolutions?: Array<string>,
-                    canBeDownloaded?: boolean, minAgeRestriction?: number | null) {
+                    canBeDownloaded?: boolean, minAgeRestriction?: number | null): Promise<Video|null> {
 
+        const id = +(new Date())
         let newVideo = {
-            id: +(new Date()),
+            id: id,
             title: title,
             author: author,
             availableResolutions: availableResolutions,
@@ -30,7 +31,7 @@ export const videosRepository = {
         }
 
         let videoTmp = {
-            id: +(new Date()),
+            id: id,
             title: title,
             author: author,
             availableResolutions: availableResolutions,
@@ -41,7 +42,7 @@ export const videosRepository = {
         }
         newVideo = Object.assign(newVideo, videoTmp)
         await videoDBController.insertOne(newVideo)
-        return newVideo
+        return await videoDBController.findOne({id: id}, {projection: {_id: 0}});
 
     },
 

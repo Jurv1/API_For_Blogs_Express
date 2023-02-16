@@ -15,9 +15,8 @@ export const postsRepository = {
 
     async createOne(id: string, blogName: string, title: string, shortDescription: string,
                     content: string, blogId: string): Promise<Post | null> {
-
         let newPostTmp = {
-            id: (+(new Date())).toString(),
+            id: id,
             title: title.toString(),
             shortDescription: shortDescription.toString(),
             content: content,
@@ -25,7 +24,7 @@ export const postsRepository = {
             blogName: blogName
         }
         await postDBController.insertOne(newPostTmp)
-        return newPostTmp
+        return await postDBController.findOne({id: id}, {projection: {_id: 0}});
 
     },
 
