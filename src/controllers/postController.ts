@@ -19,7 +19,7 @@ export async function getOnePost(req: Request, res: Response) {
         const id = req.params.id
         const foundedPost = await postsRepository.getOne(id)
         if (foundedPost){
-            res.status(204).send(foundedPost)
+            res.status(200).send(foundedPost)
             return
         }
 
