@@ -2,9 +2,9 @@ import { body } from "express-validator";
 import { CustomValidator } from "express-validator/src/base";
 import {blogsRepository} from "../repositories/blogsRepository";
 export const checkBlogId : CustomValidator = async value => {
-    const foundBlog = await blogsRepository.getOne(value);
-    if (!foundBlog) {
-        throw new Error('not blogId')
+    const foundedEl = await blogsRepository.getOne(value);
+    if (!foundedEl) {
+        throw new Error('no such Blog')
     }
 };
 
