@@ -18,7 +18,11 @@ export async function getOnePost(req: Request, res: Response) {
     try {
         const id = req.params.id
         const foundedPost = await postsRepository.getOne(id)
-        if (foundedPost) res.status(204).send(foundedPost)
+        if (foundedPost){
+            res.status(204).send(foundedPost)
+            return
+        }
+
         res.send(404)
     } catch (err) {
         console.log(err)
@@ -63,7 +67,10 @@ export async function updateOnePost(req: Request, res: Response) {
         const id = req.params.id
         const updatedEl = await postsRepository.updateOne(id, req.body.blogName, req.body.title,
             req.body.shortDescription, req.body.content, req.body.blogId)
-        if (!updatedEl) res.send(404)
+        if (!updatedEl) {
+            res.sendStatus(404)
+            return
+        }
         const post = await postsRepository.getOne(id)
         res.status(204).send(post)
     } catch (err) {

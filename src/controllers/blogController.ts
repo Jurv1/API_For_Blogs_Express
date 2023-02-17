@@ -49,7 +49,10 @@ export async function updateOneBlog(req: Request, res: Response) {
         const id = req.params.id
         const updatedEl = await blogsRepository.updateOne(id, req.body.name, req.body.description,
             req.body.websiteUrl)
-        if (!updatedEl) res.status(404)
+        if (!updatedEl) {
+            res.sendStatus(404)
+            return
+        }
         const blog = await blogsRepository.getOne(id)
         res.status(204).send(blog)
     } catch (err) {
