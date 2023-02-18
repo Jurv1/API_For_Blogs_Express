@@ -2,7 +2,7 @@ import {Request, Response} from "express";
 import {blogDBController, videoDBController} from "../db/db";
 import {Video} from "../schemas/videoSchemas";
 
-export const videosRepository = {
+export const videosService = {
     async getAll() {
 
         return await videoDBController.find({}, {projection: {_id: 0}}).toArray()

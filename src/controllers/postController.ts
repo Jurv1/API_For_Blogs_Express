@@ -1,10 +1,13 @@
 import {Request, Response} from "express";
-import {postsRepository} from "../repositories/postsRepository";
-import {blogsRepository} from "../repositories/blogsRepository";
+import * as postRepository from "../repositories/postRepository";
+import {Blog} from "../schemas/blogSchemas";
+import {postsService} from "../services/postsService";
+import {blogsService} from "../services/blogsService";
+import {Post} from "../schemas/postSchemas";
 
-export async function getAllPosts(req: Request, res: Response) {
+export async function getAll (req: Request, res: Response){
     try {
-        const allBlogs = await postsRepository.getAll()
+        const allBlogs = await postRepository.getAllPosts()
         res.status(200).send(allBlogs)
     } catch (err) {
         console.log(err)
@@ -14,45 +17,35 @@ export async function getAllPosts(req: Request, res: Response) {
     }
 }
 
-export async function getOnePost(req: Request, res: Response) {
+export async function getOne (req: Request, res: Response){
     try {
         const id = req.params.id
-        const foundedPost = await postsRepository.getOne(id)
-        if (foundedPost){
-            res.status(200).send(foundedPost)
-            return
-        }
-
-        res.send(404)
-    } catch (err) {
-        console.log(err)
-        res.status(404).json({
-            message: "Can't find el"
-        })
-    }
-}
-
-export async function createOnePost(req: Request, res: Response) {
-    try {
-        const blogId: string = req.body.blogId
-        const id = (+(new Date())).toString()
-        const foundedEl = await blogsRepository.getOne(blogId)
-        console.log(foundedEl)
-        if (foundedEl) {
-            const blogName = foundedEl.name
-            const newPostTmp = await postsRepository.createOne(id, blogName, req.body.title,
-                req.body.shortDescription, req.body.content, req.body.blogId)
-            res.status(201).send(newPostTmp)
+        const result = await postRepository.getOnePost(id)
+        if (result) {
+            res.status(200).send(result);
         } else {
-            res.status(400).json({
-                errorsMessages: [
-                    {
-                        message: "No such blog",
-                        field: "blogId"
-                    }
-                ]
-            })
+            res.sendStatus(404)
         }
+    } catch (err){
+        res.status(404).json({
+            message: "Can't find el"
+        })
+    }
+}
+
+export async function createOne (req: Request, res: Response){
+    try {
+        const id = (+(new Date())).toString()
+        const {title, shortDescription, content, blogId, blogName, createdAt} = req.body
+        const result: Post|null = await postRepository.createOnePost(id, title, shortDescription, content, blogId, blogName, createdAt)
+        result !== null ? res.status(201).send(result) : res.status(400).json({
+            errorsMessages: [
+                {
+                    message: "No such blog",
+                    field: "blogId"
+                }
+            ]
+        })
 
     } catch (err) {
         console.log(err)
@@ -62,29 +55,31 @@ export async function createOnePost(req: Request, res: Response) {
     }
 }
 
-export async function updateOnePost(req: Request, res: Response) {
+export async function updateOne (req: Request, res: Response){
     try {
         const id = req.params.id
-        const updatedEl = await postsRepository.updateOne(id, req.body.blogName, req.body.title,
-            req.body.shortDescription, req.body.content, req.body.blogId)
-        if (!updatedEl) {
-            res.sendStatus(404)
+        const {title, shortDescription, content, blogId, blogName, createdAt} = req.body
+        const result = await postRepository.updateOnePost(id, title, shortDescription, content, blogId, blogName, createdAt)
+        if (result === null) {
+            res.status(404).json({
+                message: "Not good"
+            })
             return
         }
-        const post = await postsRepository.getOne(id)
-        res.status(204).send(post)
+        res.status(204).send(result)
     } catch (err) {
         console.log(err)
         res.status(404).json({
             message: "Can't find el"
         })
     }
+
 }
 
-export async function deleteOnePost(req: Request, res: Response) {
+export async function deleteOne (req: Request, res: Response){
     try {
         const id = req.params.id
-        const result = await postsRepository.deleteOne(id)
+        const result = await postRepository.deleteOnePost(id)
         if (!result) return res.send(404)
         res.send(204)
 

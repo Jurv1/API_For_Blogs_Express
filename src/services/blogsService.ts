@@ -2,7 +2,7 @@ import {blogDBController} from "../db/db";
 import {Blog} from "../schemas/blogSchemas";
 
 
-export const blogsRepository = {
+export const blogsService = {
     async getAll(): Promise<Blog[]>{
 
         return await blogDBController.find({}, {projection: {_id: 0}}).toArray()
@@ -17,18 +17,10 @@ export const blogsRepository = {
 
     },
 
-    async createOne(name: string, description: string, websiteUrl: string): Promise<Blog|null> {
-        const id = (+(new Date())).toString()
-        let newBlogTmp = {
-            id: id,
-            name: name,
-            description: description,
-            websiteUrl: websiteUrl,
-            isMembership: false,
-            createdAt: new Date().toISOString()
-        }
+    async createOne(newBlogTmp: Blog): Promise<Blog|null> {
+
         await blogDBController.insertOne(newBlogTmp)
-        return await blogDBController.findOne({id: id}, {projection: {_id: 0}});
+        return await blogDBController.findOne({id: newBlogTmp.id}, {projection: {_id: 0}});
 
     },
 

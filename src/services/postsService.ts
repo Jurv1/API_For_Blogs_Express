@@ -2,7 +2,7 @@ import {blogDBController, postDBController} from "../db/db";
 import {Post} from "../schemas/postSchemas";
 import {Blog} from "../schemas/blogSchemas";
 
-export const postsRepository = {
+export const postsService = {
     async getAll() {
         return await postDBController.find({}, {projection: {_id: 0}}).toArray()
     },
@@ -13,19 +13,10 @@ export const postsRepository = {
         return result
     },
 
-    async createOne(id: string, blogName: string, title: string, shortDescription: string,
-                    content: string, blogId: string): Promise<Post | null> {
-        let newPostTmp = {
-            id: id,
-            title: title.toString(),
-            shortDescription: shortDescription.toString(),
-            content: content,
-            blogId: blogId,
-            blogName: blogName,
-            createdAt: new Date().toISOString()
-        }
+    async createOne(newPostTmp: Post): Promise<Post | null> {
+
         await postDBController.insertOne(newPostTmp)
-        return await postDBController.findOne({id: id}, {projection: {_id: 0}});
+        return await postDBController.findOne({id: newPostTmp.id}, {projection: {_id: 0}});
 
     },
 

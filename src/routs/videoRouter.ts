@@ -1,15 +1,15 @@
 import {Router} from "express";
-import * as VideoController from "../controllers/videoController";
+import * as VideoRepository from "../repositories/videoRepository";
 import {videoValidation} from "../validations/videoValidation";
 import handleErr from "../utils/handleErr";
 
 export const videoRouter = Router({})
 
-videoRouter.get('/', VideoController.getAllVideos)
-videoRouter.get('/:id', VideoController.getOneVideo)
+videoRouter.get('/', VideoRepository.getAllVideos)
+videoRouter.get('/:id', VideoRepository.getOneVideo)
 
-videoRouter.post('/', videoValidation, handleErr, VideoController.createOneVideo)
+videoRouter.post('/', videoValidation, handleErr, VideoRepository.createOneVideo)
 
-videoRouter.put('/:id',  videoValidation, handleErr, VideoController.updateOneVideo)
+videoRouter.put('/:id',  videoValidation, handleErr, VideoRepository.updateOneVideo)
 
-videoRouter.delete('/:id', VideoController.deleteOneVideo)
+videoRouter.delete('/:id', VideoRepository.deleteOneVideo)
