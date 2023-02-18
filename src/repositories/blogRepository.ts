@@ -29,15 +29,10 @@ export async function createOneBlog(id: string, name: string, description: strin
         return await blogDBController.findOne({id: id}, {projection: {_id: 0}});
 }
 
-export async function updateOneBlog(id: string, name: string, description: string, websiteUrl: string): Promise<Blog|null> {
+export async function updateOneBlog(id: string, name: string, description: string, websiteUrl: string): Promise<boolean> {
 
-        const updatedEl = await blogsService.updateOne(id, name, description,
+        return await blogsService.updateOne(id, name, description,
             websiteUrl)
-        if (!updatedEl) {
-            return  null
-        }
-        return await blogsService.getOne(id)
-
 }
 
 export async function deleteOneBlog(id: string): Promise<boolean> {

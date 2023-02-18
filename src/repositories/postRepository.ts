@@ -1,8 +1,6 @@
-import {Request, Response} from "express";
 import {postsService} from "../services/postsService";
 import {blogsService} from "../services/blogsService";
 import {Post} from "../schemas/postSchemas";
-import {postDBController} from "../db/db";
 
 export async function getAllPosts(): Promise<Post[]> {
 
@@ -41,13 +39,9 @@ export async function createOnePost(id: string, title: string, shortDescription:
 }
 
 export async function updateOnePost(id: string, title: string, shortDescription: string, content: string,
-                                    blogId: string, blogName: string, createdAt: string) {
+                                    blogId: string,): Promise<boolean> {
 
-    const updatedEl = await postsService.updateOne( id, title, shortDescription, content, blogId, blogName)
-    if (!updatedEl) {
-        return  null
-    }
-    return await postsService.getOne(id)
+    return await postsService.updateOne( id, title, shortDescription, content, blogId )
 
 }
 

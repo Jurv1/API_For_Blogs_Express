@@ -1,6 +1,5 @@
-import {blogDBController, postDBController} from "../db/db";
+import {postDBController} from "../db/db";
 import {Post} from "../schemas/postSchemas";
-import {Blog} from "../schemas/blogSchemas";
 
 export const postsService = {
     async getAll() {
@@ -8,9 +7,7 @@ export const postsService = {
     },
 
     async getOne(id: string): Promise<Post | null> {
-        const result: Post|null = await postDBController.findOne({id: id}, { projection: {_id: 0}})
-        console.log(result)
-        return result
+        return await postDBController.findOne({id: id}, {projection: {_id: 0}})
     },
 
     async createOne(newPostTmp: Post): Promise<Post | null> {
@@ -20,7 +17,7 @@ export const postsService = {
 
     },
 
-    async updateOne(id: string, blogName: string, title: string, shortDescription: string,
+    async updateOne(id: string,  title: string, shortDescription: string,
                     content: string, blogId: string): Promise<boolean> {
 
         const updatedEl = await postDBController.updateOne({id: id},

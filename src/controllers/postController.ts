@@ -1,8 +1,5 @@
 import {Request, Response} from "express";
 import * as postRepository from "../repositories/postRepository";
-import {Blog} from "../schemas/blogSchemas";
-import {postsService} from "../services/postsService";
-import {blogsService} from "../services/blogsService";
 import {Post} from "../schemas/postSchemas";
 
 export async function getAll (req: Request, res: Response){
@@ -37,7 +34,8 @@ export async function createOne (req: Request, res: Response){
     try {
         const id = (+(new Date())).toString()
         const {title, shortDescription, content, blogId, blogName, createdAt} = req.body
-        const result: Post|null = await postRepository.createOnePost(id, title, shortDescription, content, blogId, blogName, createdAt)
+        const result: Post|null = await postRepository.createOnePost(id, title, shortDescription,
+            content, blogId, blogName, createdAt)
         result !== null ? res.status(201).send(result) : res.status(400).json({
             errorsMessages: [
                 {
@@ -58,15 +56,16 @@ export async function createOne (req: Request, res: Response){
 export async function updateOne (req: Request, res: Response){
     try {
         const id = req.params.id
-        const {title, shortDescription, content, blogId, blogName, createdAt} = req.body
-        const result = await postRepository.updateOnePost(id, title, shortDescription, content, blogId, blogName, createdAt)
-        if (result === null) {
+        const {title, shortDescription, content, blogId,  } = req.body
+        let result = await postRepository.updateOnePost(id, title, shortDescription, content, blogId, )
+        if (!result) {
             res.status(404).json({
                 message: "Not good"
             })
             return
         }
-        res.status(204).send(result)
+        //const el = await postRepository.getOnePost(id)
+        res.sendStatus(204)
     } catch (err) {
         console.log(err)
         res.status(404).json({

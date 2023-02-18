@@ -51,14 +51,13 @@ export async function updateOne (req: Request, res: Response){
         const id = req.params.id
         const {name, description, websiteUrl} = req.body
         const result = await BlogRepository.updateOneBlog(id, name, description, websiteUrl)
-        if (result === null) {
+        if (!result) {
             res.status(404).json({
-            message: "NOT OK"
-        })
-            return
+                message: "NOT OK"
+            })
         }
 
-        res.status(204).send(result)
+        res.sendStatus(204)
 
     } catch (err) {
         console.log(err)
