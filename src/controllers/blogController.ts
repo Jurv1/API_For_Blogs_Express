@@ -19,8 +19,10 @@ export async function getOne (req: Request, res: Response){
         const result = await BlogRepository.getOneBlog(id)
         if (result) {
             res.status(200).send(result);
+            //return
         } else {
             res.sendStatus(404)
+            //return
         }
     } catch (err){
         res.status(404).json({
@@ -55,6 +57,7 @@ export async function updateOne (req: Request, res: Response){
             res.status(404).json({
                 message: "NOT OK"
             })
+            return
         }
 
         res.sendStatus(204)
