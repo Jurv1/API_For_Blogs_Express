@@ -2,8 +2,8 @@ import express from 'express'
 import bodyParser from "body-parser";
 import cors from 'cors'
 
-import * as VideoController from "./repositories/videoRepository";
-import * as testingController from "./repositories/testingRepository"
+import * as VideoController from "./services/videoService";
+import * as testingController from "./services/testingService"
 
 import {postRouter} from "./routs/postRouter";
 import {blogRouter} from "./routs/blogRouter";

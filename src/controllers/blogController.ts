@@ -1,11 +1,15 @@
 import {Request, Response} from "express";
-import * as BlogRepository from "../repositories/blogRepository";
-import {Blog} from "../schemas/blogSchemas";
+import * as BlogService from "../services/blogService";
+import {viewBlogModel} from "../schemas/presentationSchemas/blogSchemas";
+import {DBBlog, FinalDBBlog} from "../schemas/dbSchemas/BlogDBSchema";
+import {mapBlog, mapBlogs} from "../utils/mappers/blogMapper";
 
+//вынести синхронку
+//todo избавиться от своего id и в маппере преобразовывать _id в id
 export async function getAll (req: Request, res: Response){
     try {
-        const allBlogs = await BlogRepository.getAllBlogs()
-        res.status(200).send(allBlogs)
+        const allBlogs = await BlogService.getAllBlogs()
+        allBlogs ? res.status(200).send(mapBlogs(allBlogs)) : res.sendStatus(404)
     } catch (err){
         res.status(404).json({
             message: "Can't find el"
@@ -14,16 +18,10 @@ export async function getAll (req: Request, res: Response){
 }
 
 export async function getOne (req: Request, res: Response){
+    const id = req.params.id
     try {
-        const id = req.params.id
-        const result = await BlogRepository.getOneBlog(id)
-        if (result) {
-            res.status(200).send(result);
-            //return
-        } else {
-            res.sendStatus(404)
-            //return
-        }
+        const result = await BlogService.getOneBlog(id)
+        result ? res.status(200).send(mapBlog(result)) : res.sendStatus(404)
     } catch (err){
         res.status(404).json({
             message: "Can't find el"
@@ -33,13 +31,14 @@ export async function getOne (req: Request, res: Response){
 
 export async function createOne (req: Request, res: Response){
     try {
-        const id = (+(new Date())).toString()
         const {name, description, websiteUrl} = req.body
-        let result: Blog | null = await BlogRepository.createOneBlog(id, name, description, websiteUrl)
-        result !== null ? res.status(201).send(result) : res.status(404).json({
+        let result: FinalDBBlog | null = await BlogService.createOneBlog( name, description, websiteUrl)
+        if(result)  {
+            const viewBlog: viewBlogModel = mapBlog(result)
+            res.status(201).send(viewBlog)
+        } else res.status(404).json({
             message: "Can't find el"
         })
-
     } catch (err) {
         console.log(err)
         res.status(404).json({
@@ -52,7 +51,7 @@ export async function updateOne (req: Request, res: Response){
     try {
         const id = req.params.id
         const {name, description, websiteUrl} = req.body
-        const result = await BlogRepository.updateOneBlog(id, name, description, websiteUrl)
+        const result = await BlogService.updateOneBlog(id, name, description, websiteUrl)
         if (!result) {
             res.status(404).json({
                 message: "NOT OK"
@@ -75,7 +74,7 @@ export async function deleteOne (req: Request, res: Response){
     try {
 
         const id = req.params.id
-        const result = await BlogRepository.deleteOneBlog(id)
+        const result = await BlogService.deleteOneBlog(id)
         if (!result) return res.send(404)
         res.send(204)
 

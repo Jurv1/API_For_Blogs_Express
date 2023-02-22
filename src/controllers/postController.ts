@@ -1,11 +1,15 @@
 import {Request, Response} from "express";
-import * as postRepository from "../repositories/postRepository";
-import {Post} from "../schemas/postSchemas";
+import * as PostService from "../services/postService";
+import {FinalDBPost} from "../schemas/dbSchemas/PostDBSchema";
+import {mapPost, mapPosts} from "../utils/mappers/postMapper";
+
+//todo вынести синхронку
+//todo сделать функцию для трай кэтч (вынести обертку в фун-ию)
 
 export async function getAll (req: Request, res: Response){
     try {
-        const allBlogs = await postRepository.getAllPosts()
-        res.status(200).send(allBlogs)
+        const allBlogs = await PostService.getAllPosts()
+        res.status(200).send(mapPosts(allBlogs))
     } catch (err) {
         console.log(err)
         res.status(404).json({
@@ -17,9 +21,9 @@ export async function getAll (req: Request, res: Response){
 export async function getOne (req: Request, res: Response){
     try {
         const id = req.params.id
-        const result = await postRepository.getOnePost(id)
+        const result = await PostService.getOnePost(id)
         if (result) {
-            res.status(200).send(result);
+            res.status(200).send(mapPost(result));
         } else {
             res.sendStatus(404)
         }
@@ -34,9 +38,9 @@ export async function createOne (req: Request, res: Response){
     try {
         const id = (+(new Date())).toString()
         const {title, shortDescription, content, blogId, blogName, createdAt} = req.body
-        const result: Post|null = await postRepository.createOnePost(id, title, shortDescription,
+        const result: FinalDBPost|null = await PostService.createOnePost(id, title, shortDescription,
             content, blogId, blogName, createdAt)
-        result !== null ? res.status(201).send(result) : res.status(400).json({
+        result ? res.status(201).send(mapPost(result)) : res.status(400).json({
             errorsMessages: [
                 {
                     message: "No such blog",
@@ -57,14 +61,14 @@ export async function updateOne (req: Request, res: Response){
     try {
         const id = req.params.id
         const {title, shortDescription, content, blogId,  } = req.body
-        let result = await postRepository.updateOnePost(id, title, shortDescription, content, blogId, )
+        let result = await PostService.updateOnePost(id, title, shortDescription, content, blogId, )
         if (!result) {
             res.status(404).json({
                 message: "Not good"
             })
             return
         }
-        //const el = await postRepository.getOnePost(id)
+        //const el = await PostService.getOnePost(id)
         res.sendStatus(204)
     } catch (err) {
         console.log(err)
@@ -78,7 +82,7 @@ export async function updateOne (req: Request, res: Response){
 export async function deleteOne (req: Request, res: Response){
     try {
         const id = req.params.id
-        const result = await postRepository.deleteOnePost(id)
+        const result = await PostService.deleteOnePost(id)
         if (!result) return res.send(404)
         res.send(204)
 

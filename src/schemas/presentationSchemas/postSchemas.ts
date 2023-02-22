@@ -1,5 +1,4 @@
-export type Post = {
-    id: string,
+export type PostWithoutId = {
     title: string,
     shortDescription: string,
     content: string,
@@ -7,3 +6,9 @@ export type Post = {
     blogName: string,
     createdAt: string
 }
+
+type myId = {
+    id: string
+}
+
+export type viewPostModel = myId & PostWithoutId

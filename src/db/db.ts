@@ -1,9 +1,10 @@
 import { MongoClient } from "mongodb";
-import {Blog} from "../schemas/blogSchemas";
-import {Post} from "../schemas/postSchemas";
-import {Video} from "../schemas/videoSchemas";
+import {DBBlog} from "../schemas/dbSchemas/BlogDBSchema";
+import {Video} from "../schemas/presentationSchemas/videoSchemas";
 
 import * as dotenv from 'dotenv'
+import {BlogWithoutId} from "../schemas/presentationSchemas/blogSchemas";
+import {DBPost} from "../schemas/dbSchemas/PostDBSchema";
 dotenv.config()
 
 const mongoURI = process.env.MONGO_URI
@@ -22,6 +23,6 @@ export async function runDb(){
     }
 }
 
-export const blogDBController = client.db().collection<Blog>("blogs")
-export const postDBController = client.db().collection<Post>("posts")
+export const blogDBController = client.db().collection<DBBlog>("blogs")
+export const postDBController = client.db().collection<DBPost>("posts")
 export const videoDBController = client.db().collection<Video>("videos")

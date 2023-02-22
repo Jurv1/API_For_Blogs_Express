@@ -1,5 +1,5 @@
 import {Router} from "express";
-import * as VideoRepository from "../repositories/videoRepository";
+import * as VideoRepository from "../services/videoService";
 import {videoValidation} from "../validations/videoValidation";
 import handleErr from "../utils/handleErr";
 
