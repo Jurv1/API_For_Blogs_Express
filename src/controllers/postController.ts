@@ -130,6 +130,7 @@ export async function getPostsByBlogId(req: Request<{
     const query = queryValidator(searchNameTerm, sortBy, sortDirection, pageNumber, pageSize)
     try {
         const allPosts = await postsRepository.getAllPostsByBlogId(id, query)
+        if(allPosts.items.length === 0) res.sendStatus(404)
         res.status(200).send(allPosts)
     }catch (err){
         console.log(err)
