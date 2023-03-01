@@ -1,4 +1,4 @@
-import {blogDBController} from "../db/db";
+import {blogDBController, postDBController} from "../db/db";
 import {DBBlog, FinalDBBlog} from "../schemas/dbSchemas/BlogDBSchema";
 import {ObjectId, SortDirection} from "mongodb";
 import {BlogWithoutId} from "../schemas/presentationSchemas/blogSchemas";
@@ -23,12 +23,14 @@ export const blogsRepository = {
                     $options: "i"}}).sort({[sortBy]: sortDirection})
                         .skip(pageNumber > 0 ? (pageNumber - 1) * pageSize : 0)
                             .limit(pageSize > 0 ? pageSize : 0).toArray()
+            const countMe = await blogDBController.find({}).filter({name: {$regex: searchNameTerm,
+                    $options: "i"}}).toArray()
 
             return {
                 pagesCount: pagesCount,
                 page: pageNumber,
                 pageSize: pageSize,
-                totalCount: countDoc,
+                totalCount: countMe.length,
                 items: mapBlogs(allBlogs)
             }
 
