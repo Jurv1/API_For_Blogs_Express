@@ -85,7 +85,7 @@ export const postsRepository = {
         const sortDirection = query[2]
         const pageNumber = +query[3]
         const pageSize = +query[4]
-        const countDoc = await postDBController.count()
+        const countDoc = await postDBController.count({blogId: id})
         const pagesCount = Math.ceil(countDoc / +pageSize)
         const allPosts = await postDBController.find({blogId: id}).sort({[sortBy]: sortDirection})
             .skip(pageNumber > 0 ? (pageNumber - 1) * pageSize : 0)
