@@ -25,9 +25,9 @@ export const blogsRepository = {
                             .limit(pageSize > 0 ? pageSize : 0).toArray()
             const countMe = await blogDBController.find({}).filter({name: {$regex: searchNameTerm,
                     $options: "i"}}).toArray()
-
+            const pagesCountsss = Math.ceil(countMe.length / +pageSize)
             return {
-                pagesCount: pagesCount,
+                pagesCount: pagesCountsss, //костыли
                 page: pageNumber,
                 pageSize: pageSize,
                 totalCount: countMe.length,
