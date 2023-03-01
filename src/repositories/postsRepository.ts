@@ -27,7 +27,7 @@ export const postsRepository = {
                 pagesCount: pagesCount,
                 page: pageNumber,
                 pageSize: pageSize,
-                totalCount: allPosts.length,
+                totalCount: countDoc,
                 items: mapPosts(allPosts)
             }} else {
             const allPosts = await postDBController.find({}).sort({[sortBy]: sortDirection})
@@ -37,7 +37,7 @@ export const postsRepository = {
                 pagesCount: pagesCount,
                 page: +pageNumber,
                 pageSize: +pageSize,
-                totalCount: allPosts.length,
+                totalCount: countDoc,
                 items: mapPosts(allPosts)
             }
         }
@@ -94,7 +94,7 @@ export const postsRepository = {
             pagesCount: pagesCount,
             page: pageNumber,
             pageSize: pageSize,
-            totalCount: allPosts.length,
+            totalCount: countDoc,
             items: mapPosts(allPosts)
         }
     }
