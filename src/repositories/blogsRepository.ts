@@ -28,7 +28,7 @@ export const blogsRepository = {
                 pagesCount: pagesCount,
                 page: pageNumber,
                 pageSize: pageSize,
-                totalCount: countDoc,
+                totalCount: allBlogs.length,
                 items: mapBlogs(allBlogs)
             }
 
@@ -40,7 +40,7 @@ export const blogsRepository = {
                 pagesCount: pagesCount,
                 page: +pageNumber,
                 pageSize: +pageSize,
-                totalCount: countDoc,
+                totalCount: allBlogs.length,
                 items: mapBlogs(allBlogs)
             }
         }

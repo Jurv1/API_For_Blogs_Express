@@ -68,7 +68,7 @@ export async function createOneByBlogId (req: Request, res: Response) {
     const {title, shortDescription, content} = req.body
     try {
         const result: FinalDBPost|null = await PostService.createOnePostByBlogId(title, shortDescription, content, blogId)
-        result ? res.status(201).send(mapPost(result)) : res.status(400).json({
+        result ? res.status(201).send(mapPost(result)) : res.status(404).json({
             errorsMessages: [
                 {
                     message: "No such blog",
