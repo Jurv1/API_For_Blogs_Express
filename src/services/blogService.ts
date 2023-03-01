@@ -2,10 +2,13 @@ import {blogsRepository} from "../repositories/blogsRepository";
 //import {Blog} from "../schemas/presentationSchemas/blogSchemas";
 import {blogDBController} from "../db/db";
 import {DBBlog, FinalDBBlog} from "../schemas/dbSchemas/BlogDBSchema";
+import {SortDirection} from "mongodb";
+import {BlogPagination} from "../schemas/paginationSchemas/blogPaginationSchema";
 
-export async function getAllBlogs(): Promise<FinalDBBlog[]> {
+export async function getAllBlogs(query: [searchNameTerm: string, sortBy: string,
+    sortDirection: SortDirection, pageNumber: string, pageSize: string]): Promise<BlogPagination> {
 
-        return await blogsRepository.getAll()
+        return await blogsRepository.getAll(query)
 
 }
 

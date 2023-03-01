@@ -2,12 +2,48 @@ import {blogDBController} from "../db/db";
 import {DBBlog, FinalDBBlog} from "../schemas/dbSchemas/BlogDBSchema";
 import {ObjectId, SortDirection} from "mongodb";
 import {BlogWithoutId} from "../schemas/presentationSchemas/blogSchemas";
+import {mapBlogs} from "../utils/mappers/blogMapper";
+import {BlogPagination} from "../schemas/paginationSchemas/blogPaginationSchema";
 
 
 export const blogsRepository = {
-    async getAll(): Promise<FinalDBBlog[]>{
+    async getAll(query: [searchNameTerm: string, sortBy: string,
+        sortDirection: SortDirection, pageNumber: string, pageSize: string]): Promise<BlogPagination>{
+        const searchNameTerm = query[0]
+        const sortBy = query[1]
+        const sortDirection = query[2]
+        const pageNumber = +query[3]
+        const pageSize = +query[4]
 
-        return await blogDBController.find({}).toArray()
+        console.log(pageNumber, pageSize)
+        const countDoc = await blogDBController.count()
+        const pagesCount = Math.ceil(countDoc / +pageSize)
+        if(searchNameTerm !== "null"){
+            const allBlogs = await blogDBController.find({}).filter({name: {$regex: searchNameTerm,
+                    $options: "i"}}).sort({[sortBy]: sortDirection})
+                        .skip(pageNumber > 0 ? (pageNumber - 1) * pageSize : 0)
+                            .limit(pageSize > 0 ? pageSize : 0).toArray()
+
+            return {
+                pagesCount: pagesCount,
+                page: pageNumber,
+                pageSize: pageSize,
+                totalCount: countDoc,
+                items: mapBlogs(allBlogs)
+            }
+
+        } else {
+            const allBlogs = await blogDBController.find({}).sort({[sortBy]: sortDirection})
+                    .skip(pageNumber > 0 ? (pageNumber - 1) * pageSize : 0)
+                        .limit(pageSize > 0 ? pageSize : 0).toArray()
+            return {
+                pagesCount: pagesCount,
+                page: +pageNumber,
+                pageSize: +pageSize,
+                totalCount: countDoc,
+                items: mapBlogs(allBlogs)
+            }
+        }
 
     },
 
@@ -45,11 +81,13 @@ export const blogsRepository = {
         return result.deletedCount === 1
 
     },
-    async getSort(id: string, blogName: string, sortString: string): Promise<DBBlog|null>{
+    async getSort(sortString: string): Promise<DBBlog|null>{
 
-        return await blogDBController.findOne({id: id, blogName: `/.*${sortString}.*/`} )
-
+        const result = await blogDBController.findOne({ name: {$regex: `/.*${sortString}.*/`}} )
+        console.log(result)
+        return result
     },
+
     //use rejecton
     // async getSortAD(id: string, direction: string|boolean, fieldToSort: keyof DBBlog): Promise<DBBlog|null>{
     //

@@ -15,12 +15,14 @@ export function mapBlog(obj: FinalDBBlog): viewBlogModel{
 export function mapBlogs(objs: FinalDBBlog[]): viewBlogModel[]{
     return objs.map(el => {
         return {
+
             id: el._id.toString(),
             name: el.name,
             description: el.description,
             websiteUrl: el.websiteUrl,
             isMembership: el.isMembership,
             createdAt: el.createdAt
+
         }
     })
 }

@@ -1,10 +1,13 @@
 import {postsRepository} from "../repositories/postsRepository";
 import {blogsRepository} from "../repositories/blogsRepository";
 import {FinalDBPost} from "../schemas/dbSchemas/PostDBSchema";
+import {SortDirection} from "mongodb";
+import {PostPagination} from "../schemas/paginationSchemas/postPaginationSchema";
 
-export async function getAllPosts(): Promise<FinalDBPost[]> {
+export async function getAllPosts(query: [searchNameTerm: string, sortBy: string,
+    sortDirection: SortDirection, pageNumber: string, pageSize: string]): Promise<PostPagination> {
 
-    return await postsRepository.getAll()
+    return await postsRepository.getAll(query)
 
 }
 
@@ -35,6 +38,26 @@ export async function createOnePost(id: string, title: string, shortDescription:
         return null
     }
 
+}
+
+export async function createOnePostByBlogId(title: string, shortDescription: string, content: string, blogId: string):
+    Promise<FinalDBPost|null>{
+
+    const foundedEl = await blogsRepository.getOne(blogId)
+    if (foundedEl) {
+        const blogName = foundedEl.name
+        const newPostTmp = {
+            title: title.toString(),
+            shortDescription: shortDescription.toString(),
+            content: content,
+            blogId: blogId,
+            blogName: blogName,
+            createdAt: new Date().toISOString()
+        }
+        return await postsRepository.createOne(newPostTmp)
+    } else {
+        return null
+    }
 }
 
 export async function updateOnePost(id: string, title: string, shortDescription: string, content: string,
