@@ -22,13 +22,13 @@ export const postsRepository = {
                     $options: "i"}}).sort({[sortBy]: sortDirection})
                 .skip(pageNumber > 0 ? (pageNumber - 1) * pageSize : 0)
                 .limit(pageSize > 0 ? pageSize : 0).toArray()
-            const countMe = await postDBController.count({name: {$regex: searchNameTerm,
-                    $options: "i"}})
+            const countMe = await postDBController.find({}).filter({name: {$regex: searchNameTerm,
+                    $options: "i"}}).toArray()
             return {
                 pagesCount: pagesCount,
                 page: pageNumber,
                 pageSize: pageSize,
-                totalCount: countMe,
+                totalCount: countMe.length,
                 items: mapPosts(allPosts)
             }} else {
             const allPosts = await postDBController.find({}).sort({[sortBy]: sortDirection})
