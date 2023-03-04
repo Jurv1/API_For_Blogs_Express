@@ -18,5 +18,3 @@ blogRouter.post('/:blogId/posts', checkAuth, postValid, handleErr, createOneByBl
 blogRouter.put('/:id', checkAuth, blogValidation, handleErr, BlogController.updateOne)
 
 blogRouter.delete('/:id', checkAuth, BlogController.deleteOne)
-
-blogRouter.get('/s', BlogController.getSortedByName)

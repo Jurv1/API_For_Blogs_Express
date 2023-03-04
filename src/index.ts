@@ -9,6 +9,8 @@ import {postRouter} from "./routs/postRouter";
 import {blogRouter} from "./routs/blogRouter";
 import {videoRouter} from "./routs/videoRouter";
 import {runDb} from "./db/db";
+import {userRouter} from "./routs/userRouter";
+import {authRouter} from "./routs/authRouter";
 
 const app = express()
 const port = 3003
@@ -29,6 +31,8 @@ app.get('/', VideoController.getStart)
 app.use('/videos', videoRouter)
 app.use('/blogs', blogRouter)
 app.use('/posts', postRouter)
+app.use('/users', userRouter)
+app.use('/auth', authRouter)
 
 app.delete('/testing/all-data', testingController.deleteAll)
 

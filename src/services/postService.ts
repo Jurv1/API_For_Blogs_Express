@@ -3,24 +3,12 @@ import {blogsRepository} from "../repositories/blogsRepository";
 import {FinalDBPost} from "../schemas/dbSchemas/PostDBSchema";
 import {SortDirection} from "mongodb";
 import {PostPagination} from "../schemas/paginationSchemas/postPaginationSchema";
-
-export async function getAllPosts(query: [searchNameTerm: string, sortBy: string,
-    sortDirection: SortDirection, pageNumber: string, pageSize: string]): Promise<PostPagination> {
-
-    return await postsRepository.getAll(query)
-
-}
-
-export async function getOnePost(id: string): Promise<FinalDBPost|null> {
-
-    return await postsRepository.getOne(id)
-
-}
+import * as BlogQueryRepo from "../repositories/queryRepository/blogQ/blogQ"
 
 export async function createOnePost(id: string, title: string, shortDescription: string, content: string,
                                     blogId: string, blogName: string, createdAt: string): Promise<FinalDBPost|null> {
 
-    const foundedEl = await blogsRepository.getOne(blogId)
+    const foundedEl = await BlogQueryRepo.getOneBlog(blogId)
 
     if (foundedEl) {
         const blogName = foundedEl.name
@@ -43,7 +31,7 @@ export async function createOnePost(id: string, title: string, shortDescription:
 export async function createOnePostByBlogId(title: string, shortDescription: string, content: string, blogId: string):
     Promise<FinalDBPost|null>{
 
-    const foundedEl = await blogsRepository.getOne(blogId)
+    const foundedEl = await BlogQueryRepo.getOneBlog(blogId)
     if (foundedEl) {
         const blogName = foundedEl.name
         const newPostTmp = {

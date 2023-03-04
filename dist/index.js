@@ -44,6 +44,8 @@ const postRouter_1 = require("./routs/postRouter");
 const blogRouter_1 = require("./routs/blogRouter");
 const videoRouter_1 = require("./routs/videoRouter");
 const db_1 = require("./db/db");
+const userRouter_1 = require("./routs/userRouter");
+const authRouter_1 = require("./routs/authRouter");
 const app = (0, express_1.default)();
 const port = 3003;
 const parserMiddleware = (0, body_parser_1.default)({});
@@ -58,6 +60,8 @@ app.get('/', VideoController.getStart);
 app.use('/videos', videoRouter_1.videoRouter);
 app.use('/blogs', blogRouter_1.blogRouter);
 app.use('/posts', postRouter_1.postRouter);
+app.use('/users', userRouter_1.userRouter);
+app.use('/auth', authRouter_1.authRouter);
 app.delete('/testing/all-data', testingController.deleteAll);
 const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, db_1.runDb)();
