@@ -31,7 +31,7 @@ export async function getAll(req: Request | Request<{}, {}, {}, {searchLoginTerm
 
         const allUsers = await UserQueryRepo.getAllUsers(filter, sort, pagination)
 
-        if(allUsers.items.length === 0){
+        if(!allUsers){
             res.sendStatus(404)
             return
 
