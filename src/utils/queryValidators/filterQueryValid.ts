@@ -2,7 +2,7 @@ import {Document} from "mongodb";
 
 export function filterQueryValid(searchNameTerm?: string, searchLoginTerm?: string, searchEmailTerm?: string): Document{
     let filter: Document = {}
-
+    console.log(searchNameTerm, searchLoginTerm, searchEmailTerm)
     typeof searchNameTerm === 'undefined' ? console.log("No Name Term") : filter.name =
         { $regex: searchNameTerm, $options: "i" }
 
@@ -10,7 +10,7 @@ export function filterQueryValid(searchNameTerm?: string, searchLoginTerm?: stri
         filter.$or = []
         typeof searchLoginTerm === 'undefined'  ? console.log("No Login Term") : filter.$or.push({ login:
                 { $regex: searchLoginTerm, $options: "i" } })
-        typeof searchEmailTerm === 'undefined' ? console.log("No Email Term") : filter.$or.push({ login:
+        typeof searchEmailTerm === 'undefined' ? console.log("No Email Term") : filter.$or.push({ email:
                 { $regex: searchEmailTerm, $options: "i" } })
     }
 

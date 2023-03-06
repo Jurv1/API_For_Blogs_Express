@@ -22,7 +22,13 @@ export async function getAll (req: Request<{}, {}, {}, {searchNameTerm: string, 
 
     try {
         const allPosts = await PostQueryRepo.getAllPosts(filter, sort, pagination)
-        allPosts ? res.status(200).send(allPosts) : res.sendStatus(404)
+        if(allPosts.items.length === 0){
+            res.sendStatus(404)
+            return
+        }
+
+        res.status(200).send(allPosts)
+
     } catch (err) {
         console.log(err)
         res.status(404).json({
@@ -63,6 +69,7 @@ export async function getPostsByBlogId(req: Request<{
         if(allPosts.items.length === 0){
             res.sendStatus(404)
             return
+
         }
 
         res.status(200).send(allPosts)

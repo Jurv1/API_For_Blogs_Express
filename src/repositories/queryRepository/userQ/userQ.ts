@@ -9,7 +9,7 @@ export async function getAllUsers(filter: Document,sort: Sort, pagination: {skip
     const allUsers = await userDBController.find(filter).sort(sort).skip(pagination["skipValue"])
         .limit(pagination["limitValue"]).toArray()
 
-    const countDocs = await blogDBController.countDocuments(filter)
+    const countDocs = await userDBController.countDocuments(filter)
     const pagesCount = Math.ceil(countDocs / pagination["pageSize"])
 
     return {

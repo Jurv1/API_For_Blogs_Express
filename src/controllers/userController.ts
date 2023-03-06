@@ -11,15 +11,21 @@ import {queryValidator} from "../utils/queryValidators/sortQueryValidator";
 import {usersRepository} from "../repositories/usersRepository";
 import {filterQueryValid} from "../utils/queryValidators/filterQueryValid";
 import {makePagination} from "../utils/paggination/paggination";
+import QueryString from "qs";
 
-export async function getAll(req: Request<{}, {}, {}, {searchLoginTerm: string, searchEmailTerm: string, sortBy: string,
-    sortDirection: SortDirection, pageNumber: string, pageSize: string}> ,res: Response){
+export async function getAll(req: Request | Request<{}, {}, {}, {searchLoginTerm: string;
+                                                                            searchEmailTerm: string;
+                                                                            sortBy: string;
+                                                                            sortDirection: SortDirection;
+                                                                            pageNumber: string;
+                                                                            pageSize: string}>, res: Response){
 
     let {searchLoginTerm, searchEmailTerm, sortBy, sortDirection, pageNumber, pageSize} = req.query
+    console.log(searchLoginTerm, searchEmailTerm, sortBy, sortDirection, pageNumber, pageSize)
 
-    const sort = queryValidator(sortBy, sortDirection)
-    const filter = filterQueryValid(searchLoginTerm, searchEmailTerm)
-    const pagination = makePagination(pageNumber, pageSize)
+    const sort = queryValidator(sortBy as string, sortDirection as SortDirection)
+    const filter = filterQueryValid(undefined, searchLoginTerm as string, searchEmailTerm as string)
+    const pagination = makePagination(pageNumber as string, pageSize as string)
 
     try {
 
@@ -27,6 +33,8 @@ export async function getAll(req: Request<{}, {}, {}, {searchLoginTerm: string, 
 
         if(allUsers.items.length === 0){
             res.sendStatus(404)
+            return
+
         }
 
         res.status(200).send(allUsers)
@@ -36,8 +44,6 @@ export async function getAll(req: Request<{}, {}, {}, {searchLoginTerm: string, 
             message: "Can't find el"
         })
     }
-    const allUsers = await userDBController.find().toArray()
-    res.status(200).send(allUsers)
 }
 
 export async function createOne(req: Request, res: Response){
