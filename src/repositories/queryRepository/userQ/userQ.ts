@@ -10,13 +10,14 @@ export async function getAllUsers(filter: Document,sort: Sort, pagination: {skip
         .limit(pagination["limitValue"]).toArray()
 
     const countDocs = await userDBController.countDocuments(filter)
-    const pagesCount = Math.ceil(countDocs / pagination["pageSize"])
+    const c = await userDBController.find(filter).toArray()
+    const pagesCount = Math.ceil(c.length / pagination["pageSize"])
 
     return {
         pagesCount: pagesCount,
         page: pagination["pageNumber"],
         pageSize: pagination["pageSize"],
-        totalCount: countDocs,
+        totalCount: c.length,
         items: mapUsers(allUsers)
     }
 
