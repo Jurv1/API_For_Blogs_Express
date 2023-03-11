@@ -1,9 +1,8 @@
 import {postsRepository} from "../repositories/postsRepository";
-import {blogsRepository} from "../repositories/blogsRepository";
 import {FinalDBPost} from "../schemas/dbSchemas/PostDBSchema";
-import {SortDirection} from "mongodb";
-import {PostPagination} from "../schemas/paginationSchemas/postPaginationSchema";
 import * as BlogQueryRepo from "../repositories/queryRepository/blogQ/blogQ"
+import * as PostQueryRepo from "../repositories/queryRepository/postQ/postQ"
+import {FinalDBComment} from "../schemas/dbSchemas/CommentDBSchema";
 
 export async function createOnePost(id: string, title: string, shortDescription: string, content: string,
                                     blogId: string, blogName: string, createdAt: string): Promise<FinalDBPost|null> {
@@ -48,6 +47,22 @@ export async function createOnePostByBlogId(title: string, shortDescription: str
     }
 }
 
+export async function createOneCommentByPostId(postId: string, content: string): Promise<FinalDBComment | null> {
+    const foundedEl = await PostQueryRepo.getOnePost(postId)
+    if (foundedEl) {
+        const newCommentTmp = {
+            content: content,
+            commentatorInfo: {
+                userId: "ss",
+                userLogin: "ss"
+            },
+            postId: postId,
+            createdAt: new Date().toISOString()
+        }
+        return await postsRepository.createOneCommentByPostId(newCommentTmp)
+    } else return null
+}
+
 export async function updateOnePost(id: string, title: string, shortDescription: string, content: string,
                                     blogId: string,): Promise<boolean> {
 
@@ -56,6 +71,7 @@ export async function updateOnePost(id: string, title: string, shortDescription:
 }
 
 export async function deleteOnePost(id: string) {
+
     return await postsRepository.deleteOne(id)
 
 }

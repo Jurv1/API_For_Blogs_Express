@@ -1,11 +1,9 @@
-import {blogDBController, postDBController} from "../db/db";
-import {FinalDBBlog} from "../schemas/dbSchemas/BlogDBSchema";
+import {commentDBController, postDBController} from "../db/db";
 import {FinalDBPost} from "../schemas/dbSchemas/PostDBSchema";
-import {ObjectId, SortDirection} from "mongodb";
+import {ObjectId} from "mongodb";
 import {PostWithoutId} from "../schemas/presentationSchemas/postSchemas";
-import {mapBlogs} from "../utils/mappers/blogMapper";
-import {mapPosts} from "../utils/mappers/postMapper";
-import {PostPagination} from "../schemas/paginationSchemas/postPaginationSchema";
+import {FinalDBComment} from "../schemas/dbSchemas/CommentDBSchema";
+import {CommentWithoutId} from "../schemas/presentationSchemas/commentSchemas";
 
 export const postsRepository = {
 
@@ -38,5 +36,10 @@ export const postsRepository = {
         const result = await postDBController.deleteOne({ _id: myId })
         return result.deletedCount === 1
 
+    },
+
+    async createOneCommentByPostId(newCommentTmp: CommentWithoutId): Promise<FinalDBComment | null>{
+        const resultId = await commentDBController.insertOne(newCommentTmp)
+        return await commentDBController.findOne({_id: resultId.insertedId});
     }
 }

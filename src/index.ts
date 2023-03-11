@@ -11,6 +11,7 @@ import {videoRouter} from "./routs/videoRouter";
 import {runDb} from "./db/db";
 import {userRouter} from "./routs/userRouter";
 import {authRouter} from "./routs/authRouter";
+import {commentRouter} from "./routs/commentRouter";
 
 const app = express()
 const port = 3003
@@ -29,10 +30,16 @@ app.use(cors(options));
 app.get('/', VideoController.getStart)
 
 app.use('/videos', videoRouter)
+
 app.use('/blogs', blogRouter)
+
 app.use('/posts', postRouter)
+
 app.use('/users', userRouter)
+
 app.use('/auth', authRouter)
+
+app.use('/comments', commentRouter)
 
 app.delete('/testing/all-data', testingController.deleteAll)
 

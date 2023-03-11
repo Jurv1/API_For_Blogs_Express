@@ -3,9 +3,9 @@ import {DBBlog} from "../schemas/dbSchemas/BlogDBSchema";
 import {Video} from "../schemas/presentationSchemas/videoSchemas";
 
 import * as dotenv from 'dotenv'
-import {BlogWithoutId} from "../schemas/presentationSchemas/blogSchemas";
 import {DBPost} from "../schemas/dbSchemas/PostDBSchema";
 import {DBUser} from "../schemas/dbSchemas/UserDBSchema";
+import {DBComment} from "../schemas/dbSchemas/CommentDBSchema";
 dotenv.config()
 
 const mongoURI = process.env.MONGO_URI
@@ -28,3 +28,4 @@ export const blogDBController = client.db().collection<DBBlog>("blogs")
 export const postDBController = client.db().collection<DBPost>("posts")
 export const videoDBController = client.db().collection<Video>("videos")
 export const userDBController = client.db().collection<DBUser>("users")
+export const commentDBController = client.db().collection<DBComment>("comments")

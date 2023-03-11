@@ -8,8 +8,11 @@ export const postRouter = Router({})
 
 postRouter.get('/', PostController.getAll)
 postRouter.get('/:id', PostController.getOne)
+postRouter.get('/:postId/comments', PostController.getAllCommentsByPostId)
+
 
 postRouter.post('/', checkAuth, postValidation, handleErr,  PostController.createOne)
+postRouter.post('/:postId/comments', PostController.createOneCommentByPostId)
 
 postRouter.put('/:id', checkAuth, postValidation, handleErr, PostController.updateOne)
 

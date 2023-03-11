@@ -2,8 +2,8 @@ import {Request, Response} from "express";
 import * as BlogService from "../services/blogService";
 import * as BlogQueryRepo from "../repositories/queryRepository/blogQ/blogQ"
 import {viewBlogModel} from "../schemas/presentationSchemas/blogSchemas";
-import {DBBlog, FinalDBBlog} from "../schemas/dbSchemas/BlogDBSchema";
-import {mapBlog, mapBlogs} from "../utils/mappers/blogMapper";
+import {FinalDBBlog} from "../schemas/dbSchemas/BlogDBSchema";
+import {mapBlog} from "../utils/mappers/blogMapper";
 import {queryValidator} from "../utils/queryValidators/sortQueryValidator";
 import {SortDirection} from "mongodb";
 import {filterQueryValid} from "../utils/queryValidators/filterQueryValid";
@@ -14,8 +14,8 @@ export async function getAll (req: Request<{}, {}, {}, {searchNameTerm: string, 
 
     let {searchNameTerm, sortBy, sortDirection, pageNumber, pageSize} = req.query
 
-    const sort = queryValidator(sortBy, sortDirection)
     const filter = filterQueryValid(searchNameTerm)
+    const sort = queryValidator(sortBy, sortDirection)
     const pagination = makePagination(pageNumber, pageSize)
 
     try {

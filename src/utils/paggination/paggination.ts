@@ -8,8 +8,8 @@ export function makePagination(pageNumber: string, pageSize: string):
         pageNumber: 0
     }
 
-    typeof pageNumber === 'undefined'  ? pageNumber = '1' : pageNumber
-    typeof pageSize === 'undefined'  ? pageSize = '10' : pageSize
+    typeof pageNumber === 'undefined' && (pageNumber = '1')
+    typeof pageSize === 'undefined' && (pageSize = '10')
 
     const skipValue: number = +pageNumber > 0 ? (+pageNumber - 1) * +pageSize : 0
 

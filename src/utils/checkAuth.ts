@@ -1,9 +1,10 @@
-import {NextFunction, Request, RequestHandler, Response} from "express";
+import {NextFunction, Request, Response} from "express";
 import {SortDirection} from "mongodb";
 
 export default (req: Request|Request<{}, {}, {}, {searchNameTerm: string, sortBy: string,
-    sortDirection: SortDirection, pageNumber: string, pageSize: string}>|Request<{}, {}, {}, {searchLoginTerm: string, searchEmailTerm: string, sortBy: string,
-    sortDirection: SortDirection, pageNumber: string, pageSize: string}, {}>, res: Response, next: NextFunction) => {
+        sortDirection: SortDirection, pageNumber: string, pageSize: string}>|Request<{}, {}, {}, {searchLoginTerm: string,
+            searchEmailTerm: string, sortBy: string, sortDirection: SortDirection, pageNumber: string, pageSize: string}, {}>
+                , res: Response, next: NextFunction) => {
     const hashText = (req.headers.authorization || '').replace(/Basic\s?/, '')
     if (hashText) {
         try {

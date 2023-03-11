@@ -1,6 +1,5 @@
-import {userDBController} from "../db/db";
 import {FinalDBUser} from "../schemas/dbSchemas/UserDBSchema";
-import {ObjectId, SortDirection} from "mongodb";
+import { SortDirection} from "mongodb";
 import {Request, Response} from "express";
 
 import * as UserService from "../services/userService"
@@ -8,10 +7,8 @@ import * as UserQueryRepo from "../repositories/queryRepository/userQ/userQ"
 import {mapUser} from "../utils/mappers/userMapper";
 import {ViewUserModel} from "../schemas/presentationSchemas/userSchemas";
 import {queryValidator} from "../utils/queryValidators/sortQueryValidator";
-import {usersRepository} from "../repositories/usersRepository";
 import {filterQueryValid} from "../utils/queryValidators/filterQueryValid";
 import {makePagination} from "../utils/paggination/paggination";
-import QueryString from "qs";
 
 export async function getAll(req: Request | Request<{}, {}, {}, {searchLoginTerm: string;
                                                                             searchEmailTerm: string;
@@ -34,7 +31,6 @@ export async function getAll(req: Request | Request<{}, {}, {}, {searchLoginTerm
         if(!allUsers){
             res.sendStatus(404)
             return
-
         }
 
         res.status(200).send(allUsers)

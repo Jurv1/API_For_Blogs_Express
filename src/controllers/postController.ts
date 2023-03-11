@@ -7,6 +7,8 @@ import {SortDirection} from "mongodb";
 import {queryValidator} from "../utils/queryValidators/sortQueryValidator";
 import {filterQueryValid} from "../utils/queryValidators/filterQueryValid";
 import {makePagination} from "../utils/paggination/paggination";
+import {FinalDBComment} from "../schemas/dbSchemas/CommentDBSchema";
+import {mapComment} from "../utils/mappers/commentMapper";
 
 //todo вынести синхронку
 //todo сделать функцию для трай кэтч (вынести обертку в фун-ию)
@@ -58,7 +60,7 @@ export async function getPostsByBlogId(req: Request<{
 }, {}, {}, {searchNameTerm: string, sortBy: string,
     sortDirection: SortDirection, pageNumber: string, pageSize: string}>, res: Response){
     const id = req.params.blogId
-    let {searchNameTerm, sortBy, sortDirection, pageNumber, pageSize} = req.query
+    let {sortBy, sortDirection, pageNumber, pageSize} = req.query
 
     const sort = queryValidator(sortBy, sortDirection)
     const pagination = makePagination(pageNumber, pageSize)
@@ -75,6 +77,30 @@ export async function getPostsByBlogId(req: Request<{
         res.status(200).send(allPosts)
 
     }catch (err){
+        console.log(err)
+        res.status(404).json({
+            message: "Can't find el"
+        })
+    }
+}
+
+export async function getAllCommentsByPostId(req: Request<{postId: string}, {}, {}, {sortBy: string,
+    sortDirection: SortDirection, pageNumber: string, pageSize: string}>, res: Response) {
+
+    const postId = req.params.postId
+
+    const {sortBy, sortDirection, pageNumber, pageSize} = req.query
+
+    const sort = queryValidator(sortBy, sortDirection)
+    const pagination = makePagination(pageNumber, pageSize)
+
+    try {
+
+        const allComments = await PostQueryRepo.getAllCommentsByPostId(postId, sort, pagination)
+
+        res.status(200).send(allComments)
+
+    } catch (err){
         console.log(err)
         res.status(404).json({
             message: "Can't find el"
@@ -115,6 +141,28 @@ export async function createOneByBlogId (req: Request, res: Response) {
                 {
                     message: "No such blog",
                     field: "blogId"
+                }
+            ]
+        })
+    } catch (err){
+        console.log(err)
+        res.status(404).json({
+            message: "Can't find el"
+        })
+    }
+}
+
+export async function createOneCommentByPostId(req: Request, res: Response) {
+    const postId = req.params.postId
+    const content = req.body
+
+    try {
+        const result: FinalDBComment|null = await PostService.createOneCommentByPostId(postId, content)
+        result ? res.status(201).send(mapComment(result)) : res.status(404).json({
+            errorsMessages: [
+                {
+                    message: "No such post",
+                    field: "postId"
                 }
             ]
         })
