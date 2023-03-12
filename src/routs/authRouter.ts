@@ -5,6 +5,6 @@ import checkBearer from "../utils/auth/checkBearer";
 
 export const authRouter = Router({})
 
-authRouter.post('/login', checkBearer, loginValid, LoginController.loginUser)
+authRouter.post('/login', loginValid, LoginController.loginUser)
 
 authRouter.get('/me', checkBearer, LoginController.getMe)
