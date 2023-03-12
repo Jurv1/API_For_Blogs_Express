@@ -154,7 +154,7 @@ export async function createOneByBlogId (req: Request, res: Response) {
 
 export async function createOneCommentByPostId(req: Request, res: Response) {
     const postId = req.params.postId
-    const content = req.body
+    const content = req.body.content
     const userId = req.user!._id.toString()
     const userLogin = req.user!.login
 
