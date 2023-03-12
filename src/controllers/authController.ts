@@ -18,7 +18,7 @@ export async function loginUser(req: Request, res: Response){
             }
 
             const token = await jwtService.createJWT(user)
-            res.status(200).send(token)
+            res.status(200).json({ accessToken: token})
         } else {
             res.sendStatus(401)
             return
