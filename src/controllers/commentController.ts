@@ -23,7 +23,13 @@ export async function updateOneById(req: Request, res: Response){
     try {
 
         const result = await CommentService.updateOneCommentById(id, content)
-        result ? res.sendStatus(204) : res.sendStatus(404)
+        if (!result) {
+            res.status(404).json({
+                message: "Not good"
+            })
+            return
+        }
+        res.sendStatus(204)
 
     } catch (err){
         console.log(err)
@@ -39,7 +45,8 @@ export async function deleteOneById(req: Request, res: Response){
 
     try {
         const result = await CommentService.deleteOneCommentById(id, userId)
-        result ? res.sendStatus(204) : res.sendStatus(404)
+        if (!result) return res.send(404)
+        res.send(204)
     } catch (err){
         console.log(err)
         res.status(404).json({
