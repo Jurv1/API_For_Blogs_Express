@@ -14,6 +14,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     if (userId) {
         req.user = await UserQueryRepo.getOneUserById(userId.toString())
         next()
+        return
     }
 
     res.sendStatus(401)

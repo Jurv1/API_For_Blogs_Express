@@ -33,10 +33,18 @@ export async function loginUser(req: Request, res: Response){
 }
 
 export async function getMe(req: Request, res: Response){
-    const result = {
-        email: req.user!.email,
-        login: req.user!.login,
-        userId: req.user!._id
+    try {
+        const result = {
+            email: req.user!.email,
+            login: req.user!.login,
+            userId: req.user!._id
+        }
+        res.status(200).send(result)
+    } catch (err){
+        console.log(err)
+        res.status(404).json({
+            message: "Can't find el"
+        })
     }
-    res.status(200).send(result)
+
 }
