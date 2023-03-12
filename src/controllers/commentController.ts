@@ -1,13 +1,14 @@
 import {Request, Response} from "express";
 import * as CommentService from "../services/commentService"
 import * as CommentQueryRepo from "../repositories/queryRepository/commentQ/commentQ"
+import {mapComment} from "../utils/mappers/commentMapper";
 
 export async function getOneById(req: Request, res: Response){
     const id = req.params.id
 
     try {
         const comment = await CommentQueryRepo.getOneComment(id)
-        comment ? res.status(200).send(comment) : res.sendStatus(404)
+        comment ? res.status(200).send(mapComment(comment)) : res.sendStatus(404)
     } catch (err){
         console.log(err)
         res.status(404).json({
