@@ -14,9 +14,9 @@ export const commentsRepository = {
         return updatedEl.matchedCount === 1;
     },
 
-    async deleteOne(id: string): Promise<boolean> {
+    async deleteOne(id: string, userId: string): Promise<boolean> {
         const myId = new ObjectId(id)
-        const result = await commentDBController.deleteOne({ _id: myId })
+        const result = await commentDBController.deleteOne({_id: myId})
         return result.deletedCount === 1
     }
 }

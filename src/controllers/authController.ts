@@ -1,26 +1,28 @@
 import {Request, Response} from "express";
 import * as UserQueryRepo from "../repositories/queryRepository/userQ/userQ"
-import {generateHash} from "../utils/bcrypt/generateHash";
+import { checkCredentials } from "../services/userService";
+import {jwtService} from "../application/jwtService";
 
 export async function loginUser(req: Request, res: Response){
 
     const {loginOrEmail, password} = req.body
 
     try {
-        const user = await UserQueryRepo.getOneByLoginOrPassword(loginOrEmail)
 
-        if(!user){
+        const checkMe = await checkCredentials(loginOrEmail, password)
+        if (checkMe){
+            const user = await UserQueryRepo.getOneByLoginOrPassword(loginOrEmail)
+            if(!user){
+                res.sendStatus(401)
+                return
+            }
+
+            const token = await jwtService.createJWT(user)
+            res.status(200).send(token)
+        } else {
             res.sendStatus(401)
             return
         }
-
-        const passwordHash = await generateHash(password, user.passwordSalt)
-
-        if (user.password !== passwordHash){
-            res.sendStatus(401)
-            return
-        }
-        res.sendStatus(204)
 
     } catch (err){
         console.log(err)
@@ -28,4 +30,13 @@ export async function loginUser(req: Request, res: Response){
             message: "Can't find el"
         })
     }
+}
+
+export async function getMe(req: Request, res: Response){
+    const result = {
+        email: req.user!.email,
+        login: req.user!.login,
+        userId: req.user!._id
+    }
+    res.status(200).send(result)
 }

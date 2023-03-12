@@ -1,7 +1,8 @@
-import {Document, Sort} from "mongodb";
+import {Document, ObjectId, Sort} from "mongodb";
 import {UserPagination} from "../../../schemas/paginationSchemas/userPaginationSchema";
 import {blogDBController, userDBController} from "../../../db/db";
 import {mapUsers} from "../../../utils/mappers/userMapper";
+import {FinalDBUser} from "../../../schemas/dbSchemas/UserDBSchema";
 
 export async function getAllUsers(filter: Document,sort: Sort, pagination: {skipValue: number, limitValue: number,
     pageSize: number, pageNumber: number}): Promise<UserPagination>{
@@ -22,8 +23,14 @@ export async function getAllUsers(filter: Document,sort: Sort, pagination: {skip
 
 }
 
-export async function getOneByLoginOrPassword(loginOrEmail: string){
+export async function getOneByLoginOrPassword(loginOrEmail: string): Promise<FinalDBUser | null>{
 
     return await userDBController.findOne({$or: [{login: loginOrEmail}, {email: loginOrEmail}]})
+
+}
+
+export async function getOneUserById(id: string){
+
+    return await userDBController.findOne( {_id: new ObjectId(id)} )
 
 }

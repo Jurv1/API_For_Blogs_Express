@@ -1,7 +1,10 @@
 import {Router} from "express";
 import {loginValid} from "../validations/authValid";
-import {loginUser} from "../controllers/authController";
+import * as LoginController from "../controllers/authController";
+import checkBearer from "../utils/auth/checkBearer";
 
 export const authRouter = Router({})
 
-authRouter.post('/login', loginValid, loginUser)
+authRouter.post('/login', checkBearer, loginValid, LoginController.loginUser)
+
+authRouter.get('/me', checkBearer, LoginController.getMe)

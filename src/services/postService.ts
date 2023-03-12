@@ -47,14 +47,14 @@ export async function createOnePostByBlogId(title: string, shortDescription: str
     }
 }
 
-export async function createOneCommentByPostId(postId: string, content: string): Promise<FinalDBComment | null> {
+export async function createOneCommentByPostId(postId: string, content: string, userId: string, userLogin: string): Promise<FinalDBComment | null> {
     const foundedEl = await PostQueryRepo.getOnePost(postId)
     if (foundedEl) {
         const newCommentTmp = {
             content: content,
             commentatorInfo: {
-                userId: "ss",
-                userLogin: "ss"
+                userId: userId,
+                userLogin: userLogin
             },
             postId: postId,
             createdAt: new Date().toISOString()

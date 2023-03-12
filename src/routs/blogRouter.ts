@@ -1,7 +1,7 @@
 import {Router} from "express";
 import * as BlogController from "../controllers/blogController";
 import { getPostsByBlogId, createOneByBlogId } from "../controllers/postController"
-import checkAuth from "../utils/checkAuth";
+import checkAuth from "../utils/auth/checkAuth";
 import {blogValidation} from "../validations/blogValidator";
 import handleErr from "../utils/handleErr";
 import {postValid} from "../validations/postValidator";

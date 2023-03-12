@@ -1,6 +1,6 @@
 import {Router} from "express";
 import * as UserController from "../controllers/userController"
-import checkAuth from "../utils/checkAuth";
+import checkAuth from "../utils/auth/checkAuth";
 import {userValidator} from "../validations/userValidator";
 import handleErr from "../utils/handleErr";
 export const userRouter = Router({})

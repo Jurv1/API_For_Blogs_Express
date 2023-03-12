@@ -4,6 +4,8 @@ import {usersRepository} from "../repositories/usersRepository";
 import bcrypt from "bcrypt"
 import {generateHash} from "../utils/bcrypt/generateHash";
 
+import * as UserQueryRepo from "../repositories/queryRepository/userQ/userQ"
+
 export async function createOneUser( login: string, email: string, password: string): Promise<FinalDBUser|null> {
 
     const passwordSalt = await bcrypt.genSalt(10)
@@ -20,6 +22,16 @@ export async function createOneUser( login: string, email: string, password: str
     if (result){
         return await userDBController.findOne({_id: result._id});
     } else return null
+
+}
+
+export async function checkCredentials( loginOrEmail: string, password: string ): Promise<boolean> {
+
+    const user = await UserQueryRepo.getOneByLoginOrPassword(loginOrEmail)
+
+    if (!user) return false
+
+    return await bcrypt.compare(password, user.password)
 
 }
 

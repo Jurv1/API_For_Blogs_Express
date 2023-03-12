@@ -155,9 +155,11 @@ export async function createOneByBlogId (req: Request, res: Response) {
 export async function createOneCommentByPostId(req: Request, res: Response) {
     const postId = req.params.postId
     const content = req.body
+    const userId = req.user!._id.toString()
+    const userLogin = req.user!.login
 
     try {
-        const result: FinalDBComment|null = await PostService.createOneCommentByPostId(postId, content)
+        const result: FinalDBComment|null = await PostService.createOneCommentByPostId(postId, content, userId, userLogin)
         result ? res.status(201).send(mapComment(result)) : res.status(404).json({
             errorsMessages: [
                 {
