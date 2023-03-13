@@ -2,15 +2,16 @@ import {Request, Response} from "express";
 import * as CommentService from "../services/commentService"
 import * as CommentQueryRepo from "../repositories/queryRepository/commentQ/commentQ"
 import {mapComment} from "../utils/mappers/commentMapper";
+import {ObjectId} from "mongodb";
 
 export async function getOneById(req: Request, res: Response){
-    const id = req.params.id
+    const id = new ObjectId(req.params.id)
 
     try {
         const result = await CommentQueryRepo.getOneComment(id)
 
         if (result) {
-            res.status(200).send(mapComment(result))
+            res.status(200).send(result)
             return
         } else {
             res.sendStatus(404)
@@ -24,7 +25,7 @@ export async function getOneById(req: Request, res: Response){
 }
 
 export async function updateOneById(req: Request, res: Response){
-    const id = req.params.commentId
+    const id = req.params.id
     const content = req.body.content
     try {
 

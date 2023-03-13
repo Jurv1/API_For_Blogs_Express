@@ -1,9 +1,17 @@
 import {FinalDBComment} from "../../../schemas/dbSchemas/CommentDBSchema";
 import {commentDBController} from "../../../db/db";
 import {ObjectId} from "mongodb";
+import {mapComment} from "../../../utils/mappers/commentMapper";
+import {viewCommentModel} from "../../../schemas/presentationSchemas/commentSchemas";
 
-export async function getOneComment(id: string): Promise<FinalDBComment|null> {
+export async function getOneComment(id: ObjectId): Promise<viewCommentModel|null> {
 
-    return await commentDBController.findOne({ _id: new ObjectId(id) })
+    const result = await commentDBController.findOne({ _id: new ObjectId(id) })
+
+    if(!result){
+        return null
+    }
+
+    return mapComment(result)
 
 }

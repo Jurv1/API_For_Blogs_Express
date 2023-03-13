@@ -1,17 +1,20 @@
 import {NextFunction, Response, Request} from "express";
 import {getOneComment} from "../../repositories/queryRepository/commentQ/commentQ"
+import {ObjectId} from "mongodb";
 
 export async function checkWhoOwnerIs( req: Request, res: Response, next: NextFunction){
-    const myId = req.params.id
-    try {
-        const foundedEl = await getOneComment(myId)
-        if (foundedEl?.commentatorInfo.userId === req.user!._id.toString()) {
-            next()
-        }
-        else {
-            res.sendStatus(403)
-        }
-    } catch (err){
-
+    const myId = new ObjectId(req.params.id)
+    const foundedEl = await getOneComment(myId)
+    console.log(req.user!._id.toString())
+    console.log(foundedEl)
+    if ( foundedEl && foundedEl.commentatorInfo.userId === req.user!._id.toString()) {
+        console.log(foundedEl)
+        next()
     }
+    else {
+        console.log(foundedEl)
+        console.log(foundedEl?.commentatorInfo.userId)
+        res.sendStatus(403)
+    }
+
 }
