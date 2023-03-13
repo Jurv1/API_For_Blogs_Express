@@ -14,6 +14,11 @@ exports.default = (req, res, next) => {
                 field: errors[i].param
             });
         }
+        if (errorsArray.length === 1 && errorsArray[0].field === "id") {
+            res.status(404).json({
+                errorsMessages: errorsArray
+            });
+        }
         res.status(400).json({
             errorsMessages: errorsArray
         });
