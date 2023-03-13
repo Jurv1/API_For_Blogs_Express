@@ -10,6 +10,6 @@ export const commentRouter = Router({})
 
 commentRouter.get('/:id', CommentController.getOneById)
 
-commentRouter.put('/:id', checkBearer, checkWhoOwnerIs, commentValid, handleErr, CommentController.updateOneById)
+commentRouter.put('/:id', isCommentExists, handleErr, checkBearer, checkWhoOwnerIs, commentValid, handleErr, CommentController.updateOneById)
 
 commentRouter.delete('/:id', isCommentExists, handleErr, checkBearer, checkWhoOwnerIs, CommentController.deleteOneById)
