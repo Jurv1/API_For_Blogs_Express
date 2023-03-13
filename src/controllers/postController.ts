@@ -97,7 +97,10 @@ export async function getAllCommentsByPostId(req: Request<{postId: string}, {}, 
     try {
 
         const allComments = await PostQueryRepo.getAllCommentsByPostId(postId, sort, pagination)
-
+        if (allComments.items.length === 0){
+            res.sendStatus(404)
+            return
+        }
         res.status(200).send(allComments)
 
     } catch (err){
