@@ -2,12 +2,13 @@ import {Router} from "express";
 import * as CommentController from "../controllers/commentController"
 import checkBearer from "../utils/auth/checkBearer";
 import {commentValid} from "../validations/commentValid";
+import {checkWhoOwnerIs} from "../utils/middlewares/checkWhoOwnerIs"
 import handleErr from "../utils/handleErr";
 
 export const commentRouter = Router({})
 
 commentRouter.get('/:id', CommentController.getOneById)
 
-commentRouter.put('/:commentId', checkBearer, commentValid, handleErr, CommentController.updateOneById)
+commentRouter.put('/:commentId', checkBearer, checkWhoOwnerIs, commentValid, handleErr, CommentController.updateOneById)
 
-commentRouter.delete('/:id', checkBearer, CommentController.deleteOneById)
+commentRouter.delete('/:id', checkBearer, checkWhoOwnerIs, CommentController.deleteOneById)

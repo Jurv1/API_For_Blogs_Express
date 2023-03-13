@@ -7,8 +7,14 @@ export async function getOneById(req: Request, res: Response){
     const id = req.params.id
 
     try {
-        const comment = await CommentQueryRepo.getOneComment(id)
-        comment ? res.status(200).send(mapComment(comment)) : res.sendStatus(404)
+        const result = await CommentQueryRepo.getOneComment(id)
+
+        if (result) {
+            res.status(200).send(mapComment(result))
+            return
+        } else {
+            res.sendStatus(404)
+        }
     } catch (err){
         console.log(err)
         res.status(404).json({
