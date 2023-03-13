@@ -17,10 +17,7 @@ export const commentsRepository = {
 
     async deleteOne(id: string): Promise<boolean> {
         const myId = new ObjectId(id)
-        const a = await commentDBController.findOne({ _id: myId})
-        console.log(a)
         const result = await commentDBController.deleteOne({_id: myId})
-        //const result = await commentDBController.deleteOne({myId})
         return result.deletedCount === 1
     }
 }

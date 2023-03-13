@@ -40,7 +40,7 @@ export async function updateOneById(req: Request, res: Response){
 }
 
 export async function deleteOneById(req: Request, res: Response){
-    const id = req.params.commentId
+    const id = req.params.id
     const userId = req.user!._id.toString()
 
     try {
