@@ -1,6 +1,5 @@
 import {ObjectId} from "mongodb";
 import {commentDBController} from "../db/db";
-import {mapComment} from "../utils/mappers/commentMapper";
 
 export const commentsRepository = {
 
