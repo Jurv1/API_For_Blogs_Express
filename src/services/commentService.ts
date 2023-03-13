@@ -4,8 +4,8 @@ export async function updateOneCommentById(id: string, content: string): Promise
     return await commentsRepository.updateOne(id, content)
 }
 
-export async function deleteOneCommentById(id: string, userId: string): Promise<boolean>{
+export async function deleteOneCommentById(id: string): Promise<boolean>{
 
-    return await commentsRepository.deleteOne(id, userId)
+    return await commentsRepository.deleteOne(id)
 
 }

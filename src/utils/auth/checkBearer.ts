@@ -4,7 +4,7 @@ import * as UserQueryRepo from "../../repositories/queryRepository/userQ/userQ"
 
 export default async (req: Request, res: Response, next: NextFunction) => {
     if (!req.headers.authorization){
-        res.status(401)
+        res.sendStatus(401)
         return
     }
 
@@ -12,9 +12,16 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
     const userId = await jwtService.getUserIdByToken(token)
     if (userId) {
-        req.user = await UserQueryRepo.getOneUserById(userId.toString())
-        next()
-        return
+        try {
+            req.user = await UserQueryRepo.getOneUserById(userId.toString())
+            next()
+            return
+        } catch (err){
+            return res.status(401).json(
+                {message: 'Нет доступа'}
+            )
+        }
+
     }
 
     res.sendStatus(401)

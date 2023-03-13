@@ -44,7 +44,7 @@ export async function deleteOneById(req: Request, res: Response){
     const userId = req.user!._id.toString()
 
     try {
-        const result = await CommentService.deleteOneCommentById(id, userId)
+        const result = await CommentService.deleteOneCommentById(id)
         if (!result) return res.send(404)
         res.send(204)
     } catch (err){
