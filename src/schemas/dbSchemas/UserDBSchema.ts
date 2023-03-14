@@ -1,11 +1,18 @@
 import {ObjectId} from "mongodb";
 
 export type DBUser = {
-    login: string,
-    email: string,
-    password: string,
-    passwordSalt: string,
-    createdAt: string
+    accountData: {
+        login: string,
+        email: string,
+        password: string,
+        passwordSalt: string,
+        createdAt: string
+    },
+    emailConfirmation: {
+        confirmationCode: string,
+        expirationDate: any,
+        isConfirmed: boolean
+    }
 }
 type MongoId = {
     _id: ObjectId

@@ -7,9 +7,9 @@ export function mapUser(obj: FinalDBUser): ViewUserModel{
     return {
 
         id: obj._id.toString(),
-        login: obj.login,
-        email: obj.email,
-        createdAt: obj.createdAt
+        login: obj.accountData.login,
+        email: obj.accountData.email,
+        createdAt: obj.accountData.createdAt
     }
 }
 
@@ -18,9 +18,9 @@ export function mapUsers(objs: FinalDBUser[]): ViewUserModel[]{
         return {
 
             id: el._id.toString(),
-            login: el.login,
-            email: el.email,
-            createdAt: el.createdAt
+            login: el.accountData.login,
+            email: el.accountData.email,
+            createdAt: el.accountData.createdAt
 
         }
     })

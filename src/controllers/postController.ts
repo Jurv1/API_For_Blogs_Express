@@ -159,7 +159,7 @@ export async function createOneCommentByPostId(req: Request, res: Response) {
     const postId = req.params.postId
     const content = req.body.content
     const userId = req.user!._id.toString()
-    const userLogin = req.user!.login
+    const userLogin = req.user!.accountData.login
 
     try {
         const result: FinalDBComment|null = await PostService.createOneCommentByPostId(postId, content, userId, userLogin)

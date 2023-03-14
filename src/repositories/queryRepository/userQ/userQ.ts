@@ -23,9 +23,15 @@ export async function getAllUsers(filter: Document,sort: Sort, pagination: {skip
 
 }
 
-export async function getOneByLoginOrPassword(loginOrEmail: string): Promise<FinalDBUser | null>{
+export async function getOneByLoginOrEmail(loginOrEmail: string): Promise<FinalDBUser | null>{
 
     return await userDBController.findOne({$or: [{login: loginOrEmail}, {email: loginOrEmail}]})
+
+}
+
+export async function getOneByConfirmationCode(confirmationCode: string): Promise<FinalDBUser | null>{
+
+    return await userDBController.findOne({"emailConfirmation.confirmationCode": confirmationCode})
 
 }
 

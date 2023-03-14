@@ -16,6 +16,18 @@ export const usersRepository = {
 
     },
 
+    async updateEmailConfirmation(id: ObjectId){
+        const result = await userDBController.updateOne({_id: id},
+            {$set:
+                    {
+                        'emailConfirmation.isConfirmed': true
+                    }
+            }
+            )
+        return result.modifiedCount === 1
+
+    },
+
     async deleteOne(id: string): Promise<boolean> {
         const myId = new ObjectId(id)
         const result = await userDBController.deleteOne({ _id: myId })
