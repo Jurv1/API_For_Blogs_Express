@@ -8,6 +8,7 @@ import {generateHash} from "../utils/bcrypt/generateHash";
 
 import * as UserQueryRepo from "../repositories/queryRepository/userQ/userQ"
 import {emailManager} from "../managers/emailManager";
+import {getOneUserById} from "../repositories/queryRepository/userQ/userQ";
 
 export async function createOneUser( login: string, email: string, password: string): Promise<FinalDBUser|null> {
 
@@ -34,7 +35,7 @@ export async function createOneUser( login: string, email: string, password: str
     }
     const result = await usersRepository.createOne(newUserTmp)
     try {
-        await emailManager.sendEmailConfirmationMessage(result)
+        if (result) await emailManager.sendEmailConfirmationMessage(result ,result.emailConfirmation.confirmationCode)
     } catch (err){
         console.log(err)
         return null

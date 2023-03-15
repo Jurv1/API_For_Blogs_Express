@@ -1,10 +1,10 @@
 import {Router} from "express";
 import * as PostController from "../controllers/postController";
 import checkAuth from "../utils/auth/checkAuth";
-import {postValidation} from "../validations/postValidator";
+import {postValidation} from "../validations/bodyValidations/post/postValidator";
 import handleErr from "../utils/handleErr";
 import checkBearer from "../utils/auth/checkBearer";
-import {commentValid} from "../validations/commentValid";
+import {commentValid} from "../validations/bodyValidations/comment/commentValid";
 
 export const postRouter = Router({})
 

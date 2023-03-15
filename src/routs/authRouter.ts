@@ -1,5 +1,6 @@
 import {Router} from "express";
-import {loginValid} from "../validations/authValid";
+import {loginValid} from "../validations/bodyValidations/auth/authValid";
+import { isEmailOrLoginExists } from "../validations/checkOnExist/isEmailOrLoginExists"
 import * as LoginController from "../controllers/authController";
 import checkBearer from "../utils/auth/checkBearer";
 

@@ -2,9 +2,9 @@ import {Router} from "express";
 import * as BlogController from "../controllers/blogController";
 import { getPostsByBlogId, createOneByBlogId } from "../controllers/postController"
 import checkAuth from "../utils/auth/checkAuth";
-import {blogValidation} from "../validations/blogValidator";
+import {blogValidation} from "../validations/bodyValidations/blog/blogValidator";
 import handleErr from "../utils/handleErr";
-import {postValid} from "../validations/postValidator";
+import {postValid} from "../validations/bodyValidations/post/postValidator";
 
 export const blogRouter = Router({})
 

@@ -1,10 +1,10 @@
 import {Router} from "express";
 import * as CommentController from "../controllers/commentController"
 import checkBearer from "../utils/auth/checkBearer";
-import {commentValid} from "../validations/commentValid";
+import {commentValid} from "../validations/bodyValidations/comment/commentValid";
 import {checkWhoOwnerIs} from "../utils/middlewares/checkWhoOwnerIs"
 import handleErr from "../utils/handleErr";
-import {isCommentExists} from "../validations/isCommentExists";
+import {isCommentExists} from "../validations/checkOnExist/isCommentExists";
 
 export const commentRouter = Router({})
 
