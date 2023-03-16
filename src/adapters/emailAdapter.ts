@@ -28,10 +28,7 @@ export default async function send(email: string, subject: string, message: stri
         });
 
         const mailData = {
-            from: {
-                name: `Jeembo`,
-                address: "myEmail@gmail.com",
-            },
+            from:  `Jeembo <${process.env["EMAIL"]}>`,
             to: email,
             subject: subject,
             html: message,
@@ -53,7 +50,7 @@ export default async function send(email: string, subject: string, message: stri
     } catch (err){
         console.log(err)
     }
-    }
+}
 // export const emailAdapter = {
 //     async send(email: string, subject: string, message: string){
 //         let transporter = nodemailer.createTransport({
