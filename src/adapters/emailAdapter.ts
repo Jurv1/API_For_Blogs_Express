@@ -7,7 +7,7 @@ export const emailAdapter = {
             service: "gmail",
             auth: {
                 user: process.env["EMAIL"], // generated ethereal user
-                pass: process.env["EMAIL_PASSWORD"], // generated ethereal password
+                pass: process.env["VERCEL_PASSWORD"], // generated ethereal password
             },
         })
         const mailOptions = {
