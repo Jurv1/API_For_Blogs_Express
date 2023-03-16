@@ -57,7 +57,7 @@ export async function registerMe(req: Request, res: Response){
     try {
         await isEmailOrLoginExists("login")
         await isEmailOrLoginExists("email")
-        const user = await createOneUser(login, email, password)
+        const user = await createOneUser(login, email, password, false)
         if(user) {
             res.sendStatus(204)
         } else {

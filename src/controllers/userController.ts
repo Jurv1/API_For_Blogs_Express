@@ -45,7 +45,7 @@ export async function getAll(req: Request | Request<{}, {}, {}, {searchLoginTerm
 export async function createOne(req: Request, res: Response){
     const {login, email, password} = req.body
     try {
-        const result: FinalDBUser|null = await UserService.createOneUser(login, email, password)
+        const result: FinalDBUser|null = await UserService.createOneUser(login, email, password, true)
         if(result)  {
             const viewBlog: ViewUserModel = mapUser(result)
             res.status(201).send(viewBlog)

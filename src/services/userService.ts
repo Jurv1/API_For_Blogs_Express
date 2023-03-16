@@ -8,9 +8,8 @@ import {generateHash} from "../utils/bcrypt/generateHash";
 
 import * as UserQueryRepo from "../repositories/queryRepository/userQ/userQ"
 import {emailManager} from "../managers/emailManager";
-import {getOneUserById} from "../repositories/queryRepository/userQ/userQ";
 
-export async function createOneUser( login: string, email: string, password: string): Promise<FinalDBUser|null> {
+export async function createOneUser( login: string, email: string, password: string, confirmed: boolean): Promise<FinalDBUser|null> {
 
     const passwordSalt = await bcrypt.genSalt(10)
     const passwordHash = await generateHash(password, passwordSalt)
@@ -29,7 +28,7 @@ export async function createOneUser( login: string, email: string, password: str
                 hours: 1,
                 minutes: 3
             }),
-            isConfirmed: false
+            isConfirmed: confirmed
         }
 
     }
