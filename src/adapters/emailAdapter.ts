@@ -3,54 +3,56 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 
 export default async function send(email: string, subject: string, message: string){
-
-
-    const transporter = nodemailer.createTransport({
-        port: 465,
-        host: "smtp.gmail.com",
-        auth: {
-            user: process.env["EMAIL"],
-            pass: process.env["EMAIL_PASSWORD"],
-        },
-        secure: true,
-    });
-
-    await new Promise((resolve, reject) => {
-        // verify connection configuration
-        transporter.verify(function (error, success) {
-            if (error) {
-                console.log(error);
-                reject(error);
-            } else {
-                console.log("Server is ready to take our messages");
-                resolve(success);
-            }
+    try {
+        const transporter = nodemailer.createTransport({
+            port: 465,
+            host: "smtp.gmail.com",
+            auth: {
+                user: process.env["EMAIL"],
+                pass: process.env["EMAIL_PASSWORD"],
+            },
+            secure: true,
         });
-    });
 
-    const mailData = {
-        from: {
-            name: `Jeembo`,
-            address: "myEmail@gmail.com",
-        },
-        to: email,
-        subject: subject,
-        html: message,
-    };
-
-    await new Promise((resolve, reject) => {
-        // send mail
-        transporter.sendMail(mailData, (err, info) => {
-            if (err) {
-                console.error(err);
-                reject(err);
-            } else {
-                console.log('Email sent: ' + info.response);
-                resolve(info);
-            }
+        await new Promise((resolve, reject) => {
+            // verify connection configuration
+            transporter.verify(function (error, success) {
+                if (error) {
+                    console.log(error);
+                    reject(error);
+                } else {
+                    console.log("Server is ready to take our messages");
+                    resolve(success);
+                }
+            });
         });
-    });
-    return
+
+        const mailData = {
+            from: {
+                name: `Jeembo`,
+                address: "myEmail@gmail.com",
+            },
+            to: email,
+            subject: subject,
+            html: message,
+        };
+
+        await new Promise((resolve, reject) => {
+            // send mail
+            transporter.sendMail(mailData, (err, info) => {
+                if (err) {
+                    console.error(err);
+                    reject(err);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                    resolve(info);
+                }
+            });
+        });
+        return
+    } catch (err){
+        console.log(err)
+    }
     }
 // export const emailAdapter = {
 //     async send(email: string, subject: string, message: string){
