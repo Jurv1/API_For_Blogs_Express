@@ -1,5 +1,4 @@
-import {Request, Response} from "express";
-import {blogDBController, videoDBController} from "../db/db";
+import {videoDBController} from "../db/db";
 import {Video} from "../schemas/presentationSchemas/videoSchemas";
 
 export const videosRepository = {

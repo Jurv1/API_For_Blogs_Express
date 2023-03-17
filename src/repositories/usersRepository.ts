@@ -1,10 +1,6 @@
-import {blogDBController, userDBController} from "../db/db";
+import {userDBController} from "../db/db";
 import {DBUser, FinalDBUser} from "../schemas/dbSchemas/UserDBSchema";
-import {ObjectId, SortDirection} from "mongodb";
-import {BlogPagination} from "../schemas/paginationSchemas/blogPaginationSchema";
-import {mapBlogs} from "../utils/mappers/blogMapper";
-import {UserPagination} from "../schemas/paginationSchemas/userPaginationSchema";
-import {mapUsers} from "../utils/mappers/userMapper";
+import {ObjectId} from "mongodb";
 
 export const usersRepository = {
 

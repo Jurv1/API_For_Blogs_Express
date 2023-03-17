@@ -14,7 +14,8 @@ exports.default = (req, res, next) => {
                 field: errors[i].param
             });
         }
-        if (errorsArray.length === 1 && errorsArray[0].field === "id") {
+        if (errorsArray.length === 1 && errorsArray[0].field === "id" || errorsArray[0].field === "email"
+            || errorsArray[0].field === "login") {
             res.status(404).json({
                 errorsMessages: errorsArray
             });

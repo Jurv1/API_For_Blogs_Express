@@ -1,7 +1,6 @@
 import {Request, Response} from "express";
 import * as CommentService from "../services/commentService"
 import * as CommentQueryRepo from "../repositories/queryRepository/commentQ/commentQ"
-import {mapComment} from "../utils/mappers/commentMapper";
 import {ObjectId} from "mongodb";
 
 export async function getOneById(req: Request, res: Response){

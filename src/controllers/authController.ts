@@ -3,7 +3,6 @@ import * as UserQueryRepo from "../repositories/queryRepository/userQ/userQ"
 import { checkCredentials, createOneUser } from "../services/userService";
 import {jwtService} from "../application/jwtService";
 import {confirmEmail, resendConfirmationEmail} from "../services/authService";
-import {isEmailOrLoginExists} from "../validations/checkOnExist/isEmailOrLoginExists";
 
 export async function loginUser(req: Request, res: Response){
 
@@ -14,12 +13,8 @@ export async function loginUser(req: Request, res: Response){
         const checkMe = await checkCredentials(loginOrEmail, password)
         if (checkMe){
             const user = await UserQueryRepo.getOneByLoginOrEmail(loginOrEmail)
-            if(!user){
-                res.sendStatus(401)
-                return
-            }
-
-            const token = await jwtService.createJWT(user)
+            console.log(user)
+            const token = await jwtService.createJWT(user!)
             res.status(200).json({ accessToken: token})
         } else {
             res.sendStatus(401)
@@ -55,13 +50,16 @@ export async function registerMe(req: Request, res: Response){
 
     const {login, password, email} = req.body
     try {
-        await isEmailOrLoginExists("login")
-        await isEmailOrLoginExists("email")
         const user = await createOneUser(login, email, password, false)
         if(user) {
             res.sendStatus(204)
         } else {
-            res.status(400).send
+            res.status(400).json({
+                "errorsMessages": {
+                    "message": "s",
+                    "field": "login"
+                }
+            })
         }
     } catch (err){
         console.log(err)

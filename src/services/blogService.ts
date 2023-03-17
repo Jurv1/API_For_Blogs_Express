@@ -1,7 +1,6 @@
 import {blogsRepository} from "../repositories/blogsRepository";
-//import {Blog} from "../schemas/presentationSchemas/blogSchemas";
 import {blogDBController} from "../db/db";
-import {DBBlog, FinalDBBlog} from "../schemas/dbSchemas/BlogDBSchema";
+import {FinalDBBlog} from "../schemas/dbSchemas/BlogDBSchema";
 
 export async function createOneBlog( name: string, description: string, websiteUrl: string): Promise<FinalDBBlog|null> {
 

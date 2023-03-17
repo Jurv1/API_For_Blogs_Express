@@ -1,4 +1,4 @@
-import {Document, ObjectId, Sort, SortDirection} from "mongodb";
+import {Document, ObjectId, Sort} from "mongodb";
 import {BlogPagination} from "../../../schemas/paginationSchemas/blogPaginationSchema";
 import {blogDBController} from "../../../db/db";
 import {mapBlogs} from "../../../utils/mappers/blogMapper";

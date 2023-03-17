@@ -1,4 +1,3 @@
-import {FinalDBComment} from "../../../schemas/dbSchemas/CommentDBSchema";
 import {commentDBController} from "../../../db/db";
 import {ObjectId} from "mongodb";
 import {mapComment} from "../../../utils/mappers/commentMapper";

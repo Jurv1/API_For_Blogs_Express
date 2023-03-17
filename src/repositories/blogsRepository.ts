@@ -1,9 +1,7 @@
-import {blogDBController, postDBController} from "../db/db";
-import {DBBlog, FinalDBBlog} from "../schemas/dbSchemas/BlogDBSchema";
-import {ObjectId, SortDirection} from "mongodb";
+import {blogDBController} from "../db/db";
+import {FinalDBBlog} from "../schemas/dbSchemas/BlogDBSchema";
+import {ObjectId} from "mongodb";
 import {BlogWithoutId} from "../schemas/presentationSchemas/blogSchemas";
-import {mapBlogs} from "../utils/mappers/blogMapper";
-import {BlogPagination} from "../schemas/paginationSchemas/blogPaginationSchema";
 
 
 export const blogsRepository = {

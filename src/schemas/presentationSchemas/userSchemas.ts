@@ -1,6 +1,7 @@
 export type UserWithoutId = {
     login: string,
     email: string,
+    confirmationCode: string,
     createdAt: string
 }
 

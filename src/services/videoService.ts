@@ -1,6 +1,5 @@
 import {Request, Response} from "express";
 import {videosRepository} from "../repositories/videosRepository";
-import {Video} from "../schemas/presentationSchemas/videoSchemas";
 
 export const getStart = async (req: Request, res: Response) => {
     await res.send("Hi")

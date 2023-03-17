@@ -1,4 +1,4 @@
-import {DBBlog, FinalDBBlog} from "../../schemas/dbSchemas/BlogDBSchema";
+import {FinalDBBlog} from "../../schemas/dbSchemas/BlogDBSchema";
 import {viewBlogModel} from "../../schemas/presentationSchemas/blogSchemas";
 
 export function mapBlog(obj: FinalDBBlog): viewBlogModel{

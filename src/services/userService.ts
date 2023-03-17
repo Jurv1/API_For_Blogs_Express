@@ -1,4 +1,3 @@
-import { userDBController } from "../db/db";
 import {DBUser, FinalDBUser} from "../schemas/dbSchemas/UserDBSchema";
 import {usersRepository} from "../repositories/usersRepository";
 import { v4 as uuidv4 } from "uuid"

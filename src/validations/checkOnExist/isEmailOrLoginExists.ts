@@ -1,13 +1,11 @@
-import { param } from "express-validator";
+import { body } from "express-validator";
 import {getOneByLoginOrEmail} from "../../repositories/queryRepository/userQ/userQ";
-import {NextFunction} from "express";
 
-export async function isEmailOrLoginExists(field: string) {
-    param(field).custom(
-        async (value) => {
-            const result = await getOneByLoginOrEmail(value)
-            if (!result) throw new Error("Login or email is already exists")
-            return true
+export const isEmailOrLoginExists = (field: string) =>
+    body(field).custom(async (value) => {
+        const result = await getOneByLoginOrEmail(value);
+        if (result) {
+            throw new Error("User already registered");
         }
-    )
-}
+        return true;
+    });

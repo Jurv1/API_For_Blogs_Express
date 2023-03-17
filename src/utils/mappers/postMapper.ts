@@ -1,5 +1,3 @@
-import {DBBlog, FinalDBBlog} from "../../schemas/dbSchemas/BlogDBSchema";
-import {viewBlogModel} from "../../schemas/presentationSchemas/blogSchemas";
 import {FinalDBPost} from "../../schemas/dbSchemas/PostDBSchema";
 import {viewPostModel} from "../../schemas/presentationSchemas/postSchemas";
 

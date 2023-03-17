@@ -7,11 +7,13 @@ import {registrationCodeValid} from "../validations/bodyValidations/auth/registr
 import handleErr from "../utils/handleErr";
 import {emailValid} from "../validations/bodyValidations/auth/emailValid";
 import {isCommentExists} from "../validations/checkOnExist/isUserConfirmedAlready";
+import {isEmailOrLoginExists} from "../validations/checkOnExist/isEmailOrLoginExists";
 
 export const authRouter = Router({})
 
 authRouter.post('/login', loginValid, handleErr, LoginController.loginUser)
-authRouter.post('/registration', userValidator, handleErr, LoginController.registerMe)
+authRouter.post('/registration', isEmailOrLoginExists("email"), isEmailOrLoginExists("login"),
+    userValidator, handleErr, LoginController.registerMe)
 authRouter.post('/registration-confirmation', registrationCodeValid, handleErr, LoginController.confirmRegistration)
 authRouter.post('/registration-email-resending', emailValid, isCommentExists, handleErr, LoginController.resendRegistrationConfirming)
 
