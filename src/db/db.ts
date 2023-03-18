@@ -8,7 +8,9 @@ import {DBUser} from "../schemas/dbSchemas/UserDBSchema";
 import {DBComment} from "../schemas/dbSchemas/CommentDBSchema";
 dotenv.config()
 
-const mongoURI = process.env.MONGO_URI
+const mongoURI =
+    process.env.MONGO_URI
+
 console.log(mongoURI)
 if (!mongoURI){
     throw new Error("No URL")

@@ -70,7 +70,7 @@ export async function registerMe(req: Request, res: Response){
 }
 
 export async function confirmRegistration(req: Request, res: Response){
-    const code = req.body
+    const code = req.body.code
     try {
         const result = await confirmEmail(code)
         if (!result) {
