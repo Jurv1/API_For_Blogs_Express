@@ -29,5 +29,6 @@ export const emailAdapter = {
         return
         // send mail with defined transport object
 
+
     }
 }
