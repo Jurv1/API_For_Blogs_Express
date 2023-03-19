@@ -1,10 +1,13 @@
-import { param } from "express-validator";
+import { body } from "express-validator";
 import {getOneByLoginOrEmail} from "../../repositories/queryRepository/userQ/userQ";
 
-export const isUserConfirmedAlready = param("email").custom(
+export const isUserConfirmedAlready = body("email").custom(
     async (value) => {
         const result = await getOneByLoginOrEmail(value)
-        if (!result || result.emailConfirmation.isConfirmed) throw new Error("You are already confirmed yourself")
+        if (!result || result.emailConfirmation.isConfirmed) {
+            console.log(value)
+            throw new Error("You are already confirmed yourself")
+        }
         return true
     }
 )

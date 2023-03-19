@@ -95,7 +95,7 @@ export async function confirmRegistration(req: Request, res: Response){
 }
 
 export async function resendRegistrationConfirming(req: Request, res: Response){
-    const email = req.body
+    const email = req.body.email
 
     try {
         const result = await resendConfirmationEmail(email)
