@@ -26,7 +26,7 @@ export async function confirmEmail(code: string): Promise<boolean>{
 export async function resendConfirmationEmail(email: string){
 
     const user = await getOneByLoginOrEmail(email)
-    if (!user) return false
+    if (!user || !user.emailConfirmation.confirmationCode) return false
     const newRegistrationCode = uuidv4()
     try {
         await emailManager.sendEmailConfirmationMessage(user, newRegistrationCode)
