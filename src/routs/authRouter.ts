@@ -17,6 +17,7 @@ authRouter.post('/registration', isEmailOrLoginExists("email"), isEmailOrLoginEx
 authRouter.post('/registration-confirmation', registrationCodeValid, handleErr, LoginController.confirmRegistration)
 authRouter.post('/registration-email-resending', emailValid, isUserConfirmedAlready, handleErr, LoginController
     .resendRegistrationConfirming)
-authRouter.post('/refresh-token', )
+authRouter.post('/refresh-token', LoginController.refreshMyToken)
+authRouter.post('/logout', LoginController.logOut)
 
 authRouter.get('/me', checkBearer, LoginController.getMe)
