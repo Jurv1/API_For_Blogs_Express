@@ -35,6 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.app = void 0;
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
@@ -47,27 +48,27 @@ const db_1 = require("./db/db");
 const userRouter_1 = require("./routs/userRouter");
 const authRouter_1 = require("./routs/authRouter");
 const commentRouter_1 = require("./routs/commentRouter");
-const app = (0, express_1.default)();
+exports.app = (0, express_1.default)();
 const port = 3003;
 const parserMiddleware = (0, body_parser_1.default)({});
-app.use(parserMiddleware);
+exports.app.use(parserMiddleware);
 const allowedOrigins = ['http://localhost:3003'];
 const options = {
     origin: allowedOrigins
 };
 // Then pass these options to cors:
-app.use((0, cors_1.default)(options));
-app.get('/', VideoController.getStart);
-app.use('/videos', videoRouter_1.videoRouter);
-app.use('/blogs', blogRouter_1.blogRouter);
-app.use('/posts', postRouter_1.postRouter);
-app.use('/users', userRouter_1.userRouter);
-app.use('/auth', authRouter_1.authRouter);
-app.use('/comments', commentRouter_1.commentRouter);
-app.delete('/testing/all-data', testingController.deleteAll);
+exports.app.use((0, cors_1.default)(options));
+exports.app.get('/', VideoController.getStart);
+exports.app.use('/videos', videoRouter_1.videoRouter);
+exports.app.use('/blogs', blogRouter_1.blogRouter);
+exports.app.use('/posts', postRouter_1.postRouter);
+exports.app.use('/users', userRouter_1.userRouter);
+exports.app.use('/auth', authRouter_1.authRouter);
+exports.app.use('/comments', commentRouter_1.commentRouter);
+exports.app.delete('/testing/all-data', testingController.deleteAll);
 const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, db_1.runDb)();
-    app.listen(port, () => {
+    exports.app.listen(port, () => {
         console.log(`Example app listening on port ${port}`);
     });
 });
