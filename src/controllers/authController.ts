@@ -14,8 +14,10 @@ export async function loginUser(req: Request, res: Response){
         if (checkMe){
             const user = await UserQueryRepo.getOneByLoginOrEmail(loginOrEmail)
             console.log(user)
-            const token = await jwtService.createJWT(user!)
-            res.status(200).json({ accessToken: token})
+            const token = await jwtService.createJWT(user!, "10s")
+            const refreshToken = await jwtService.createJWT(user!, "20s")
+            res.cookie('refreshToken', refreshToken, {httpOnly: true, secure: true})
+                .header('Authorization', token).status(200).json({ accessToken: token})
         } else {
             res.sendStatus(401)
             return
@@ -111,4 +113,37 @@ export async function resendRegistrationConfirming(req: Request, res: Response){
             message: "Can't find el"
         })
     }
+}
+
+export async function refreshMyToken(res: Response, req: Request){
+    const refreshToken = req.cookies['refreshToken']
+
+    try {
+     if (!refreshToken){
+         return res.sendStatus(401)
+     }
+     const userId = await jwtService.getUserIdByToken(refreshToken)
+     if(userId){
+         const user = await UserQueryRepo.getOneUserById(userId.toString())
+         const accessToken = await jwtService.createJWT(user!, "10s")
+         const newRefreshToken = await jwtService.createJWT(user!, "20s")
+
+         res.cookie('refreshToken', newRefreshToken, {httpOnly: true, secure: true})
+             .header('Authorization', accessToken).status(200).json({ accessToken: accessToken})
+
+     } else return res.sendStatus(401)
+
+    }catch(err){
+        console.log(err)
+        res.status(404).json({
+            message: "Can't find el"
+        })
+    }
+}
+
+export async function logOut(res: Response, req: Request){
+    const refreshToken = req.cookies['refreshToken']
+    if(!refreshToken) return res.sendStatus(401)
+    return res.sendStatus(204)
+
 }
