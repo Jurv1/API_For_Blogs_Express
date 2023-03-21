@@ -13,7 +13,7 @@ import {userRouter} from "./routs/userRouter";
 import {authRouter} from "./routs/authRouter";
 import {commentRouter} from "./routs/commentRouter";
 
-const app = express()
+export const app = express()
 const port = 3003
 
 const parserMiddleware = bodyParser({})
@@ -45,7 +45,7 @@ app.delete('/testing/all-data', testingController.deleteAll)
 
 const startApp = async () => {
     await runDb()
-    app.listen(port, () => {
+    app.listen(port,  () => {
         console.log(`Example app listening on port ${port}`)
     })
 }
