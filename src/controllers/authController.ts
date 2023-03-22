@@ -116,7 +116,7 @@ export async function resendRegistrationConfirming(req: Request, res: Response){
 }
 
 export async function refreshMyToken(res: Response, req: Request){
-    const refreshToken = req.cookies['refreshToken']
+    const refreshToken = req.cookies.refreshToken
 
     try {
      if (!refreshToken){
@@ -146,7 +146,7 @@ export async function refreshMyToken(res: Response, req: Request){
 }
 
 export async function logOut(res: Response, req: Request){
-    const refreshToken = req.cookies['refreshToken']
+    const refreshToken = req.cookies.refreshToken
     if(!refreshToken) return res.sendStatus(401)
     return res.sendStatus(204)
 
