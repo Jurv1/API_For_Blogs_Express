@@ -58,6 +58,7 @@ const options = {
 };
 // Then pass these options to cors:
 exports.app.use((0, cors_1.default)(options));
+exports.app.use();
 exports.app.get('/', VideoController.getStart);
 exports.app.use('/videos', videoRouter_1.videoRouter);
 exports.app.use('/blogs', blogRouter_1.blogRouter);

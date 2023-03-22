@@ -128,6 +128,10 @@ export async function refreshMyToken(res: Response, req: Request){
          const accessToken = await jwtService.createJWT(user!, "10s")
          const newRefreshToken = await jwtService.createJWT(user!, "20s")
 
+         const isTokenAddedToBlackList = await jwtService.addTokenToBlackList(refreshToken)
+         if (!isTokenAddedToBlackList){
+             return  res.sendStatus(401)
+         }
          res.cookie('refreshToken', newRefreshToken, {httpOnly: true, secure: true})
              .header('Authorization', accessToken).status(200).json({ accessToken: accessToken})
 

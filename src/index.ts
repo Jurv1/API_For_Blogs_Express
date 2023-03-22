@@ -25,7 +25,8 @@ const options: cors.CorsOptions = {
 };
 
 // Then pass these options to cors:
-app.use(cors(options));
+app.use(cors(options))
+app.use()
 
 app.get('/', VideoController.getStart)
 
