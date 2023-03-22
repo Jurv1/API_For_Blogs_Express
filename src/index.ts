@@ -1,6 +1,7 @@
 import express from 'express'
 import bodyParser from "body-parser";
 import cors from 'cors'
+import cookieParser from "cookie-parser";
 
 import * as VideoController from "./services/videoService";
 import * as testingController from "./services/testingService"
@@ -26,7 +27,7 @@ const options: cors.CorsOptions = {
 
 // Then pass these options to cors:
 app.use(cors(options))
-app.use()
+app.use(cookieParser())
 
 app.get('/', VideoController.getStart)
 

@@ -39,6 +39,7 @@ exports.app = void 0;
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const VideoController = __importStar(require("./services/videoService"));
 const testingController = __importStar(require("./services/testingService"));
 const postRouter_1 = require("./routs/postRouter");
@@ -58,7 +59,7 @@ const options = {
 };
 // Then pass these options to cors:
 exports.app.use((0, cors_1.default)(options));
-exports.app.use();
+exports.app.use((0, cookie_parser_1.default)());
 exports.app.get('/', VideoController.getStart);
 exports.app.use('/videos', videoRouter_1.videoRouter);
 exports.app.use('/blogs', blogRouter_1.blogRouter);

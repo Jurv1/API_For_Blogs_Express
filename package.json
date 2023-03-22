@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.13",
     "@types/date-fns": "^2.6.0",
     "@types/express-validator": "^3.0.0",
