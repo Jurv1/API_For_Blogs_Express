@@ -8,6 +8,7 @@ import handleErr from "../utils/handleErr";
 import {emailValid} from "../validations/bodyValidations/auth/emailValid";
 import {isEmailOrLoginExists} from "../validations/checkOnExist/isEmailOrLoginExists";
 import {isUserConfirmedAlready} from "../validations/checkOnExist/isUserConfirmedAlready";
+import {isRefreshTokenInBlackList} from "../utils/middlewares/isRefreshTokenInBlackList";
 
 export const authRouter = Router({})
 
@@ -17,7 +18,7 @@ authRouter.post('/registration', isEmailOrLoginExists("email"), isEmailOrLoginEx
 authRouter.post('/registration-confirmation', registrationCodeValid, handleErr, LoginController.confirmRegistration)
 authRouter.post('/registration-email-resending', emailValid, isUserConfirmedAlready, handleErr, LoginController
     .resendRegistrationConfirming)
-authRouter.post('/refresh-token', LoginController.refreshMyToken)
-authRouter.post('/logout', LoginController.logOut)
+authRouter.post('/refresh-token', isRefreshTokenInBlackList, LoginController.refreshMyToken)
+authRouter.post('/logout', isRefreshTokenInBlackList, LoginController.logOut)
 
 authRouter.get('/me', checkBearer, LoginController.getMe)

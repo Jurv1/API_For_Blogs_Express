@@ -119,17 +119,15 @@ export async function refreshMyToken(res: Response, req: Request){
     const refreshToken = req.cookies.refreshToken
 
     try {
-     if (!refreshToken){
-         return res.sendStatus(401)
-     }
-     const userId = await jwtService.getUserIdByToken(refreshToken)
-     if(userId){
+        const userId = await jwtService.getUserIdByToken(refreshToken)
+
+        if(userId){
          const user = await UserQueryRepo.getOneUserById(userId.toString())
          const accessToken = await jwtService.createJWT(user!, "10s")
          const newRefreshToken = await jwtService.createJWT(user!, "20s")
 
-         const isTokenAddedToBlackList = await jwtService.addTokenToBlackList(refreshToken)
-         if (!isTokenAddedToBlackList){
+         const addTokenToBlackList = await jwtService.addTokenToBlackList(refreshToken)
+         if (!addTokenToBlackList){
              return  res.sendStatus(401)
          }
          res.cookie('refreshToken', newRefreshToken, {httpOnly: true, secure: true})

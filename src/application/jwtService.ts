@@ -21,6 +21,7 @@ export const jwtService = {
         let expirationDate = payload.exp // seconds * 1000 => date
         expirationDate = new Date(Number(expirationDate * 1000))
         const refreshTokenTmp = {
+            refreshToken: refreshToken,
             payload: payload,
             expDate: expirationDate
         }
