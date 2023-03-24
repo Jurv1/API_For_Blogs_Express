@@ -16,7 +16,7 @@ export async function loginUser(req: Request, res: Response){
             console.log(user)
             const token = await jwtService.createJWT(user!, "10s")
             const refreshToken = await jwtService.createJWT(user!, "20s")
-            res.cookie('refreshToken', refreshToken, )
+            res.cookie('refreshToken', refreshToken, {httpOnly: true, secure: true})
                 .header('Authorization', token).status(200).json({ accessToken: token})
         } else {
             res.sendStatus(401)
@@ -30,7 +30,7 @@ export async function loginUser(req: Request, res: Response){
         })
     }
 }
-//{httpOnly: true, secure: true}
+
 export async function getMe(req: Request, res: Response){
     try {
         const result = {
