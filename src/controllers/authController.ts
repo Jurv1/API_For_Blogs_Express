@@ -145,6 +145,6 @@ export async function refreshMyToken(req: Request, res: Response){
 export async function logOut(res: Response, req: Request){
     const refreshToken = req.cookies.refreshToken
     if(!refreshToken) return res.sendStatus(401)
+    await jwtService.addTokenToBlackList(refreshToken)
     return res.sendStatus(204)
-
 }
