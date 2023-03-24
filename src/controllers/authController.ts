@@ -16,7 +16,7 @@ export async function loginUser(req: Request, res: Response){
             console.log(user)
             const token = await jwtService.createJWT(user!, "10s")
             const refreshToken = await jwtService.createJWT(user!, "20s")
-            res.cookie('refreshToken', refreshToken, {httpOnly: true, secure: true})
+            res.cookie('refreshToken', refreshToken, )
                 .header('Authorization', token).status(200).json({ accessToken: token})
         } else {
             res.sendStatus(401)
@@ -30,7 +30,7 @@ export async function loginUser(req: Request, res: Response){
         })
     }
 }
-
+//{httpOnly: true, secure: true}
 export async function getMe(req: Request, res: Response){
     try {
         const result = {
@@ -115,7 +115,7 @@ export async function resendRegistrationConfirming(req: Request, res: Response){
     }
 }
 
-export async function refreshMyToken(res: Response, req: Request){
+export async function refreshMyToken(req: Request, res: Response){
     const refreshToken = req.cookies.refreshToken
 
     try {
@@ -125,11 +125,10 @@ export async function refreshMyToken(res: Response, req: Request){
          const user = await UserQueryRepo.getOneUserById(userId.toString())
          const accessToken = await jwtService.createJWT(user!, "10s")
          const newRefreshToken = await jwtService.createJWT(user!, "20s")
-
-         const addTokenToBlackList = await jwtService.addTokenToBlackList(refreshToken)
-         if (!addTokenToBlackList){
-             return  res.sendStatus(401)
-         }
+            await jwtService.addTokenToBlackList(refreshToken)
+        //if (!addTokenToBlackList){
+            //              return  res.sendStatus(401)
+            //          }
          res.cookie('refreshToken', newRefreshToken, {httpOnly: true, secure: true})
              .header('Authorization', accessToken).status(200).json({ accessToken: accessToken})
 
