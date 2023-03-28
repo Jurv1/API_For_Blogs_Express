@@ -2,11 +2,13 @@ import {FinalDBUser} from "../schemas/dbSchemas/UserDBSchema";
 import jwt from "jsonwebtoken"
 import {settings} from "../settings";
 import {ObjectId} from "mongodb";
+import { v4 as uuidv4 } from "uuid"
 import {refreshTokensDBController} from "../db/db";
 
 export const jwtService = {
     async createJWT(user: FinalDBUser, exp: string) {
-        return jwt.sign({userId: user!._id}, settings.JWT_SECRET, {expiresIn: exp})
+        const deviceId = uuidv4()
+        return jwt.sign({userId: user!._id, deviceId}, settings.JWT_SECRET, {expiresIn: exp})
     },
     async getUserIdByToken(token: string){
         try {

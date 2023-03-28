@@ -1,4 +1,4 @@
-import {ObjectId} from "mongodb";
+import {MongoId} from "./MongoIdSchema";
 
 export type DBBlog = {
     name: string
@@ -8,8 +8,6 @@ export type DBBlog = {
     createdAt?: string
 }
 
-type MongoId = {
-    _id: ObjectId
-}
+
 
 export type FinalDBBlog = MongoId & DBBlog

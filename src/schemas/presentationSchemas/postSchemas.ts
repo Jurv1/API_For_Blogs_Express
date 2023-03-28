@@ -1,3 +1,5 @@
+import {myId} from "./myId";
+
 export type PostWithoutId = {
     title: string,
     shortDescription: string,
@@ -5,10 +7,6 @@ export type PostWithoutId = {
     blogId: string,
     blogName: string,
     createdAt: string
-}
-
-type myId = {
-    id: string
 }
 
 export type viewPostModel = myId & PostWithoutId

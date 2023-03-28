@@ -49,6 +49,7 @@ const db_1 = require("./db/db");
 const userRouter_1 = require("./routs/userRouter");
 const authRouter_1 = require("./routs/authRouter");
 const commentRouter_1 = require("./routs/commentRouter");
+const securityRouter_1 = require("./routs/securityRouter");
 exports.app = (0, express_1.default)();
 const port = 3003;
 const parserMiddleware = (0, body_parser_1.default)({});
@@ -60,6 +61,7 @@ const options = {
 // Then pass these options to cors:
 exports.app.use((0, cors_1.default)(options));
 exports.app.use((0, cookie_parser_1.default)());
+exports.app.set('trust proxy', true);
 exports.app.get('/', VideoController.getStart);
 exports.app.use('/videos', videoRouter_1.videoRouter);
 exports.app.use('/blogs', blogRouter_1.blogRouter);
@@ -67,6 +69,7 @@ exports.app.use('/posts', postRouter_1.postRouter);
 exports.app.use('/users', userRouter_1.userRouter);
 exports.app.use('/auth', authRouter_1.authRouter);
 exports.app.use('/comments', commentRouter_1.commentRouter);
+exports.app.use('/security', securityRouter_1.securityRouter);
 exports.app.delete('/testing/all-data', testingController.deleteAll);
 const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, db_1.runDb)();

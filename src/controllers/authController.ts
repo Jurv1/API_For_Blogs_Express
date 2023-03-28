@@ -7,6 +7,10 @@ import {confirmEmail, resendConfirmationEmail} from "../services/authService";
 export async function loginUser(req: Request, res: Response){
 
     const {loginOrEmail, password} = req.body
+    const ip = req.ip
+    const title = req.headers["user-agent"]
+    console.log(ip, "    ", title)
+    console.log(`${req.method} ${req.originalUrl} ${res.statusCode}`)
 
     try {
 

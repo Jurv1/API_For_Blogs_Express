@@ -1,4 +1,4 @@
-import {ObjectId} from "mongodb";
+import {MongoId} from "./MongoIdSchema";
 
 export type DBPost = {
     title: string,
@@ -7,10 +7,6 @@ export type DBPost = {
     blogId: string,
     blogName: string,
     createdAt: string
-}
-
-type MongoId = {
-    _id: ObjectId
 }
 
 export type FinalDBPost = MongoId & DBPost

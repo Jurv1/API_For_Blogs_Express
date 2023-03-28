@@ -13,6 +13,7 @@ import {runDb} from "./db/db";
 import {userRouter} from "./routs/userRouter";
 import {authRouter} from "./routs/authRouter";
 import {commentRouter} from "./routs/commentRouter";
+import {securityRouter} from "./routs/securityRouter";
 
 export const app = express()
 const port = 3003
@@ -29,6 +30,8 @@ const options: cors.CorsOptions = {
 app.use(cors(options))
 app.use(cookieParser())
 
+app.set('trust proxy', true)
+
 app.get('/', VideoController.getStart)
 
 app.use('/videos', videoRouter)
@@ -42,6 +45,8 @@ app.use('/users', userRouter)
 app.use('/auth', authRouter)
 
 app.use('/comments', commentRouter)
+
+app.use('/security', securityRouter)
 
 app.delete('/testing/all-data', testingController.deleteAll)
 

@@ -6,6 +6,8 @@ import * as dotenv from 'dotenv'
 import {DBPost} from "../schemas/dbSchemas/PostDBSchema";
 import {DBUser} from "../schemas/dbSchemas/UserDBSchema";
 import {DBComment} from "../schemas/dbSchemas/CommentDBSchema";
+import {DBDevice} from "../schemas/dbSchemas/DeviceDBSchema";
+import {Attempt} from "../schemas/presentationSchemas/attemptSchema";
 dotenv.config()
 
 const mongoURI =
@@ -32,3 +34,5 @@ export const videoDBController = client.db().collection<Video>("videos")
 export const userDBController = client.db().collection<DBUser>("users")
 export const commentDBController = client.db().collection<DBComment>("comments")
 export const refreshTokensDBController = client.db().collection("refreshTokens")
+export const devicesDBController = client.db().collection<DBDevice>("devices")
+export const attemptsDBController = client.db().collection<Attempt>("attempts")

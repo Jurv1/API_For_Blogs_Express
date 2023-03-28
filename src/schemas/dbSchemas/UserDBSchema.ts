@@ -1,4 +1,4 @@
-import {ObjectId} from "mongodb";
+import {MongoId} from "./MongoIdSchema";
 
 export type DBUser = {
     accountData: {
@@ -13,9 +13,6 @@ export type DBUser = {
         expirationDate: any,
         isConfirmed: boolean
     }
-}
-type MongoId = {
-    _id: ObjectId
 }
 
 export type FinalDBUser = MongoId & DBUser

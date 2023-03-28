@@ -1,3 +1,5 @@
+import {myId} from "./myId";
+
 export type CommentWithoutId = {
     content: string,
     commentatorInfo: {
@@ -6,10 +8,6 @@ export type CommentWithoutId = {
     },
     postId: string,
     createdAt: string
-}
-
-type myId = {
-    id: string
 }
 
 export type viewCommentModel = myId & {

@@ -1,4 +1,4 @@
-import {ObjectId} from "mongodb";
+import {MongoId} from "./MongoIdSchema";
 
 export type DBComment = {
     content: string,
@@ -8,10 +8,6 @@ export type DBComment = {
     },
     postId: string,
     createdAt: string
-}
-
-type MongoId = {
-    _id: ObjectId
 }
 
 export type FinalDBComment = MongoId & DBComment
