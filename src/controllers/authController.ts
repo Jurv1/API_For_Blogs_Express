@@ -32,20 +32,23 @@ export async function loginUser(req: Request, res: Response){
                 const decodedRefresh = jwt.decode(refreshToken, {json: true})
 
                 if(decodedRefresh && decodedRefresh.iat) {
-                    await deviceRepository.updateLastActivity(device.deviceId, (new Date(decodedRefresh.iat)).toISOString() )
+
+                    const isDevicesWasUpdated =  await deviceRepository.updateLastActivity(device.deviceId, (new Date()).toISOString())
+
+                    if (isDevicesWasUpdated) console.log("It's Ok")
                 }
 
             } else {
                 await createNewDevice(ip, title, refreshToken)
             }
 
-            res.cookie('refreshToken', refreshToken, {httpOnly: true, secure: true})
+            res.cookie('refreshToken', refreshToken, )
                 .header('Authorization', token).status(200).json({ accessToken: token})
         } else {
             res.sendStatus(401)
             return
         }
-
+//{httpOnly: true, secure: true}
     } catch (err){
         console.log(err)
         res.status(404).json({

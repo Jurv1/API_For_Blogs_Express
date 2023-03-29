@@ -47,8 +47,8 @@ export async function createOne(req: Request, res: Response){
     try {
         const result: FinalDBUser|null = await UserService.createOneUser(login, email, password, true)
         if(result)  {
-            const viewBlog: ViewUserModel = mapUser(result)
-            res.status(201).send(viewBlog)
+            const viewUser: ViewUserModel = mapUser(result)
+            res.status(201).send(viewUser)
         } else res.status(404).json({
             message: "Can't find el"
         })

@@ -108,3 +108,16 @@ describe("Testing Auth", ()=> {
         
     });
 })
+
+describe("Testing login with zalupa", ()=> {
+    it("should create user with correct data",  async () => {
+        await request(app).post('/security/devices').send({
+            login: "Poziloy_Chert",
+            email: "XXX@mail.ru",
+            password: "123456789"
+        }).set(
+            "Authorization",
+            "Basic YWRtaW46cXdlcnR5"
+        ).expect(201)
+    })
+})

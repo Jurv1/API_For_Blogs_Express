@@ -16,10 +16,11 @@ export async function createNewDevice(ip: string, title: string, refresh: string
     if(!decodedRefresh || !decodedRefresh.iat){
         return null
     }
+
     const deviceTmp = {
         ip: ip,
         title: title,
-        lastActiveDate: new Date(decodedRefresh.iat).toISOString(),
+        lastActiveDate: (new Date()).toISOString(),
         deviceId: decodedRefresh.deviceId,
         userId: decodedRefresh.userId.toString()
     }

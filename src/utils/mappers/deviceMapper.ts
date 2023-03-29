@@ -17,9 +17,6 @@ export function mapDevices(objs: FinalDBDevice[]): viewDeviceModel[]{
             ip: el.ip,
             lastActiveDate: el.lastActiveDate ,
             title: el.title,
-
-
-
         }
     })
 }

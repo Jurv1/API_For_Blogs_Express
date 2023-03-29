@@ -22,10 +22,11 @@ export const deviceRepository = {
     },
 
     async updateLastActivity(deviceId: string , iat: string){
-        await devicesDBController.updateOne({ deviceId: deviceId }, {
+        const result = await devicesDBController.updateOne({ deviceId: deviceId }, {
             $set: {
-                lastActivity: iat
+                lastActiveDate: (new Date()).toISOString()
             }
         })
+        return result.modifiedCount === 1
     },
 }

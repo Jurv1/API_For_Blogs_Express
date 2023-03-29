@@ -9,9 +9,9 @@ export async function isRefreshTokenInBlackList( req: Request, res: Response, ne
     }
     const checkToken = await refreshTokensDBController.findOne({ refreshToken: refreshToken })
     if (checkToken){
-        return res.sendStatus(401)
+        return res.sendStatus(404)
     }
     const userId = await jwtService.getUserIdByToken(refreshToken)
     if (userId) next()
-    else return res.sendStatus(401)
+    else return res.sendStatus(400)
 }
