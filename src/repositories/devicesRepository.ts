@@ -21,7 +21,7 @@ export const deviceRepository = {
         return result.deletedCount === 1
     },
 
-    async updateLastActivity(deviceId: string , iat: string){
+    async updateLastActivity(deviceId: string , iat: Date){
         await devicesDBController.updateOne({ deviceId: deviceId }, {
             $set: {
                 lastActivity: iat

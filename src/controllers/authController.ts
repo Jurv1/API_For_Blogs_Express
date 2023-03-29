@@ -32,7 +32,7 @@ export async function loginUser(req: Request, res: Response){
                 const decodedRefresh = jwt.decode(refreshToken, {json: true})
 
                 if(decodedRefresh && decodedRefresh.iat) {
-                    await deviceRepository.updateLastActivity(device.deviceId, decodedRefresh.iat.toString())
+                    await deviceRepository.updateLastActivity(device.deviceId, new Date(decodedRefresh.iat))
                 }
 
             } else {

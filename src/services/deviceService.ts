@@ -19,7 +19,7 @@ export async function createNewDevice(ip: string, title: string, refresh: string
     const deviceTmp = {
         ip: ip,
         title: title,
-        lastActivity: decodedRefresh.iat.toString(),
+        lastActivity: new Date(decodedRefresh.iat),
         deviceId: decodedRefresh.deviceId,
         userId: decodedRefresh.userId.toString()
     }
