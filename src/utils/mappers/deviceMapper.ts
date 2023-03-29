@@ -12,7 +12,7 @@ export function mapDevice(obj: FinalDBDevice): viewDeviceModel{
 
 export function mapDevices(objs: FinalDBDevice[]): viewDeviceModel[]{
     return objs.map(el => {
-        const lastAct = new Date(el.lastActivity).toString()
+        const lastAct = new Date( Number(el.lastActivity) ).toString()
         return {
 
             ip: el.ip,
