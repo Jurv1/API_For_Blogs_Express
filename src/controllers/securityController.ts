@@ -34,8 +34,8 @@ export async function deleteAllExceptActive(req: Request, res: Response){
     const decodedRefresh = jwt.decode(refreshToken, {json: true})
 
     try {
-        if (decodedRefresh && decodedRefresh.deviceId){
-            const isDeleted = await deleteAllDevicesExceptActive(new ObjectId(decodedRefresh.deviceId))
+        if (decodedRefresh && decodedRefresh.deviceId && decodedRefresh.userId){
+            const isDeleted = await deleteAllDevicesExceptActive(decodedRefresh.userId, decodedRefresh.deviceId)
 
             if (isDeleted) return res.sendStatus(204)
             return res.sendStatus(404)

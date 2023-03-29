@@ -9,8 +9,8 @@ export const deviceRepository = {
         return await devicesDBController.findOne({ _id: result.insertedId })
     },
 
-    async deleteAllExceptActive(id: ObjectId){
-        const result = await devicesDBController.deleteMany({ _id: { $ne: id } }, )
+    async deleteAllExceptActive(userId: string , deviceId: string){
+        const result = await devicesDBController.deleteMany({ userId, deviceId: { $ne: deviceId } }, )
 
         return result.deletedCount === 1
     },
