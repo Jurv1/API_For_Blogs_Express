@@ -42,13 +42,12 @@ export async function loginUser(req: Request, res: Response){
                 await createNewDevice(ip, title, refreshToken)
             }
 
-            res.cookie('refreshToken', refreshToken, )
+            res.cookie('refreshToken', refreshToken, {httpOnly: true, secure: true})
                 .header('Authorization', token).status(200).json({ accessToken: token})
         } else {
             res.sendStatus(401)
             return
         }
-//{httpOnly: true, secure: true}
     } catch (err){
         console.log(err)
         res.status(404).json({
