@@ -3,7 +3,7 @@ import {Attempt} from "../schemas/presentationSchemas/attemptSchema";
 
 export const attemptsRepository = {
     async countAttempts(ip: string, URL: string, time: Date){
-        return await attemptsDBController.countDocuments({  })
+        return await attemptsDBController.countDocuments({ip, URL, time: {$gt: time}})
     },
 
     async createAttempt(att: Attempt){
