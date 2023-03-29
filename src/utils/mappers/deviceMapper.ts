@@ -13,11 +13,12 @@ export function mapDevice(obj: FinalDBDevice): viewDeviceModel{
 export function mapDevices(objs: FinalDBDevice[]): viewDeviceModel[]{
     return objs.map(el => {
         return {
-
-            ip: el.ip,
-            title: el.title,
-            lastActivity: el.lastActivity ,
             deviceId: el.deviceId,
+            ip: el.ip,
+            lastActivity: el.lastActivity ,
+            title: el.title,
+
+
 
         }
     })
