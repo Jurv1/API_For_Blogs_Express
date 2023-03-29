@@ -5,7 +5,7 @@ export async function countAttemptsToRequest( req: Request, res: Response, next:
     const limit = new Date(new Date().getTime() - 10000)
 
     const countOfAttempts = await attemptsRepository.countAttempts(req.ip, req.originalUrl, limit)
-    if (countOfAttempts >= 5) return res.sendStatus(429)
+    if (countOfAttempts > 5) return res.sendStatus(429)
 
     const attemptTmp = {
         ip: req.ip,
