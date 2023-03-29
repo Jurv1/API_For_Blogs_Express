@@ -5,7 +5,7 @@ export function mapDevice(obj: FinalDBDevice): viewDeviceModel{
     return {
         ip: obj.ip,
         title: obj.title,
-        lastActivity: new Date(obj.lastActivity) ,
+        lastActivity:  obj.lastActivity,
         deviceId: obj.deviceId,
     }
 }
@@ -16,7 +16,7 @@ export function mapDevices(objs: FinalDBDevice[]): viewDeviceModel[]{
 
             ip: el.ip,
             title: el.title,
-            lastActivity: new Date(el.lastActivity) ,
+            lastActivity: el.lastActivity ,
             deviceId: el.deviceId,
 
         }
