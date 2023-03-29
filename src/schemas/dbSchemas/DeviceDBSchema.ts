@@ -3,7 +3,7 @@ import {MongoId} from "./MongoIdSchema";
 export type DBDevice = {
     ip: string,
     title: string,
-    lastActivity: Date,
+    lastActivity: string,
     deviceId: string,
     userId: string
 }
