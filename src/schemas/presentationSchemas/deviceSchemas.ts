@@ -2,6 +2,6 @@
 export type viewDeviceModel = {
     ip: string,
     title: string,
-    lastActivityDate: string,
+    lastActiveDate: string,
     deviceId: string,
 }
