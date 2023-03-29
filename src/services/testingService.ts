@@ -1,5 +1,13 @@
 import {Request, Response} from "express";
-import {blogDBController, commentDBController, postDBController, userDBController, videoDBController} from "../db/db";
+import {
+    attemptsDBController,
+    blogDBController,
+    commentDBController,
+    devicesDBController,
+    postDBController,
+    userDBController,
+    videoDBController
+} from "../db/db";
 
 export const deleteAll = async (req: Request, res: Response) => {
     try {
@@ -8,6 +16,8 @@ export const deleteAll = async (req: Request, res: Response) => {
         await blogDBController.deleteMany({})
         await userDBController.deleteMany({})
         await commentDBController.deleteMany({})
+        await devicesDBController.deleteMany({})
+        await attemptsDBController.deleteMany({})
         res.sendStatus(204)
     } catch (err) {
         console.log(err)
