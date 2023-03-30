@@ -35,6 +35,20 @@ export const jwtService = {
         return false
     },
 
+    async getPayload(token: string) {
+        try {
+            const res: any = jwt.verify(token, settings.JWT_SECRET)
+            return res
+        } catch (error) {
+            return null
+        }
+    },
+
+    getLastActiveDate(refreshToken: string): string {
+        const payload: any = jwt.decode(refreshToken)
+        return new Date(payload.iat * 1000).toISOString()
+    },
+
 
     // CRON | sheduling
     async clearOldTokens(){

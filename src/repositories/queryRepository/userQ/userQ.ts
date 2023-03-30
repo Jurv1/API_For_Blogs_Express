@@ -40,3 +40,7 @@ export async function getOneUserById(id: string){
     return await userDBController.findOne( {_id: new ObjectId(id)} )
 
 }
+
+export async function findOneByDeviceIdUserIdAndLastActiveDate(userId: string, deviceId: string, lastActiveDate: string) {
+    return userDBController.findOne({userId, deviceId, lastActiveDate})
+}
