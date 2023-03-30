@@ -4,6 +4,7 @@ import {getAllDevicesByUserId} from "../repositories/queryRepository/deviceQ/dev
 import { deleteAllDevicesExceptActive, deleteOneDeviceById } from "../services/deviceService";
 import {ObjectId} from "mongodb";
 import {mapDevices} from "../utils/mappers/deviceMapper";
+import {jwtService} from "../application/jwtService";
 
 export async function getAll(req: Request, res: Response){
 
@@ -31,11 +32,12 @@ export async function getAll(req: Request, res: Response){
 export async function deleteAllExceptActive(req: Request, res: Response){
 
     const refreshToken = req.cookies.refreshToken
-    const decodedRefresh = jwt.decode(refreshToken, {json: true})
+    const getDeviceDataByToken = await jwtService.getPayload(refreshToken)
+    const {userId, deviceId} = getDeviceDataByToken
 
     try {
-        if (decodedRefresh && decodedRefresh.deviceId && decodedRefresh.userId){
-            const isDeleted = await deleteAllDevicesExceptActive(decodedRefresh.userId, decodedRefresh.deviceId)
+        if (userId && deviceId){
+            const isDeleted = await deleteAllDevicesExceptActive(userId, deviceId)
 
             if (isDeleted) return res.sendStatus(204)
             return res.sendStatus(404)
