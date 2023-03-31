@@ -16,10 +16,11 @@ export async function isRefreshTokenInBlackList( req: Request, res: Response, ne
     const user = await getOneUserById(jwtPayload.userId)
     if (!user) return res.sendStatus(401)
 
-    const lastActiveDate = jwtService.getLastActiveDate(refreshToken)
-    console.log(lastActiveDate, jwtPayload.userId, jwtPayload.deviceId)
-    //const userSession = await getOneDeviceByUserIdAndDeviceId(jwtPayload.userId, jwtPayload.deviceId)
-    //if (!userSession) return res.sendStatus(405)
+    //const lastActiveDate = jwtService.getLastActiveDate(refreshToken)
+    //console.log(lastActiveDate, jwtPayload.userId, jwtPayload.deviceId)
+    const userSession = await findOneByDeviceIdUserIdAndLastActiveDate(req.ip, jwtPayload.userId,
+        req.headers["user-agent"] || "untitled device")
+    if (!userSession) return res.sendStatus(403)
 
     req.user = user
     next()
