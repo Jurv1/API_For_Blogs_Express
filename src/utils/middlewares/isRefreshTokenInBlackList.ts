@@ -1,6 +1,10 @@
 import {NextFunction, Request, Response} from "express";
 import {jwtService} from "../../application/jwtService";
-import {findOneByDeviceIdUserIdAndLastActiveDate, getOneUserById} from "../../repositories/queryRepository/userQ/userQ"
+import {getOneUserById} from "../../repositories/queryRepository/userQ/userQ"
+import {
+    findOneByDeviceIdUserIdAndLastActiveDate,
+    getOneDeviceByUserIdAndDeviceId
+} from "../../repositories/queryRepository/deviceQ/deviceQ";
 
 export async function isRefreshTokenInBlackList( req: Request, res: Response, next: NextFunction){
     const refreshToken = req.cookies.refreshToken
@@ -13,8 +17,9 @@ export async function isRefreshTokenInBlackList( req: Request, res: Response, ne
     if (!user) return res.sendStatus(403)
 
     const lastActiveDate = jwtService.getLastActiveDate(refreshToken)
-    const userSession = await findOneByDeviceIdUserIdAndLastActiveDate(jwtPayload.userId, jwtPayload.deviceId, lastActiveDate)
-    if (!userSession) return res.sendStatus(405)
+    console.log(lastActiveDate, jwtPayload.userId, jwtPayload.deviceId)
+    //const userSession = await getOneDeviceByUserIdAndDeviceId(jwtPayload.userId, jwtPayload.deviceId)
+    //if (!userSession) return res.sendStatus(405)
 
     req.user = user
     next()

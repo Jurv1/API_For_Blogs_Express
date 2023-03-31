@@ -1,5 +1,6 @@
-import jwt from "jsonwebtoken";
+import jwt, {JwtPayload} from "jsonwebtoken";
 import {deviceRepository} from "../repositories/devicesRepository";
+import {jwtService} from "../application/jwtService";
 
 export async function deleteAllDevicesExceptActive( userId: string , deviceId: string){
     return await deviceRepository.deleteAllExceptActive(userId, deviceId)
@@ -9,10 +10,10 @@ export async function deleteOneDeviceById(id: string){
     return await deviceRepository.deleteOneDeviceById(id)
 }
 
-export async function createNewDevice(ip: string, title: string, refresh: string){
-    const decodedRefresh =  jwt.decode(refresh, {json: true})
-    console.log(decodedRefresh)
-    if(!decodedRefresh || !decodedRefresh.iat){
+export async function createNewDevice(ip: string, title: string, payload: JwtPayload){
+    //const payload = await jwtService.getPayload(refresh)
+    console.log(payload)
+    if(!payload){
         return null
     }
 
@@ -20,8 +21,8 @@ export async function createNewDevice(ip: string, title: string, refresh: string
         ip: ip,
         title: title,
         lastActiveDate: (new Date()).toISOString(),
-        deviceId: decodedRefresh.deviceId,
-        userId: decodedRefresh.userId.toString()
+        deviceId: payload.deviceId,
+        userId: payload.userId
     }
     await deviceRepository.createNewDevice(deviceTmp)
 

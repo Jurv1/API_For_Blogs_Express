@@ -1,6 +1,9 @@
 import {Request, Response} from "express";
 import jwt from "jsonwebtoken";
-import {getAllDevicesByUserId} from "../repositories/queryRepository/deviceQ/deviceQ";
+import {
+    findOneByDeviceIdUserIdAndLastActiveDate,
+    getAllDevicesByUserId
+} from "../repositories/queryRepository/deviceQ/deviceQ";
 import { deleteAllDevicesExceptActive, deleteOneDeviceById } from "../services/deviceService";
 import {mapDevices} from "../utils/mappers/deviceMapper";
 import {jwtService} from "../application/jwtService";
@@ -31,15 +34,20 @@ export async function getAll(req: Request, res: Response){
 export async function deleteAllExceptActive(req: Request, res: Response){
 
     const refreshToken = req.cookies.refreshToken
-    const getDeviceDataByToken = await jwtService.getPayload(refreshToken)
-    const {userId, deviceId} = getDeviceDataByToken
+    const ip = req.ip
+    const title = req.headers["user-agent"]
+    const payload = await jwtService.getPayload(refreshToken)
+    const {userId, deviceId} = payload
 
     try {
-        if (userId && deviceId){
-            const isDeleted = await deleteAllDevicesExceptActive(userId, deviceId)
+        if (userId && deviceId && title){
+            const device = await findOneByDeviceIdUserIdAndLastActiveDate(userId, ip,  title)
+            if (device) {
+                const isDeleted = await deleteAllDevicesExceptActive(userId, device.deviceId)
 
-            if (isDeleted) return res.sendStatus(204)
-            return res.sendStatus(404)
+                if (isDeleted) return res.sendStatus(204)
+                return res.sendStatus(404)
+            }
 
         }
     } catch (err){

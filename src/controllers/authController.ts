@@ -6,7 +6,11 @@ import {confirmEmail, resendConfirmationEmail} from "../services/authService";
 import { createNewDevice } from "../services/deviceService";
 import jwt from "jsonwebtoken";
 import {deviceRepository} from "../repositories/devicesRepository";
-import { getOneDeviceByIpAndUserId } from "../repositories/queryRepository/deviceQ/deviceQ";
+import { v4 as uuidv4 } from "uuid"
+import {
+    findOneByDeviceIdUserIdAndLastActiveDate,
+    getOneDeviceByIpAndUserId
+} from "../repositories/queryRepository/deviceQ/deviceQ";
 
 
 export async function loginUser(req: Request, res: Response){
@@ -23,29 +27,30 @@ export async function loginUser(req: Request, res: Response){
         if (checkMe){
             const user = await UserQueryRepo.getOneByLoginOrEmail(loginOrEmail)
             console.log(user)
-
-            const token = await jwtService.createJWT(user!, "30m")
-            const refreshToken = await jwtService.createJWT(user!, "1h")
+            const deviceId = uuidv4()
+            const token = await jwtService.createJWT(user!, deviceId, "30m")
+            const refreshToken = await jwtService.createJWT(user!, deviceId, "1h")
 
             const jwtPayload = await jwtService.getPayload(refreshToken)
             //const lastActiveDate = jwtService.getLastActiveDate(refreshToken)
-            //const device = await findOneByDeviceIdUserIdAndLastActiveDate(jwtPayload.userId, jwtPayload.deviceId, lastActiveDate)
-            const device = await getOneDeviceByIpAndUserId(ip, jwtPayload.userId)
+            //const device = await getOneDeviceByIpAndUserId(ip, jwtPayload.userId, )
+            const device = await findOneByDeviceIdUserIdAndLastActiveDate(jwtPayload.userId, ip,  title)
             if (device){
-                const decodedRefresh = jwt.decode(refreshToken, {json: true})
 
-                if(decodedRefresh && decodedRefresh.iat) {
+                if(jwtPayload) {
 
-                    const isDevicesWasUpdated =  await deviceRepository.updateLastActivity(device.deviceId, (new Date()).toISOString())
+                    const isDevicesWasUpdated =  await deviceRepository.updateLastActivity(jwtPayload.deviceId,
+                        jwtPayload.userId)
 
                     if (isDevicesWasUpdated) console.log("It's Ok")
                 }
 
             } else {
-                await createNewDevice(ip, title, refreshToken)
+                await createNewDevice(ip, title, jwtPayload)
             }
-
-            res.cookie('refreshToken', refreshToken, {httpOnly: true, secure: true})
+            //await createNewDevice(ip, title, jwtPayload)
+            res.cookie('refreshToken', refreshToken, )
+                //{httpOnly: true, secure: true}
                 .header('Authorization', token).status(200).json({ accessToken: token})
         } else {
             res.sendStatus(401)
@@ -151,8 +156,9 @@ export async function refreshMyToken(req: Request, res: Response){
 
         if(userId){
          const user = await UserQueryRepo.getOneUserById(userId.toString())
-         const accessToken = await jwtService.createJWT(user!, "10s")
-         const newRefreshToken = await jwtService.createJWT(user!, "20s")
+            const payload = await jwtService.getPayload(refreshToken)
+         const accessToken = await jwtService.createJWT(user!, payload.deviceId, "10s")
+         const newRefreshToken = await jwtService.createJWT(user!, payload.deviceId, "20s")
             await jwtService.addTokenToBlackList(refreshToken)
         //if (!addTokenToBlackList){
             //              return  res.sendStatus(401)

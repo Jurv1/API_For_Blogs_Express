@@ -41,6 +41,3 @@ export async function getOneUserById(id: string){
 
 }
 
-export async function findOneByDeviceIdUserIdAndLastActiveDate(userId: string, deviceId: string, lastActiveDate: string) {
-    return userDBController.findOne({userId, deviceId, lastActiveDate})
-}
