@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import jwt from "jsonwebtoken";
 import {
-    findOneByDeviceIdUserIdAndLastActiveDate,
+    findOneByDeviceIdUserIdAndTitle,
     getAllDevicesByUserId
 } from "../repositories/queryRepository/deviceQ/deviceQ";
 import { deleteAllDevicesExceptActive, deleteOneDeviceById } from "../services/deviceService";
@@ -41,7 +41,7 @@ export async function deleteAllExceptActive(req: Request, res: Response){
 
     try {
         if (userId && deviceId && title){
-            const device = await findOneByDeviceIdUserIdAndLastActiveDate(userId, ip,  title)
+            const device = await findOneByDeviceIdUserIdAndTitle(userId, ip,  title)
             if (device) {
                 const isDeleted = await deleteAllDevicesExceptActive(userId, device.deviceId)
 

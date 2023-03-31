@@ -12,6 +12,10 @@ export async function getOneDeviceByUserIdAndDeviceId(userId: string, deviceId: 
     return await devicesDBController.findOne({ $and: [{userId: userId, deviceId: deviceId}] })
 }
 
-export async function findOneByDeviceIdUserIdAndLastActiveDate(userId: string, ip: string, title: string) {
+export async function findOneByDeviceIdUserIdAndTitle(userId: string, ip: string, title: string) {
     return devicesDBController.findOne({$and: [{userId: userId, ip: ip, title: title}]})
+}
+
+export async function findOneByDeviceId(deviceId: string) {
+    return devicesDBController.findOne({deviceId: deviceId})
 }

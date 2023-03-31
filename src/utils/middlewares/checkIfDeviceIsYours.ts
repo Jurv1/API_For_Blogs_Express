@@ -1,23 +1,22 @@
 import {NextFunction, Request, Response} from "express";
-import jwt from "jsonwebtoken";
-import {getOneDeviceByUserIdAndDeviceId} from "../../repositories/queryRepository/deviceQ/deviceQ";
+import {
+    findOneByDeviceId,
+} from "../../repositories/queryRepository/deviceQ/deviceQ";
+import {jwtService} from "../../application/jwtService";
 
 export async function checkIfDeviceIsYours( req: Request, res: Response, next: NextFunction){
 
     const refreshToken = req.cookies.refreshToken
+    const deviceDeletedId = req.params.deviceId
 
-    const decodedRefresh = jwt.decode(refreshToken, { json: true })
+    const payload = await jwtService.getPayload(refreshToken)
 
-    if (decodedRefresh && decodedRefresh.userId && decodedRefresh.deviceId){
+    const device = await findOneByDeviceId(deviceDeletedId)
 
-        const result = await getOneDeviceByUserIdAndDeviceId(decodedRefresh.userId, decodedRefresh.deviceId)
-
-        if (result){
-            next()
-        }
-
+    if (device?.deviceId === payload.deviceId){
+        next()
     }
-
     res.sendStatus(403)
+
 
 }

@@ -7,10 +7,7 @@ import { createNewDevice } from "../services/deviceService";
 import jwt from "jsonwebtoken";
 import {deviceRepository} from "../repositories/devicesRepository";
 import { v4 as uuidv4 } from "uuid"
-import {
-    findOneByDeviceIdUserIdAndLastActiveDate,
-    getOneDeviceByIpAndUserId
-} from "../repositories/queryRepository/deviceQ/deviceQ";
+import {findOneByDeviceIdUserIdAndTitle} from "../repositories/queryRepository/deviceQ/deviceQ";
 
 
 export async function loginUser(req: Request, res: Response){
@@ -34,7 +31,7 @@ export async function loginUser(req: Request, res: Response){
             const jwtPayload = await jwtService.getPayload(refreshToken)
             //const lastActiveDate = jwtService.getLastActiveDate(refreshToken)
             //const device = await getOneDeviceByIpAndUserId(ip, jwtPayload.userId, )
-            const device = await findOneByDeviceIdUserIdAndLastActiveDate(jwtPayload.userId, ip,  title)
+            const device = await findOneByDeviceIdUserIdAndTitle(jwtPayload.userId, ip,  title)
             if (device){
 
                 if(jwtPayload) {
