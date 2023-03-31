@@ -2,7 +2,6 @@ import {Request, Response} from "express";
 import jwt from "jsonwebtoken";
 import {getAllDevicesByUserId} from "../repositories/queryRepository/deviceQ/deviceQ";
 import { deleteAllDevicesExceptActive, deleteOneDeviceById } from "../services/deviceService";
-import {ObjectId} from "mongodb";
 import {mapDevices} from "../utils/mappers/deviceMapper";
 import {jwtService} from "../application/jwtService";
 
@@ -55,7 +54,7 @@ export async function deleteDeviceById(req: Request, res: Response){
     const deviceId = req.params.deviceId
 
     try {
-        const isDeleted = await deleteOneDeviceById(new ObjectId(deviceId))
+        const isDeleted = await deleteOneDeviceById(deviceId)
 
         if (isDeleted) return res.sendStatus(204)
         return res.sendStatus(404)

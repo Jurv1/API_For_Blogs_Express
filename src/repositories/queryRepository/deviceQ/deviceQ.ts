@@ -4,8 +4,8 @@ export async function getAllDevicesByUserId(userId: string){
     return await devicesDBController.find( { userId: userId } ).toArray()
 }
 
-export async function getOneDeviceByIp(ip: string){
-    return  await devicesDBController.findOne({ ip: ip })
+export async function getOneDeviceByIpAndUserId(ip: string, userId: string){
+    return  await devicesDBController.findOne({ ip: ip , userId: userId})
 }
 
 export async function getOneDeviceByUserIdAndDeviceId(userId: string, deviceId: string){

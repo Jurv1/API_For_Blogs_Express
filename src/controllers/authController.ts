@@ -6,7 +6,7 @@ import {confirmEmail, resendConfirmationEmail} from "../services/authService";
 import { createNewDevice } from "../services/deviceService";
 import jwt from "jsonwebtoken";
 import {deviceRepository} from "../repositories/devicesRepository";
-import { getOneDeviceByIp } from "../repositories/queryRepository/deviceQ/deviceQ";
+import { getOneDeviceByIpAndUserId } from "../repositories/queryRepository/deviceQ/deviceQ";
 
 
 export async function loginUser(req: Request, res: Response){
@@ -27,7 +27,10 @@ export async function loginUser(req: Request, res: Response){
             const token = await jwtService.createJWT(user!, "30m")
             const refreshToken = await jwtService.createJWT(user!, "1h")
 
-            const device = await getOneDeviceByIp(ip)
+            const jwtPayload = await jwtService.getPayload(refreshToken)
+            //const lastActiveDate = jwtService.getLastActiveDate(refreshToken)
+            //const device = await findOneByDeviceIdUserIdAndLastActiveDate(jwtPayload.userId, jwtPayload.deviceId, lastActiveDate)
+            const device = await getOneDeviceByIpAndUserId(ip, jwtPayload.userId)
             if (device){
                 const decodedRefresh = jwt.decode(refreshToken, {json: true})
 
@@ -42,7 +45,8 @@ export async function loginUser(req: Request, res: Response){
                 await createNewDevice(ip, title, refreshToken)
             }
 
-            res.cookie('refreshToken', refreshToken, {httpOnly: true, secure: true})
+            res.cookie('refreshToken', refreshToken, )
+                //{httpOnly: true, secure: true}
                 .header('Authorization', token).status(200).json({ accessToken: token})
         } else {
             res.sendStatus(401)

@@ -1,6 +1,5 @@
 import {DBDevice, FinalDBDevice} from "../schemas/dbSchemas/DeviceDBSchema";
 import {devicesDBController} from "../db/db";
-import {ObjectId} from "mongodb";
 
 export const deviceRepository = {
 
@@ -15,8 +14,8 @@ export const deviceRepository = {
         return result.deletedCount === 1
     },
 
-    async deleteOneDeviceById(id: ObjectId){
-        const result = await devicesDBController.deleteOne({ _id: id })
+    async deleteOneDeviceById(id: string){
+        const result = await devicesDBController.deleteOne({ deviceId: id })
 
         return result.deletedCount === 1
     },

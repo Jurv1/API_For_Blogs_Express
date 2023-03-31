@@ -10,8 +10,10 @@ import {DBDevice} from "../schemas/dbSchemas/DeviceDBSchema";
 import {Attempt} from "../schemas/presentationSchemas/attemptSchema";
 dotenv.config()
 
-const mongoURI =
-    process.env.MONGO_URI
+const mongoURI = "mongodb://localhost:27017"
+
+
+//process.env.MONGO_URI
 
 console.log(mongoURI)
 if (!mongoURI){

@@ -1,12 +1,11 @@
 import jwt from "jsonwebtoken";
 import {deviceRepository} from "../repositories/devicesRepository";
-import {ObjectId} from "mongodb";
 
 export async function deleteAllDevicesExceptActive( userId: string , deviceId: string){
     return await deviceRepository.deleteAllExceptActive(userId, deviceId)
 }
 
-export async function deleteOneDeviceById(id: ObjectId){
+export async function deleteOneDeviceById(id: string){
     return await deviceRepository.deleteOneDeviceById(id)
 }
 
