@@ -139,7 +139,8 @@ export async function refreshMyToken(req: Request, res: Response){
             const payload = await jwtService.getPayload(refreshToken)
          const accessToken = await jwtService.createJWT(user!, payload.deviceId, "10s")
          const newRefreshToken = await jwtService.createJWT(user!, payload.deviceId, "20s")
-            await deviceRepository.updateLastActivity(payload)
+            const newRefreshTokenPayload = await jwtService.getPayload(newRefreshToken)
+            await deviceRepository.updateLastActivity(newRefreshTokenPayload)
 
          res.cookie('refreshToken', newRefreshToken, {httpOnly: true, secure: true})
              .header('Authorization', accessToken).status(200).json({ accessToken: accessToken})
