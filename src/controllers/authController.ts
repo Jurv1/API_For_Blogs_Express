@@ -30,7 +30,8 @@ export async function loginUser(req: Request, res: Response){
 
             await createNewDevice(ip, title, jwtPayload)
 
-            res.cookie('refreshToken', refreshToken, {httpOnly: true, secure: true})
+            res.cookie('refreshToken', refreshToken, )
+                //{httpOnly: true, secure: true}
                 .header('Authorization', token).status(200).json({ accessToken: token})
         } else {
             res.sendStatus(401)
