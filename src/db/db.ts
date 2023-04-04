@@ -8,11 +8,14 @@ import {DBUser} from "../schemas/dbSchemas/UserDBSchema";
 import {DBComment} from "../schemas/dbSchemas/CommentDBSchema";
 import {DBDevice} from "../schemas/dbSchemas/DeviceDBSchema";
 import {Attempt} from "../schemas/presentationSchemas/attemptSchema";
+import mongoose, {connect, disconnect} from "mongoose";
 dotenv.config()
 
 const mongoURI =
     process.env.MONGO_URI
 //"mongodb://localhost:27017"
+
+const DBName = process.env["DB_NAME"]
 console.log(mongoURI)
 if (!mongoURI){
     throw new Error("No URL")
@@ -20,11 +23,13 @@ if (!mongoURI){
 export const client = new MongoClient(mongoURI)
 export async function runDb(){
     try {
+        await mongoose.connect(mongoURI + "/" + DBName)
         await client.connect()
         await client.db("products").command({ ping: 1 })
         console.log("DB OK")
     } catch (err){
         await client.close()
+        await mongoose.disconnect()
     }
 }
 

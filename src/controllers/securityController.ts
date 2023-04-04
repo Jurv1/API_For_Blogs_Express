@@ -32,20 +32,14 @@ export async function getAll(req: Request, res: Response){
 export async function deleteAllExceptActive(req: Request, res: Response){
 
     const refreshToken = req.cookies.refreshToken
-    const ip = req.ip
-    const title = req.headers["user-agent"]
     const payload = await jwtService.getPayload(refreshToken)
     const {userId, deviceId} = payload
 
     try {
         if (userId && deviceId){
-
                 const isDeleted = await deleteAllDevicesExceptActive(userId, deviceId)
-
                 if (isDeleted) return res.sendStatus(204)
                 return res.sendStatus(404)
-
-
         }
     } catch (err){
         console.log(err)
