@@ -38,14 +38,13 @@ export async function deleteAllExceptActive(req: Request, res: Response){
     const {userId, deviceId} = payload
 
     try {
-        if (userId && deviceId && title){
-            const device = await findOneByDeviceIdUserIdAndTitle(userId, ip,  title)
-            if (device) {
-                const isDeleted = await deleteAllDevicesExceptActive(userId, device.deviceId)
+        if (userId && deviceId){
+
+                const isDeleted = await deleteAllDevicesExceptActive(userId, deviceId)
 
                 if (isDeleted) return res.sendStatus(204)
                 return res.sendStatus(404)
-            }
+
 
         }
     } catch (err){
