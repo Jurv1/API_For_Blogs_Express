@@ -8,4 +8,4 @@ export const securityRouter = Router({})
 securityRouter.get('/devices', isRefreshTokenInBlackList, DeviceController.getAll)
 
 securityRouter.delete('/devices', isRefreshTokenInBlackList, DeviceController.deleteAllExceptActive)
-securityRouter.delete('/devices/:deviceId', isRefreshTokenInBlackList, checkForSameDevice, checkForSameUser, DeviceController.deleteDeviceById)
+securityRouter.delete('/devices/:deviceId', isRefreshTokenInBlackList, checkForSameUser, DeviceController.deleteDeviceById)

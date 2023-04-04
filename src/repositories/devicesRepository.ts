@@ -1,5 +1,6 @@
 import {DBDevice, FinalDBDevice} from "../schemas/dbSchemas/DeviceDBSchema";
 import {devicesDBController} from "../db/db";
+import {JwtPayload} from "jsonwebtoken";
 
 export const deviceRepository = {
 
@@ -20,10 +21,13 @@ export const deviceRepository = {
         return result.deletedCount === 1
     },
 
-    async updateLastActivity(deviceId: string , userId: string){
-        const result = await devicesDBController.updateOne({ $and: [{deviceId: deviceId, userId: userId}]  }, {
+    async updateLastActivity(payload: JwtPayload){
+        if(!payload.iat){
+            return null
+        }
+        const result = await devicesDBController.updateOne({ deviceId: payload.deviceId }, {
             $set: {
-                lastActiveDate: (new Date()).toISOString()
+                lastActiveDate: new Date(payload.iat * 1000)
             }
         })
         return result.modifiedCount === 1

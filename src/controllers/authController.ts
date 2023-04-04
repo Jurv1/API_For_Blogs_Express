@@ -29,23 +29,9 @@ export async function loginUser(req: Request, res: Response){
             const refreshToken = await jwtService.createJWT(user!, deviceId, "1h")
 
             const jwtPayload = await jwtService.getPayload(refreshToken)
-            //const lastActiveDate = jwtService.getLastActiveDate(refreshToken)
-            //const device = await getOneDeviceByIpAndUserId(ip, jwtPayload.userId, )
-            const device = await findOneByDeviceIdUserIdAndTitle(jwtPayload.userId, ip,  title)
-            if (device){
 
-                if(jwtPayload) {
+            await createNewDevice(ip, title, jwtPayload)
 
-                    const isDevicesWasUpdated =  await deviceRepository.updateLastActivity(jwtPayload.deviceId,
-                        jwtPayload.userId)
-
-                    if (isDevicesWasUpdated) console.log("It's Ok")
-                }
-
-            } else {
-                await createNewDevice(ip, title, jwtPayload)
-            }
-            //await createNewDevice(ip, title, jwtPayload)
             res.cookie('refreshToken', refreshToken, {httpOnly: true, secure: true})
                 .header('Authorization', token).status(200).json({ accessToken: token})
         } else {
@@ -155,10 +141,8 @@ export async function refreshMyToken(req: Request, res: Response){
             const payload = await jwtService.getPayload(refreshToken)
          const accessToken = await jwtService.createJWT(user!, payload.deviceId, "10s")
          const newRefreshToken = await jwtService.createJWT(user!, payload.deviceId, "20s")
-            await jwtService.addTokenToBlackList(refreshToken)
-        //if (!addTokenToBlackList){
-            //              return  res.sendStatus(401)
-            //          }
+            await deviceRepository.updateLastActivity(payload)
+
          res.cookie('refreshToken', newRefreshToken, {httpOnly: true, secure: true})
              .header('Authorization', accessToken).status(200).json({ accessToken: accessToken})
 
@@ -176,11 +160,8 @@ export async function logOut( req: Request, res: Response){
     const refreshToken = req.cookies.refreshToken
     if(!refreshToken) return res.sendStatus(401)
 
-    await jwtService.addTokenToBlackList(refreshToken)
-
-    const decodedRefresh = jwt.decode(refreshToken, {json: true})
-    const deviceId = decodedRefresh!.deviceId
-    await deviceRepository.deleteOneDeviceById(deviceId)
+    const payload = await jwtService.getPayload(refreshToken)
+    await deviceRepository.deleteOneDeviceById(payload.deviceId)
 
     return res.sendStatus(204)
 }

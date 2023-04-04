@@ -38,8 +38,8 @@ export const checkForSameUser = async (req: Request, res: Response, next: NextFu
     const id = req.params.deviceId
     const userInfo = await jwtService.getUserIdByToken(refreshToken)
     const result = await getOneDeviceById(id)
-    if(!result) return res.sendStatus(404)
     if (!userInfo) return res.sendStatus(401)
+    if(!result) return res.sendStatus(404)
     if (result.userId !== userInfo.id.toString()) return res.sendStatus(403)
     next()
 }

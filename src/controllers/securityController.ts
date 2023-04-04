@@ -11,12 +11,11 @@ import {jwtService} from "../application/jwtService";
 export async function getAll(req: Request, res: Response){
 
     const refreshToken = req.cookies.refreshToken
-    const decodedRefresh = jwt.decode(refreshToken, {json: true})
-    console.log(refreshToken, decodedRefresh)
+    const payload = await jwtService.getPayload(refreshToken)
 
     try {
-        if (decodedRefresh && decodedRefresh.userId){
-            const allDevices = await getAllDevicesByUserId(decodedRefresh.userId)
+        if (payload && payload.userId){
+            const allDevices = await getAllDevicesByUserId(payload.userId)
 
             if (allDevices){
                 return res.status(200).send( mapDevices(allDevices) )
