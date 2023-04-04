@@ -11,8 +11,8 @@ import {Attempt} from "../schemas/presentationSchemas/attemptSchema";
 dotenv.config()
 
 const mongoURI =
-    //process.env.MONGO_URI
-"mongodb://localhost:27017"
+    process.env.MONGO_URI
+//"mongodb://localhost:27017"
 console.log(mongoURI)
 if (!mongoURI){
     throw new Error("No URL")
