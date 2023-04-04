@@ -4,10 +4,8 @@ import { checkCredentials, createOneUser } from "../services/userService";
 import {jwtService} from "../application/jwtService";
 import {confirmEmail, resendConfirmationEmail} from "../services/authService";
 import { createNewDevice } from "../services/deviceService";
-import jwt from "jsonwebtoken";
 import {deviceRepository} from "../repositories/devicesRepository";
 import { v4 as uuidv4 } from "uuid"
-import {findOneByDeviceIdUserIdAndTitle} from "../repositories/queryRepository/deviceQ/deviceQ";
 
 
 export async function loginUser(req: Request, res: Response){

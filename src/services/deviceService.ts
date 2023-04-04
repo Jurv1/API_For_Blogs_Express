@@ -20,7 +20,7 @@ export async function createNewDevice(ip: string, title: string, payload: any){
     const deviceTmp = {
         ip: ip,
         title: title,
-        lastActiveDate: new Date(payload.iat * 1000),
+        lastActiveDate: (new Date(payload.iat * 1000)).toISOString(),
         deviceId: payload.deviceId,
         userId: payload.userId
     }

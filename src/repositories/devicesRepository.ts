@@ -27,7 +27,7 @@ export const deviceRepository = {
         }
         const result = await devicesDBController.updateOne({ deviceId: payload.deviceId }, {
             $set: {
-                lastActiveDate: new Date(payload.iat * 1000)
+                lastActiveDate: (new Date(payload.iat * 1000)).toISOString()
             }
         })
         return result.modifiedCount === 1
