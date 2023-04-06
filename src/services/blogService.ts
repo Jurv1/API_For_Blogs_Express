@@ -1,5 +1,5 @@
 import {blogsRepository} from "../repositories/blogsRepository";
-import {blogDBController} from "../db/db";
+//import {blogDBController} from "../db/db";
 import {FinalDBBlog} from "../schemas/dbSchemas/BlogDBSchema";
 
 export async function createOneBlog( name: string, description: string, websiteUrl: string): Promise<FinalDBBlog|null> {
@@ -12,9 +12,10 @@ export async function createOneBlog( name: string, description: string, websiteU
             createdAt: new Date().toISOString()
         }
         const result = await blogsRepository.createOne(newBlogTmp)
-        if (result){
-            return await blogDBController.findOne({_id: result._id});
-        } else return null
+    return result
+        //if (result){
+        //    return await blogDBController.findOne({_id: result._id});
+        //} else return null
 
 }
 

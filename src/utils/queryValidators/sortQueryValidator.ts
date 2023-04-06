@@ -1,14 +1,14 @@
-import {Sort, SortDirection} from "mongodb";
+import {SortDirection} from "mongodb";
+import {SortOrder} from "mongoose";
 
-export function queryValidator(sortBy: string, sortDirection: SortDirection): Sort{
-    let sort: Sort = {}
+export function queryValidator(sortBy: string, sortDirection: SortDirection): { [key: string]: SortOrder; }{
+
 
     typeof sortBy === 'undefined' ? sortBy = 'createdAt' : sortBy
-
-    sort[sortBy] = -1
+    let sort: { [key: string]: SortOrder } = {[sortBy]: "desc"}
 
     if (sortDirection === 'asc'){
-        sort[sortBy] = 1
+        sort[sortBy] = "asc"
     }
 
     return sort

@@ -1,16 +1,16 @@
-import {videoDBController} from "../db/db";
 import {Video} from "../schemas/presentationSchemas/videoSchemas";
+import {VideoModel} from "../schemas/mongooseSchemas/mongooseVideoSchema";
 
 export const videosRepository = {
     async getAll() {
 
-        return await videoDBController.find({}, {projection: {_id: 0}}).toArray()
+        return VideoModel.find({}, {projection: {_id: 0}}).lean();
 
     },
 
     async getOne(id: number): Promise<Video | null> {
 
-        return await videoDBController.findOne({id: id}, {projection: {_id: 0}})
+        return VideoModel.findOne({id: id}, {projection: {_id: 0}});
 
     },
 
@@ -40,15 +40,15 @@ export const videosRepository = {
             publicationDate: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString()
         }
         newVideo = Object.assign(newVideo, videoTmp)
-        await videoDBController.insertOne(newVideo)
-        return await videoDBController.findOne({id: id}, {projection: {_id: 0}});
+        await VideoModel.create(newVideo)
+        return VideoModel.findOne({id: id}, {projection: {_id: 0}});
 
     },
 
     async updateOne(id: number, title: string, author: string, availableResolutions?: Array<string>,
                     canBeDownloaded?: boolean, minAgeRestriction?: number | null): Promise<boolean> {
 
-        const updatedEl = await videoDBController.updateOne({id: id},
+        const updatedEl = await VideoModel.updateOne({id: id},
             {
                 $set: {
                     title: title,
@@ -64,7 +64,7 @@ export const videosRepository = {
 
     async deleteOne(id: number): Promise<boolean> {
 
-        const result = await videoDBController.deleteOne({id})
+        const result = await VideoModel.deleteOne({id})
         return result.deletedCount === 1
 
     }

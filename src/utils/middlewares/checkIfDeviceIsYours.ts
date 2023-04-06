@@ -4,7 +4,6 @@ import {
 } from "../../repositories/queryRepository/deviceQ/deviceQ";
 import {jwtService} from "../../application/jwtService";
 import {getOneByLoginOrEmail} from "../../repositories/queryRepository/userQ/userQ";
-import {devicesDBController} from "../../db/db";
 
 export async function checkIfDeviceIsYours( req: Request, res: Response, next: NextFunction){
 

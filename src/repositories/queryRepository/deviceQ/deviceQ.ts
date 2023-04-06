@@ -1,25 +1,25 @@
-import {devicesDBController} from "../../../db/db";
+import {Device} from "../../../schemas/mongooseSchemas/mongooseDeviceSchema";
 
 export async function getAllDevicesByUserId(userId: string){
-    return await devicesDBController.find( { userId: userId } ).toArray()
+    return Device.find({userId: userId}).lean();
 }
 
 export async function getOneDeviceById(deviceId: string){
-    return await devicesDBController.findOne( { deviceId: deviceId } )
+    return Device.findOne({deviceId: deviceId});
 }
 
 export async function getOneDeviceByTitleAndUserId(title: string, userId: string){
-    return  await devicesDBController.findOne({ title: title , userId: userId})
+    return Device.findOne({title: title, userId: userId});
 }
 
 export async function getOneDeviceByUserIdAndDeviceId(userId: string, deviceId: string){
-    return await devicesDBController.findOne({ $and: [{userId: userId, deviceId: deviceId}] })
+    return Device.findOne({$and: [{userId: userId, deviceId: deviceId}]});
 }
 
 export async function findOneByDeviceIdUserIdAndTitle(userId: string, ip: string, title: string) {
-    return devicesDBController.findOne({$and: [{userId: userId, ip: ip, title: title}]})
+    return Device.findOne({$and: [{userId: userId, ip: ip, title: title}]})
 }
 
 export async function findOneByDeviceId(deviceId: string) {
-    return devicesDBController.findOne({deviceId: deviceId})
+    return Device.findOne({deviceId: deviceId})
 }

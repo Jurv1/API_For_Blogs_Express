@@ -1,18 +1,20 @@
-import {Document, ObjectId, Sort} from "mongodb";
+import {Document, ObjectId} from "mongodb";
 import {PostPagination} from "../../../schemas/paginationSchemas/postPaginationSchema";
-import {commentDBController, postDBController} from "../../../db/db";
 import {mapPosts} from "../../../utils/mappers/postMapper";
 import {FinalDBPost} from "../../../schemas/dbSchemas/PostDBSchema";
 import {CommentPagination} from "../../../schemas/paginationSchemas/commentPaginationSchema";
 import {mapComments} from "../../../utils/mappers/commentMapper";
+import {Post} from "../../../schemas/mongooseSchemas/mongoosePostSchema";
+import {Comment} from "../../../schemas/mongooseSchemas/mongooseCommentSchema";
+import {SortOrder} from "mongoose";
 
-export async function getAllPosts(filter: Document,sort: Sort, pagination: {skipValue: number, limitValue: number,
+export async function getAllPosts(filter: Document,sort: { [key: string]: SortOrder; }, pagination: {skipValue: number, limitValue: number,
     pageSize: number, pageNumber: number}): Promise<PostPagination> {
 
-    const allPosts = await postDBController.find(filter).sort(sort).skip(pagination["skipValue"])
-        .limit(pagination["limitValue"]).toArray()
+    const allPosts = await Post.find(filter).sort(sort).skip(pagination["skipValue"])
+        .limit(pagination["limitValue"]).lean()
 
-    const countDocs = await postDBController.countDocuments(filter)
+    const countDocs = await Post.countDocuments(filter)
     const pagesCount = Math.ceil(countDocs / pagination["pageSize"])
 
     return {
@@ -27,17 +29,17 @@ export async function getAllPosts(filter: Document,sort: Sort, pagination: {skip
 
 export async function getOnePost(id: string): Promise<FinalDBPost | null> {
 
-    return await postDBController.findOne({_id: new ObjectId(id)})
+    return Post.findOne({_id: new ObjectId(id)});
 
 }
 
-export async function getAllPostsByBlogId(id: string,sort: Sort, pagination: {skipValue: number, limitValue: number,
+export async function getAllPostsByBlogId(id: string,sort: { [key: string]: SortOrder; }, pagination: {skipValue: number, limitValue: number,
     pageSize: number, pageNumber: number}): Promise<PostPagination>{
-    const countDoc = await postDBController.countDocuments({blogId: id})
+    const countDoc = await Post.countDocuments({blogId: id})
     const pagesCount = Math.ceil(countDoc / pagination["pageSize"])
-    const allPosts = await postDBController.find({blogId: id}).sort(sort)
+    const allPosts = await Post.find({blogId: id}).sort(sort)
         .skip(pagination["skipValue"])
-        .limit(pagination["limitValue"]).toArray()
+        .limit(pagination["limitValue"]).lean()
     return {
         pagesCount: pagesCount,
         page: pagination["pageNumber"],
@@ -47,13 +49,13 @@ export async function getAllPostsByBlogId(id: string,sort: Sort, pagination: {sk
     }
 }
 
-export async function getAllCommentsByPostId(postId: string, sort: Sort, pagination: {skipValue: number, limitValue: number,
+export async function getAllCommentsByPostId(postId: string, sort: { [key: string]: SortOrder; }, pagination: {skipValue: number, limitValue: number,
     pageSize: number, pageNumber: number}): Promise<CommentPagination>{
-    const countDoc = await commentDBController.countDocuments({postId : postId})
+    const countDoc = await Comment.countDocuments({postId : postId})
     const pagesCount = Math.ceil(countDoc / pagination["pageSize"])
-    const allComments = await commentDBController.find({postId: postId}).sort(sort)
+    const allComments = await Comment.find({postId: postId}).sort(sort)
         .skip(pagination["skipValue"])
-        .limit(pagination["limitValue"]).toArray()
+        .limit(pagination["limitValue"]).lean()
     return {
         pagesCount: pagesCount,
         page: pagination["pageNumber"],

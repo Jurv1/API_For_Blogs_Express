@@ -5,12 +5,12 @@ import {viewBlogModel} from "../schemas/presentationSchemas/blogSchemas";
 import {FinalDBBlog} from "../schemas/dbSchemas/BlogDBSchema";
 import {mapBlog} from "../utils/mappers/blogMapper";
 import {queryValidator} from "../utils/queryValidators/sortQueryValidator";
-import {SortDirection} from "mongodb";
 import {filterQueryValid} from "../utils/queryValidators/filterQueryValid";
 import {makePagination} from "../utils/paggination/paggination";
+import {SortOrder} from "mongoose";
 
 export async function getAll (req: Request<{}, {}, {}, {searchNameTerm: string, sortBy: string,
-    sortDirection: SortDirection, pageNumber: string, pageSize: string}>, res: Response){
+    sortDirection: SortOrder, pageNumber: string, pageSize: string}>, res: Response){
 
     let {searchNameTerm, sortBy, sortDirection, pageNumber, pageSize} = req.query
 

@@ -1,16 +1,17 @@
-import {commentDBController, postDBController} from "../db/db";
 import {FinalDBPost} from "../schemas/dbSchemas/PostDBSchema";
 import {ObjectId} from "mongodb";
 import {PostWithoutId} from "../schemas/presentationSchemas/postSchemas";
 import {FinalDBComment} from "../schemas/dbSchemas/CommentDBSchema";
 import {CommentWithoutId} from "../schemas/presentationSchemas/commentSchemas";
+import {Post} from "../schemas/mongooseSchemas/mongoosePostSchema";
+import {Comment} from "../schemas/mongooseSchemas/mongooseCommentSchema";
 
 export const postsRepository = {
 
     async createOne(newPostTmp: PostWithoutId): Promise<FinalDBPost | null> {
 
-        const resultId = await postDBController.insertOne(newPostTmp)
-        return await postDBController.findOne({_id: resultId.insertedId});
+        const resultId = await Post.create(newPostTmp)
+        return Post.findOne({_id: resultId._id});
 
     },
 
@@ -18,7 +19,7 @@ export const postsRepository = {
                     content: string, blogId: string): Promise<boolean> {
 
         const myId  = new ObjectId(id)
-        const updatedEl = await postDBController.updateOne({_id: myId},
+        const updatedEl = await Post.updateOne({_id: myId},
             {
                 $set: {
                     title: title,
@@ -33,13 +34,13 @@ export const postsRepository = {
     async deleteOne(id: string): Promise<boolean> {
 
         const myId = new ObjectId(id)
-        const result = await postDBController.deleteOne({ _id: myId })
+        const result = await Post.deleteOne({ _id: myId })
         return result.deletedCount === 1
 
     },
 
     async createOneCommentByPostId(newCommentTmp: CommentWithoutId): Promise<FinalDBComment | null>{
-        const resultId = await commentDBController.insertOne(newCommentTmp)
-        return await commentDBController.findOne({_id: resultId.insertedId});
+        const resultId = await Comment.create(newCommentTmp)
+        return Comment.findOne({_id: resultId._id});
     }
 }

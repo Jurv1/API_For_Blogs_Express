@@ -1,16 +1,17 @@
-import {Document, ObjectId, Sort} from "mongodb";
+import {Document, ObjectId} from "mongodb";
 import {UserPagination} from "../../../schemas/paginationSchemas/userPaginationSchema";
-import {userDBController} from "../../../db/db";
 import {mapUsers} from "../../../utils/mappers/userMapper";
 import {FinalDBUser} from "../../../schemas/dbSchemas/UserDBSchema";
+import {SortOrder} from "mongoose";
+import {User} from "../../../schemas/mongooseSchemas/mongooseUserSchema";
 
-export async function getAllUsers(filter: Document,sort: Sort, pagination: {skipValue: number, limitValue: number,
+export async function getAllUsers(filter: Document,sort: { [key: string]: SortOrder; }, pagination: {skipValue: number, limitValue: number,
     pageSize: number, pageNumber: number}): Promise<UserPagination>{
 
-    const allUsers = await userDBController.find(filter).sort(sort).skip(pagination["skipValue"])
-        .limit(pagination["limitValue"]).toArray()
+    const allUsers = await User.find(filter).sort(sort).skip(pagination["skipValue"])
+        .limit(pagination["limitValue"]).lean()
 
-    const countDocs = await userDBController.countDocuments(filter)
+    const countDocs = await User.countDocuments(filter)
     const pagesCount = Math.ceil(countDocs / pagination["pageSize"])
 
     return {
@@ -25,19 +26,19 @@ export async function getAllUsers(filter: Document,sort: Sort, pagination: {skip
 
 export async function getOneByLoginOrEmail(loginOrEmail: string): Promise<FinalDBUser | null>{
 
-    return await userDBController.findOne({$or: [{"accountData.login": loginOrEmail}, {"accountData.email": loginOrEmail}]})
+    return User.findOne({$or: [{"accountData.login": loginOrEmail}, {"accountData.email": loginOrEmail}]});
 
 }
 
 export async function getOneByConfirmationCode(confirmationCode: string): Promise<FinalDBUser | null>{
 
-    return await userDBController.findOne({"emailConfirmation.confirmationCode": confirmationCode})
+    return User.findOne({"emailConfirmation.confirmationCode": confirmationCode});
 
 }
 
 export async function getOneUserById(id: string){
 
-    return await userDBController.findOne( {_id: new ObjectId(id)} )
+    return User.findOne({_id: new ObjectId(id)});
 
 }
 

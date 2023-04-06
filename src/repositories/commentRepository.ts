@@ -1,11 +1,11 @@
 import {ObjectId} from "mongodb";
-import {commentDBController} from "../db/db";
+import {Comment} from "../schemas/mongooseSchemas/mongooseCommentSchema";
 
 export const commentsRepository = {
 
     async updateOne(id: string, content: string): Promise<boolean> {
         const myId  = new ObjectId(id)
-        const updatedEl = await commentDBController.updateOne({_id: myId},
+        const updatedEl = await Comment.updateOne({_id: myId},
             {
                 $set: {
                     content: content
@@ -16,7 +16,7 @@ export const commentsRepository = {
 
     async deleteOne(id: string): Promise<boolean> {
         const myId = new ObjectId(id)
-        const result = await commentDBController.deleteOne({_id: myId})
+        const result = await Comment.deleteOne({_id: myId})
         return result.deletedCount === 1
     }
 }

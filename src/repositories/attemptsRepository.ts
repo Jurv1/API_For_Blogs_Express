@@ -1,12 +1,12 @@
-import {attemptsDBController} from "../db/db";
 import {Attempt} from "../schemas/presentationSchemas/attemptSchema";
+import {AttemptModel} from "../schemas/mongooseSchemas/mongooseAttemptSchema";
 
 export const attemptsRepository = {
     async countAttempts(ip: string, URL: string, timeLimit: Date){
-        return await attemptsDBController.countDocuments({ip: ip, requestString: URL, expTime: {$gt: timeLimit}})
+        return AttemptModel.countDocuments({ip: ip, requestString: URL, expTime: {$gt: timeLimit}});
     },
 
     async createAttempt(attempt: Attempt){
-        return await attemptsDBController.insertOne(attempt)
+        return await AttemptModel.create(attempt)
     }
 }
