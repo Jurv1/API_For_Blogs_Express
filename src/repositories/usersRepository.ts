@@ -41,5 +41,18 @@ export const usersRepository = {
         const result = await User.deleteOne({ _id: myId })
         return result.deletedCount === 1
 
-    }
+    },
+
+    async updatePassword(id: string, passSalt: string, passHash: string){
+      const result = await User.updateOne({_id: id},
+          {$set:
+                  {
+                      'accountData.password': passHash,
+                      'accountData.passwordSalt': passSalt,
+                  }}
+          )
+
+        return result.modifiedCount === 1
+    },
+
 }

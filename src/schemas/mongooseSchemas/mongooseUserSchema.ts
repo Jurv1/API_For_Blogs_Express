@@ -13,7 +13,7 @@ export const userSchema = new Schema<DBUser>({
         confirmationCode: {type: String, required: true},
         expirationDate: Date,
         isConfirmed: Boolean
-    }
+    },
 })
 
 export const User = model<DBUser>("User", userSchema)

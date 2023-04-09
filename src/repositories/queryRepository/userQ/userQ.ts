@@ -26,19 +26,19 @@ export async function getAllUsers(filter: Document,sort: { [key: string]: SortOr
 
 export async function getOneByLoginOrEmail(loginOrEmail: string): Promise<FinalDBUser | null>{
 
-    return User.findOne({$or: [{"accountData.login": loginOrEmail}, {"accountData.email": loginOrEmail}]});
+    return User.findOne({$or: [{"accountData.login": loginOrEmail}, {"accountData.email": loginOrEmail}]})
 
 }
 
 export async function getOneByConfirmationCode(confirmationCode: string): Promise<FinalDBUser | null>{
 
-    return User.findOne({"emailConfirmation.confirmationCode": confirmationCode});
+    return User.findOne({"emailConfirmation.confirmationCode": confirmationCode})
 
 }
 
 export async function getOneUserById(id: string){
 
-    return User.findOne({_id: new ObjectId(id)});
+    return User.findOne({_id: new ObjectId(id)})
 
 }
 

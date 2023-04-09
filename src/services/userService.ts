@@ -59,3 +59,26 @@ export async function deleteOneBlog(id: string): Promise<boolean> {
     return await usersRepository.deleteOne(id)
 
 }
+
+export async function makePasswordRecoveryMail(email: string){
+
+    const user = await UserQueryRepo.getOneByLoginOrEmail(email)
+
+    if(!user) return false
+    await emailManager.sendPasswordRecoveryMessage(user, user.emailConfirmation.confirmationCode)
+
+    return true
+
+}
+
+export async function updateNewPassword(pass: string, code: string){
+
+    const user = await UserQueryRepo.getOneByConfirmationCode(code)
+    if (!user) return null
+
+    const passwordSalt = await bcrypt.genSalt(10)
+    const passwordHash = await generateHash(pass, passwordSalt)
+
+    return await usersRepository.updatePassword(user._id.toString(), passwordSalt, passwordHash)
+
+}

@@ -10,6 +10,7 @@ import {isEmailOrLoginExists} from "../validations/checkOnExist/isEmailOrLoginEx
 import {isUserConfirmedAlready} from "../validations/checkOnExist/isUserConfirmedAlready";
 import {isRefreshTokenInBlackList} from "../utils/middlewares/isRefreshTokenInBlackList";
 import {countAttemptsToRequest} from "../utils/middlewares/countAttemptsToRequest";
+import {passAndCodeValid} from "../validations/bodyValidations/auth/passAndCodeValid";
 
 export const authRouter = Router({})
 
@@ -21,6 +22,9 @@ authRouter.post('/registration-confirmation', countAttemptsToRequest, registrati
 authRouter.post('/registration-email-resending', countAttemptsToRequest, emailValid, isUserConfirmedAlready, handleErr, LoginController
     .resendRegistrationConfirming)
 authRouter.post('/refresh-token', countAttemptsToRequest, isRefreshTokenInBlackList, LoginController.refreshMyToken)
+
+authRouter.post("/password-recovery", countAttemptsToRequest, emailValid, handleErr, LoginController.recoverMyPassword)
+authRouter.post("/new-password", countAttemptsToRequest, passAndCodeValid, handleErr, LoginController.makeNewPassword)
 
 authRouter.post('/logout', isRefreshTokenInBlackList, LoginController.logOut)
 

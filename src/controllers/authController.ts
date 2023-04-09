@@ -1,8 +1,8 @@
 import {Request, Response} from "express";
 import * as UserQueryRepo from "../repositories/queryRepository/userQ/userQ"
-import { checkCredentials, createOneUser } from "../services/userService";
+import {checkCredentials, createOneUser, makePasswordRecoveryMail, updateNewPassword} from "../services/userService";
 import {jwtService} from "../application/jwtService";
-import {confirmEmail, resendConfirmationEmail} from "../services/authService";
+import {confirmEmail, resendConfirmationEmail, } from "../services/authService";
 import { createNewDevice } from "../services/deviceService";
 import {deviceRepository} from "../repositories/devicesRepository";
 import { v4 as uuidv4 } from "uuid"
@@ -76,6 +76,42 @@ export async function registerMe(req: Request, res: Response){
                 }
             })
         }
+    } catch (err){
+        console.log(err)
+        res.status(404).json({
+            message: "Can't find el"
+        })
+    }
+}
+
+export async function recoverMyPassword(req: Request, res: Response){
+
+    const email = req.body.email
+
+    try {
+        const result = await makePasswordRecoveryMail(email)
+
+        if(result){
+            res.sendStatus(204)
+        }
+    } catch (err){
+        console.log(err)
+        res.status(404).json({
+            message: "Can't find el"
+        })
+    }
+}
+
+export async function makeNewPassword(req: Request, res: Response){
+    const {newPassword, recoveryCode} = req.body
+
+    try {
+        const result = await updateNewPassword(newPassword, recoveryCode)
+        if (result){
+            res.sendStatus(204)
+        }
+        res.sendStatus(404)
+
     } catch (err){
         console.log(err)
         res.status(404).json({
