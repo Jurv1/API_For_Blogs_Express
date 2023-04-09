@@ -49,6 +49,8 @@ export const usersRepository = {
                   {
                       'accountData.password': passHash,
                       'accountData.passwordSalt': passSalt,
+                      'passRecovery.recoveryCode': null,
+                      'passRecovery.expirationDate': null
                   }}
           )
 

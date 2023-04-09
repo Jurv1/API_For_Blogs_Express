@@ -12,6 +12,10 @@ export type DBUser = {
         confirmationCode: string,
         expirationDate: Date,
         isConfirmed: boolean
+    },
+    passRecovery: {
+        recoveryCode: string | null,
+        expirationDate: Date | null,
     }
 }
 

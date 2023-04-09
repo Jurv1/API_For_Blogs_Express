@@ -14,6 +14,10 @@ export const userSchema = new Schema<DBUser>({
         expirationDate: Date,
         isConfirmed: Boolean
     },
+    passRecovery: {
+        recoveryCode: String,
+        expirationDate: Date,
+    }
 })
 
 export const User = model<DBUser>("User", userSchema)

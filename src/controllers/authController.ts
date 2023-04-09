@@ -89,11 +89,10 @@ export async function recoverMyPassword(req: Request, res: Response){
     const email = req.body.email
 
     try {
-        const result = await makePasswordRecoveryMail(email)
+        await makePasswordRecoveryMail(email)
 
-        if(result){
-            res.sendStatus(204)
-        }
+        res.sendStatus(204)
+
     } catch (err){
         console.log(err)
         res.status(404).json({
@@ -106,11 +105,10 @@ export async function makeNewPassword(req: Request, res: Response){
     const {newPassword, recoveryCode} = req.body
 
     try {
-        const result = await updateNewPassword(newPassword, recoveryCode)
-        if (result){
-            res.sendStatus(204)
-        }
-        res.sendStatus(404)
+
+        await updateNewPassword(newPassword, recoveryCode)
+
+        res.sendStatus(204)
 
     } catch (err){
         console.log(err)

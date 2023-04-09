@@ -7,6 +7,7 @@ import {generateHash} from "../utils/bcrypt/generateHash";
 
 import * as UserQueryRepo from "../repositories/queryRepository/userQ/userQ"
 import {emailManager} from "../managers/emailManager";
+import {User} from "../schemas/mongooseSchemas/mongooseUserSchema";
 
 export async function createOneUser( login: string, email: string, password: string, confirmed: boolean): Promise<FinalDBUser|null> {
 
@@ -28,6 +29,10 @@ export async function createOneUser( login: string, email: string, password: str
                 minutes: 3
             }),
             isConfirmed: confirmed
+        },
+        passRecovery: {
+            recoveryCode: null,
+            expirationDate: null
         }
 
     }
@@ -60,12 +65,37 @@ export async function deleteOneBlog(id: string): Promise<boolean> {
 
 }
 
+async function updatePassInfo(id: string, recoveryCode: string, expirationDate: Date) {
+    const result = await User.updateOne({ _id: id }, {
+            $set: {
+                "passRecovery.recoveryCode": recoveryCode,
+                "passRecovery.expirationDate": expirationDate,
+            },
+        }
+    )
+
+    return result.modifiedCount === 1
+}
+
 export async function makePasswordRecoveryMail(email: string){
 
     const user = await UserQueryRepo.getOneByLoginOrEmail(email)
 
     if(!user) return false
-    await emailManager.sendPasswordRecoveryMessage(user, user.emailConfirmation.confirmationCode)
+    const userId = user._id;
+    const recoveryCode = uuidv4();
+    const expirationDate = add(new Date(), {
+        hours: 1,
+    });
+    await updatePassInfo(userId.toString(), recoveryCode, expirationDate)
+
+    try {
+        await emailManager.sendPasswordRecoveryMessage(user, recoveryCode)
+    } catch (err){
+        console.log(err)
+        return null
+    }
+
 
     return true
 
@@ -73,7 +103,7 @@ export async function makePasswordRecoveryMail(email: string){
 
 export async function updateNewPassword(pass: string, code: string){
 
-    const user = await UserQueryRepo.getOneByConfirmationCode(code)
+    const user = await UserQueryRepo.getOneByPassCode(code)
     if (!user) return null
 
     const passwordSalt = await bcrypt.genSalt(10)

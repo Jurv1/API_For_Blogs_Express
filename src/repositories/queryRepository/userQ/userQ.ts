@@ -36,6 +36,12 @@ export async function getOneByConfirmationCode(confirmationCode: string): Promis
 
 }
 
+export async function getOneByPassCode(code: string){
+
+    return User.findOne({ "passRecovery.recoveryCode": code })
+
+}
+
 export async function getOneUserById(id: string){
 
     return User.findOne({_id: new ObjectId(id)})
