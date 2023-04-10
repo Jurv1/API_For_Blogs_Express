@@ -91,7 +91,7 @@ export async function recoverMyPassword(req: Request, res: Response){
     try {
         await makePasswordRecoveryMail(email)
 
-        res.sendStatus(204)
+        res.status(204).send("Message sent")
 
     } catch (err){
         console.log(err)
