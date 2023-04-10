@@ -43,7 +43,7 @@ export const usersRepository = {
 
     },
 
-    async updatePassword(id: string, passSalt: string, passHash: string){
+    async updatePassword(id: ObjectId, passSalt: string, passHash: string){
       const result = await User.updateOne({_id: id},
           {$set:
                   {

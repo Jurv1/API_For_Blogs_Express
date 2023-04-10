@@ -8,6 +8,7 @@ import {generateHash} from "../utils/bcrypt/generateHash";
 import * as UserQueryRepo from "../repositories/queryRepository/userQ/userQ"
 import {emailManager} from "../managers/emailManager";
 import {User} from "../schemas/mongooseSchemas/mongooseUserSchema";
+import {ObjectId} from "mongodb";
 
 export async function createOneUser( login: string, email: string, password: string, confirmed: boolean): Promise<FinalDBUser|null> {
 
@@ -65,7 +66,7 @@ export async function deleteOneBlog(id: string): Promise<boolean> {
 
 }
 
-async function updatePassInfo(id: string, recoveryCode: string, expirationDate: Date) {
+async function updatePassInfo(id: ObjectId, recoveryCode: string, expirationDate: Date) {
     const result = await User.updateOne({ _id: id }, {
             $set: {
                 "passRecovery.recoveryCode": recoveryCode,
@@ -87,7 +88,7 @@ export async function makePasswordRecoveryMail(email: string){
     const expirationDate = add(new Date(), {
         hours: 1,
     });
-    await updatePassInfo(userId.toString(), recoveryCode, expirationDate)
+    await updatePassInfo(userId, recoveryCode, expirationDate)
 
     try {
         await emailManager.sendPasswordRecoveryMessage(user, recoveryCode)
@@ -109,6 +110,6 @@ export async function updateNewPassword(pass: string, code: string){
     const passwordSalt = await bcrypt.genSalt(10)
     const passwordHash = await generateHash(pass, passwordSalt)
 
-    return await usersRepository.updatePassword(user._id.toString(), passwordSalt, passwordHash)
+    return await usersRepository.updatePassword(user._id, passwordSalt, passwordHash)
 
 }
