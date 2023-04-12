@@ -6,7 +6,7 @@ import {FinalDBBlog} from "../../../schemas/dbSchemas/BlogDBSchema";
 import {Blog} from "../../../schemas/mongooseSchemas/mongooseBlogSchema";
 import {SortOrder} from "mongoose";
 
-class BlogQ {
+export class BlogQ {
     async getAllBlogs(filter: Document,sort: { [key: string]: SortOrder; }, pagination: {skipValue: number, limitValue: number,
         pageSize: number, pageNumber: number}): Promise<BlogPagination>{
 
@@ -31,5 +31,3 @@ class BlogQ {
 
     }
 }
-
-export const blogQ = new BlogQ()

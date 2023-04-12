@@ -1,6 +1,7 @@
 import {NextFunction, Request, Response} from "express";
-import {attemptsRepository} from "../../repositories/attemptsRepository";
+import {AttemptsRepository} from "../../repositories/attemptsRepository";
 
+const attemptsRepository = new AttemptsRepository
 export async function countAttemptsToRequest( req: Request, res: Response, next: NextFunction){
     const limit = new Date(new Date().getTime() - 10000)
 

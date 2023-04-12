@@ -1,5 +1,4 @@
 import {Router} from "express";
-import * as BlogController from "../controllers/blogController";
 import checkAuth from "../utils/auth/checkAuth";
 import {blogValidation} from "../validations/bodyValidations/blog/blogValidator";
 import handleErr from "../utils/handleErr";
@@ -9,13 +8,13 @@ import {postController} from "../controllers/postController";
 
 export const blogRouter = Router({})
 
-blogRouter.get('/', blogController.getAll)
-blogRouter.get('/:id', blogController.getOne)
-blogRouter.get('/:blogId/posts', postController.getPostsByBlogId)
+blogRouter.get('/', blogController.getAll.bind(blogController))
+blogRouter.get('/:id', blogController.getOne.bind(blogController))
+blogRouter.get('/:blogId/posts', postController.getPostsByBlogId.bind(postController))
 
-blogRouter.post('/', checkAuth, blogValidation, handleErr, blogController.createOne)
-blogRouter.post('/:blogId/posts', checkAuth, postValid, handleErr, postController.createOneByBlogId)
+blogRouter.post('/', checkAuth, blogValidation, handleErr, blogController.createOne.bind(blogController))
+blogRouter.post('/:blogId/posts', checkAuth, postValid, handleErr, postController.createOneByBlogId.bind(postController))
 
-blogRouter.put('/:id', checkAuth, blogValidation, handleErr, blogController.updateOne)
+blogRouter.put('/:id', checkAuth, blogValidation, handleErr, blogController.updateOne.bind(blogController))
 
-blogRouter.delete('/:id', checkAuth, blogController.deleteOne)
+blogRouter.delete('/:id', checkAuth, blogController.deleteOne.bind(blogController))

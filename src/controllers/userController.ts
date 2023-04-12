@@ -1,16 +1,22 @@
 import {FinalDBUser} from "../schemas/dbSchemas/UserDBSchema";
 import { SortDirection} from "mongodb";
 import {Request, Response} from "express";
-
-import * as UserService from "../services/userService"
 import {mapUser} from "../utils/mappers/userMapper";
 import {ViewUserModel} from "../schemas/presentationSchemas/userSchemas";
 import {queryValidator} from "../utils/queryValidators/sortQueryValidator";
 import {filterQueryValid} from "../utils/queryValidators/filterQueryValid";
 import {makePagination} from "../utils/paggination/paggination";
-import {userQ} from "../repositories/queryRepository/userQ/userQ";
+import {UserQ} from "../repositories/queryRepository/userQ/userQ";
+import {UserService} from "../services/userService";
 
 class UserController {
+
+    private userQ: UserQ
+    private userService: UserService
+    constructor() {
+        this.userQ = new UserQ
+        this.userService = new UserService
+    }
     async getAll(req: Request | Request<{}, {}, {}, {
         searchLoginTerm: string;
         searchEmailTerm: string;
@@ -29,7 +35,7 @@ class UserController {
 
         try {
 
-            const allUsers = await userQ.getAllUsers(filter, sort, pagination)
+            const allUsers = await this.userQ.getAllUsers(filter, sort, pagination)
 
             if (!allUsers) {
                 res.sendStatus(404)
@@ -48,7 +54,7 @@ class UserController {
     async createOne(req: Request, res: Response) {
         const {login, email, password} = req.body
         try {
-            const result: FinalDBUser | null = await UserService.createOneUser(login, email, password, true)
+            const result: FinalDBUser | null = await this.userService.createOneUser(login, email, password, true)
             if (result) {
                 const viewUser: ViewUserModel = mapUser(result)
                 res.status(201).send(viewUser)
@@ -67,7 +73,7 @@ class UserController {
         const id = req.params.id
         try {
 
-            const result = await UserService.deleteOneBlog(id)
+            const result = await this.userService.deleteOneBlog(id)
             if (!result) return res.send(404)
             res.send(204)
 

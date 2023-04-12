@@ -1,5 +1,4 @@
 import {Request, Response} from "express";
-import * as PostService from "../services/postService";
 import {FinalDBPost} from "../schemas/dbSchemas/PostDBSchema";
 import {mapPost} from "../utils/mappers/postMapper";
 import {SortDirection} from "mongodb";
@@ -8,11 +7,18 @@ import {filterQueryValid} from "../utils/queryValidators/filterQueryValid";
 import {makePagination} from "../utils/paggination/paggination";
 import {FinalDBComment} from "../schemas/dbSchemas/CommentDBSchema";
 import {mapComment} from "../utils/mappers/commentMapper";
-import {postQ} from "../repositories/queryRepository/postQ/postQ";
+import {PostQ} from "../repositories/queryRepository/postQ/postQ";
+import {PostService} from "../services/postService";
 
 //todo сделать функцию для трай кэтч (вынести обертку в фун-ию)
 
 class PostController {
+    private postService: PostService;
+    private postQ: PostQ;
+    constructor() {
+        this.postQ = new PostQ
+        this.postService = new PostService
+    }
     async getAll(req: Request<{}, {}, {}, {
         searchNameTerm: string, sortBy: string,
         sortDirection: SortDirection, pageNumber: string, pageSize: string
@@ -25,7 +31,7 @@ class PostController {
         const pagination = makePagination(pageNumber, pageSize)
 
         try {
-            const allPosts = await postQ.getAllPosts(filter, sort, pagination)
+            const allPosts = await this.postQ.getAllPosts(filter, sort, pagination)
             if (allPosts.items.length === 0) {
                 res.sendStatus(404)
                 return
@@ -44,7 +50,7 @@ class PostController {
     async getOne(req: Request, res: Response) {
         try {
             const id = req.params.id
-            const result = await postQ.getOnePost(id)
+            const result = await this.postQ.getOnePost(id)
             if (result) {
                 res.status(200).send(mapPost(result));
             } else {
@@ -70,7 +76,7 @@ class PostController {
         const pagination = makePagination(pageNumber, pageSize)
 
         try {
-            const allPosts = await postQ.getAllPostsByBlogId(id, sort, pagination)
+            const allPosts = await this.postQ.getAllPostsByBlogId(id, sort, pagination)
 
             if (allPosts.items.length === 0) {
                 res.sendStatus(404)
@@ -102,7 +108,7 @@ class PostController {
 
         try {
 
-            const allComments = await postQ.getAllCommentsByPostId(postId, sort, pagination)
+            const allComments = await this.postQ.getAllCommentsByPostId(postId, sort, pagination)
             if (allComments.items.length === 0) {
                 res.sendStatus(404)
                 return
@@ -121,7 +127,7 @@ class PostController {
         try {
             const id = (+(new Date())).toString()
             const {title, shortDescription, content, blogId, blogName, createdAt} = req.body
-            const result: FinalDBPost | null = await PostService.createOnePost(id, title, shortDescription,
+            const result: FinalDBPost | null = await this.postService.createOnePost(id, title, shortDescription,
                 content, blogId, blogName, createdAt)
             result ? res.status(201).send(mapPost(result)) : res.status(400).json({
                 errorsMessages: [
@@ -144,7 +150,7 @@ class PostController {
         const blogId = req.params.blogId
         const {title, shortDescription, content} = req.body
         try {
-            const result: FinalDBPost | null = await PostService.createOnePostByBlogId(title, shortDescription, content, blogId)
+            const result: FinalDBPost | null = await this.postService.createOnePostByBlogId(title, shortDescription, content, blogId)
             result ? res.status(201).send(mapPost(result)) : res.status(404).json({
                 errorsMessages: [
                     {
@@ -168,7 +174,7 @@ class PostController {
         const userLogin = req.user!.accountData.login
 
         try {
-            const result: FinalDBComment | null = await PostService.createOneCommentByPostId(postId, content, userId, userLogin)
+            const result: FinalDBComment | null = await this.postService.createOneCommentByPostId(postId, content, userId, userLogin)
             result ? res.status(201).send(mapComment(result)) : res.status(404).json({
                 errorsMessages: [
                     {
@@ -189,7 +195,7 @@ class PostController {
         try {
             const id = req.params.id
             const {title, shortDescription, content, blogId,} = req.body
-            let result = await PostService.updateOnePost(id, title, shortDescription, content, blogId,)
+            let result = await this.postService.updateOnePost(id, title, shortDescription, content, blogId,)
             if (!result) {
                 res.status(404).json({
                     message: "Not good"
@@ -210,7 +216,7 @@ class PostController {
     async deleteOne(req: Request, res: Response) {
         try {
             const id = req.params.id
-            const result = await PostService.deleteOnePost(id)
+            const result = await this.postService.deleteOnePost(id)
             if (!result) return res.send(404)
             res.send(204)
 

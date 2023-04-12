@@ -2,7 +2,7 @@ import {DBUser, FinalDBUser} from "../schemas/dbSchemas/UserDBSchema";
 import {ObjectId} from "mongodb";
 import {User} from "../schemas/mongooseSchemas/mongooseUserSchema";
 
-class UsersRepository {
+export class UsersRepository {
     async createOne(newUserTmp: DBUser): Promise<FinalDBUser|null> {
 
         const resultId = await User.create(newUserTmp)
@@ -56,4 +56,3 @@ class UsersRepository {
         return result.modifiedCount === 1
     }
 }
-export const usersRepository = new UsersRepository()

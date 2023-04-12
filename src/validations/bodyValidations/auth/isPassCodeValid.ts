@@ -1,6 +1,7 @@
 import { body } from "express-validator";
-import {userQ} from "../../../repositories/queryRepository/userQ/userQ";
+import {UserQ} from "../../../repositories/queryRepository/userQ/userQ";
 
+const userQ = new UserQ
 export const isPassCodeValid = body("recoveryCode").custom(
     async (value) => {
         const user = await userQ.getOneByPassCode(value)

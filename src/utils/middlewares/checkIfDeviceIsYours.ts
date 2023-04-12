@@ -1,14 +1,17 @@
 import {NextFunction, Request, Response} from "express";
-import {deviceQ} from "../../repositories/queryRepository/deviceQ/deviceQ";
+import {DeviceQ} from "../../repositories/queryRepository/deviceQ/deviceQ";
 import {jwtService} from "../../application/jwtService";
-import {userQ} from "../../repositories/queryRepository/userQ/userQ";
+import {UserQ} from "../../repositories/queryRepository/userQ/userQ";
 
+const userQ = new UserQ
+const deviceQ = new DeviceQ
+const jwt = new jwtService
 export async function checkIfDeviceIsYours( req: Request, res: Response, next: NextFunction){
 
     const refreshToken = req.cookies.refreshToken
     const deviceDeletedId = req.params.deviceId
 
-    const payload = await jwtService.getPayload(refreshToken)
+    const payload = await jwt.getPayload(refreshToken)
 
     const device = await deviceQ.findOneByDeviceId(deviceDeletedId)
 
@@ -33,7 +36,7 @@ export const checkForSameDevice = async (req: Request, res: Response, next: Next
 export const checkForSameUser = async (req: Request, res: Response, next: NextFunction) => {
     const refreshToken = req.cookies.refreshToken
     const id = req.params.deviceId
-    const userInfo = await jwtService.getUserIdByToken(refreshToken)
+    const userInfo = await jwt.getUserIdByToken(refreshToken)
     const result = await deviceQ.getOneDeviceById(id)
     if (!userInfo) return res.sendStatus(401)
     if(!result) return res.sendStatus(404)

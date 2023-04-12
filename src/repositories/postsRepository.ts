@@ -6,7 +6,7 @@ import {CommentWithoutId} from "../schemas/presentationSchemas/commentSchemas";
 import {Post} from "../schemas/mongooseSchemas/mongoosePostSchema";
 import {Comment} from "../schemas/mongooseSchemas/mongooseCommentSchema";
 
-class PostsRepository {
+export class PostsRepository {
     async createOne(newPostTmp: PostWithoutId): Promise<FinalDBPost | null> {
 
         const resultId = await Post.create(newPostTmp)
@@ -43,4 +43,3 @@ class PostsRepository {
         return Comment.findOne({_id: resultId._id});
     }
 }
-export const postsRepository = new PostsRepository()

@@ -8,7 +8,7 @@ import {Post} from "../../../schemas/mongooseSchemas/mongoosePostSchema";
 import {Comment} from "../../../schemas/mongooseSchemas/mongooseCommentSchema";
 import {SortOrder} from "mongoose";
 
-class PostQ {
+export class PostQ {
     async getAllPosts(filter: Document, sort: { [key: string]: SortOrder; }, pagination: {
         skipValue: number, limitValue: number,
         pageSize: number, pageNumber: number
@@ -72,5 +72,3 @@ class PostQ {
         }
     }
 }
-
-export const postQ = new PostQ()

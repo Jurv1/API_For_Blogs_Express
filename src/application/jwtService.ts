@@ -3,11 +3,11 @@ import jwt from "jsonwebtoken"
 import {settings} from "../settings";
 import {ObjectId} from "mongodb";
 
-export const jwtService = {
+export class jwtService {
     async createJWT(user: FinalDBUser, deviceId: string, exp: string) {
         const userId = user!._id.toString()
         return jwt.sign({userId: userId, deviceId: deviceId}, settings.JWT_SECRET, {expiresIn: exp})
-    },
+    }
 
     async getUserIdByToken(token: string){
         try {
@@ -16,7 +16,7 @@ export const jwtService = {
         } catch (err){
             return null
         }
-    },
+    }
 
     async getPayload(token: string) {
         try {
@@ -25,7 +25,7 @@ export const jwtService = {
         } catch (error) {
             return null
         }
-    },
+    }
 
     // CRON | sheduling
     async clearOldTokens(){

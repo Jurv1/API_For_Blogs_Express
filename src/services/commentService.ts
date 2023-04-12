@@ -1,11 +1,19 @@
-import {commentsRepository} from "../repositories/commentRepository";
+import {CommentRepository} from "../repositories/commentRepository";
 
-export async function updateOneCommentById(id: string, content: string): Promise<boolean>{
-    return await commentsRepository.updateOne(id, content)
+export class CommentService {
+    private commentsRepository: CommentRepository;
+    constructor() {
+        this.commentsRepository = new CommentRepository
+    }
+    async updateOneCommentById(id: string, content: string): Promise<boolean> {
+        return await this.commentsRepository.updateOne(id, content)
+    }
+
+    async deleteOneCommentById(id: string): Promise<boolean> {
+
+        return await this.commentsRepository.deleteOne(id)
+
+    }
 }
 
-export async function deleteOneCommentById(id: string): Promise<boolean>{
-
-    return await commentsRepository.deleteOne(id)
-
-}
+export const commentService = new CommentService()

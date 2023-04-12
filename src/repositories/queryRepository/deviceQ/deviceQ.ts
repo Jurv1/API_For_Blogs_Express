@@ -1,6 +1,6 @@
 import {Device} from "../../../schemas/mongooseSchemas/mongooseDeviceSchema";
 
-class DeviceQ {
+export class DeviceQ {
     async getAllDevicesByUserId(userId: string) {
         return Device.find({userId: userId}).lean();
     }
@@ -25,5 +25,3 @@ class DeviceQ {
         return Device.findOne({deviceId: deviceId})
     }
 }
-
-export const deviceQ = new DeviceQ()

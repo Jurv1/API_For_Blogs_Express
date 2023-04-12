@@ -1,7 +1,7 @@
 import {ObjectId} from "mongodb";
 import {Comment} from "../schemas/mongooseSchemas/mongooseCommentSchema";
 
-class CommentRepository{
+export class CommentRepository{
     async updateOne(id: string, content: string): Promise<boolean> {
         const myId  = new ObjectId(id)
         const updatedEl = await Comment.updateOne({_id: myId},
@@ -19,4 +19,3 @@ class CommentRepository{
         return result.deletedCount === 1
     }
 }
-export const commentsRepository = new CommentRepository()

@@ -1,6 +1,8 @@
 import { body } from "express-validator";
 import { CustomValidator } from "express-validator/src/base";
-import {blogQ} from "../../../repositories/queryRepository/blogQ/blogQ";
+import {BlogQ} from "../../../repositories/queryRepository/blogQ/blogQ";
+
+const blogQ = new BlogQ
 const checkBlogId : CustomValidator = async value => {
     const foundedEl = await blogQ.getOneBlog(value);
     if (!foundedEl) {

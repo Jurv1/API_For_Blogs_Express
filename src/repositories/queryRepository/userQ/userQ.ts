@@ -5,7 +5,7 @@ import {FinalDBUser} from "../../../schemas/dbSchemas/UserDBSchema";
 import {SortOrder} from "mongoose";
 import {User} from "../../../schemas/mongooseSchemas/mongooseUserSchema";
 
-class UserQ {
+export class UserQ {
     async getAllUsers(filter: Document, sort: { [key: string]: SortOrder; }, pagination: {
         skipValue: number, limitValue: number,
         pageSize: number, pageNumber: number
@@ -51,5 +51,3 @@ class UserQ {
 
     }
 }
-
-export const userQ = new UserQ()

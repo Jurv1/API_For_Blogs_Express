@@ -1,8 +1,12 @@
-import {blogsRepository} from "../repositories/blogsRepository";
-//import {blogDBController} from "../db/db";
+import {BlogsRepository} from "../repositories/blogsRepository";
 import {FinalDBBlog} from "../schemas/dbSchemas/BlogDBSchema";
 
-export async function createOneBlog( name: string, description: string, websiteUrl: string): Promise<FinalDBBlog|null> {
+export class BlogService {
+    private blogsRepository: BlogsRepository;
+    constructor() {
+        this.blogsRepository = new BlogsRepository
+    }
+    async createOneBlog(name: string, description: string, websiteUrl: string): Promise<FinalDBBlog | null> {
 
         let newBlogTmp = {
             name: name,
@@ -11,22 +15,21 @@ export async function createOneBlog( name: string, description: string, websiteU
             isMembership: false,
             createdAt: new Date().toISOString()
         }
-        const result = await blogsRepository.createOne(newBlogTmp)
-    return result
-        //if (result){
-        //    return await blogDBController.findOne({_id: result._id});
-        //} else return null
+        return await this.blogsRepository.createOne(newBlogTmp)
 
-}
+    }
 
-export async function updateOneBlog(id: string, name: string, description: string, websiteUrl: string): Promise<boolean> {
+    async updateOneBlog(id: string, name: string, description: string, websiteUrl: string): Promise<boolean> {
 
-        return await blogsRepository.updateOne(id, name, description,
+        return await this.blogsRepository.updateOne(id, name, description,
             websiteUrl)
+    }
+
+    async deleteOneBlog(id: string): Promise<boolean> {
+
+        return await this.blogsRepository.deleteOne(id)
+
+    }
 }
 
-export async function deleteOneBlog(id: string): Promise<boolean> {
-
-        return await blogsRepository.deleteOne(id)
-
-}
+export const blogService = new BlogService()

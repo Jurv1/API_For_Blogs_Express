@@ -1,29 +1,31 @@
-import jwt, {JwtPayload} from "jsonwebtoken";
-import {deviceRepository} from "../repositories/devicesRepository";
-import {jwtService} from "../application/jwtService";
+import {DevicesRepository} from "../repositories/devicesRepository";
 
-export async function deleteAllDevicesExceptActive( userId: string , deviceId: string){
-    return await deviceRepository.deleteAllExceptActive(userId, deviceId)
-}
+export class DeviceService {
+    private deviceRepository: DevicesRepository;
 
-export async function deleteOneDeviceById(id: string){
-    return await deviceRepository.deleteOneDeviceById(id)
-}
-
-export async function createNewDevice(ip: string, title: string, payload: any){
-    //const payload = await jwtService.getPayload(refresh)
-    console.log(payload)
-    if(!payload){
-        return null
+    constructor() {
+        this.deviceRepository = new DevicesRepository
+    }
+    async deleteAllDevicesExceptActive(userId: string, deviceId: string) {
+        return await this.deviceRepository.deleteAllExceptActive(userId, deviceId)
     }
 
-    const deviceTmp = {
-        ip: ip,
-        title: title,
-        lastActiveDate: (new Date(payload.iat * 1000)).toISOString(),
-        deviceId: payload.deviceId,
-        userId: payload.userId
+    async deleteOneDeviceById(id: string) {
+        return await this.deviceRepository.deleteOneDeviceById(id)
     }
-    await deviceRepository.createNewDevice(deviceTmp)
 
+    async createNewDevice(ip: string, title: string, payload: any) {
+
+        const deviceTmp = {
+            ip: ip,
+            title: title,
+            lastActiveDate: (new Date(payload.iat * 1000)).toISOString(),
+            deviceId: payload.deviceId,
+            userId: payload.userId
+        }
+        await this.deviceRepository.createNewDevice(deviceTmp)
+
+    }
 }
+
+export const deviceService = new DeviceService()

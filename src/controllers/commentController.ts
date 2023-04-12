@@ -1,14 +1,20 @@
 import {Request, Response} from "express";
-import * as CommentService from "../services/commentService"
 import {ObjectId} from "mongodb";
-import {commentQ} from "../repositories/queryRepository/commentQ/commentQ";
+import {CommentQ} from "../repositories/queryRepository/commentQ/commentQ";
+import {CommentService} from "../services/commentService";
 
 class CommentController {
+    private commentQ: CommentQ;
+    private commentService: CommentService;
+    constructor() {
+        this.commentQ = new CommentQ
+        this.commentService = new CommentService
+    }
     async getOneById(req: Request, res: Response) {
         const id = new ObjectId(req.params.id)
 
         try {
-            const result = await commentQ.getOneComment(id)
+            const result = await this.commentQ.getOneComment(id)
 
             if (result) {
                 res.status(200).send(result)
@@ -29,7 +35,7 @@ class CommentController {
         const content = req.body.content
         try {
 
-            const result = await CommentService.updateOneCommentById(id, content)
+            const result = await this.commentService.updateOneCommentById(id, content)
             if (!result) {
                 res.status(404).json({
                     message: "Not good"
@@ -50,7 +56,7 @@ class CommentController {
         const id = req.params.id
 
         try {
-            const result = await CommentService.deleteOneCommentById(id)
+            const result = await this.commentService.deleteOneCommentById(id)
             if (!result) return res.send(404)
             res.send(204)
         } catch (err) {

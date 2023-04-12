@@ -15,18 +15,23 @@ import {authController} from "../controllers/authController";
 
 export const authRouter = Router({})
 
-authRouter.post('/login', countAttemptsToRequest, loginValid,  handleErr, authController.loginUser)
+authRouter.post('/login', countAttemptsToRequest, loginValid,  handleErr,
+    authController.loginUser.bind(authController))
 
-authRouter.post('/registration', countAttemptsToRequest, isEmailOrLoginExists("email"), isEmailOrLoginExists("login"),
-    userValidator, handleErr, authController.registerMe)
-authRouter.post('/registration-confirmation', countAttemptsToRequest, registrationCodeValid, handleErr, authController.confirmRegistration)
-authRouter.post('/registration-email-resending', countAttemptsToRequest, emailValid, isUserConfirmedAlready, handleErr, authController
-    .resendRegistrationConfirming)
-authRouter.post('/refresh-token', countAttemptsToRequest, isRefreshTokenInBlackList, authController.refreshMyToken)
+authRouter.post('/registration', countAttemptsToRequest, isEmailOrLoginExists("email"),
+    isEmailOrLoginExists("login"), userValidator, handleErr, authController.registerMe.bind(authController))
+authRouter.post('/registration-confirmation', countAttemptsToRequest, registrationCodeValid, handleErr,
+    authController.confirmRegistration.bind(authController))
+authRouter.post('/registration-email-resending', countAttemptsToRequest, emailValid, isUserConfirmedAlready,
+    handleErr, authController.resendRegistrationConfirming.bind(authController))
+authRouter.post('/refresh-token', countAttemptsToRequest, isRefreshTokenInBlackList,
+    authController.refreshMyToken.bind(authController))
 
-authRouter.post("/password-recovery", countAttemptsToRequest, emailValid, handleErr, authController.recoverMyPassword)
-authRouter.post("/new-password", countAttemptsToRequest, passAndCodeValid, isPassCodeValid, handleErr, authController.makeNewPassword)
+authRouter.post("/password-recovery", countAttemptsToRequest, emailValid, handleErr,
+    authController.recoverMyPassword.bind(authController))
+authRouter.post("/new-password", countAttemptsToRequest, passAndCodeValid, isPassCodeValid, handleErr,
+    authController.makeNewPassword.bind(authController))
 
-authRouter.post('/logout', isRefreshTokenInBlackList, authController.logOut)
+authRouter.post('/logout', isRefreshTokenInBlackList, authController.logOut.bind(authController))
 
-authRouter.get('/me', checkBearer, authController.getMe)
+authRouter.get('/me', checkBearer, authController.getMe.bind(authController))

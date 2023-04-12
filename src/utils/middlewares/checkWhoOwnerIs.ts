@@ -1,7 +1,8 @@
 import {NextFunction, Response, Request} from "express";
-import {commentQ} from "../../repositories/queryRepository/commentQ/commentQ"
+import {CommentQ} from "../../repositories/queryRepository/commentQ/commentQ"
 import {ObjectId} from "mongodb";
 
+const commentQ = new CommentQ
 export async function checkWhoOwnerIs( req: Request, res: Response, next: NextFunction){
     const myId = new ObjectId(req.params.id)
     const foundedEl = await commentQ.getOneComment(myId)

@@ -1,7 +1,7 @@
 import {Video} from "../schemas/presentationSchemas/videoSchemas";
 import {VideoModel} from "../schemas/mongooseSchemas/mongooseVideoSchema";
 
-class VideosRepository {
+export class VideosRepository {
     async getAll() {
 
         return VideoModel.find({}, {projection: {_id: 0}}).lean();
@@ -69,4 +69,3 @@ class VideosRepository {
 
     }
 }
-export const videosRepository = new VideosRepository()

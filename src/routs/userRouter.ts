@@ -5,8 +5,7 @@ import handleErr from "../utils/handleErr";
 import {userController} from "../controllers/userController";
 export const userRouter = Router({})
 
-userRouter.get('/', checkAuth,   userController.getAll) // UserController.getAll
-userRouter.post('/',checkAuth, userValidator, handleErr, userController.createOne)
-userRouter.delete('/:id', checkAuth, userController.deleteOne)
+userRouter.get('/', checkAuth,   userController.getAll.bind(userController))
+userRouter.post('/',checkAuth, userValidator, handleErr, userController.createOne.bind(userController))
+userRouter.delete('/:id', checkAuth, userController.deleteOne.bind(userController))
 
-// userRouter.get('/', checkAuth, )

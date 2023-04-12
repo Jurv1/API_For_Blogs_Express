@@ -3,7 +3,7 @@ import {ObjectId} from "mongodb";
 import {BlogWithoutId} from "../schemas/presentationSchemas/blogSchemas";
 import {Blog} from "../schemas/mongooseSchemas/mongooseBlogSchema";
 
-class BlogsRepository {
+export class BlogsRepository {
     async createOne(newBlogTmp: BlogWithoutId): Promise<FinalDBBlog|null> {
         const createdBlog = await Blog.create(newBlogTmp)
         return {
@@ -36,4 +36,3 @@ class BlogsRepository {
 
     }
 }
-export const blogsRepository = new BlogsRepository()

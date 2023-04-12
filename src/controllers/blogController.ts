@@ -1,5 +1,4 @@
 import {Request, Response} from "express";
-import * as BlogService from "../services/blogService";
 import {viewBlogModel} from "../schemas/presentationSchemas/blogSchemas";
 import {FinalDBBlog} from "../schemas/dbSchemas/BlogDBSchema";
 import {mapBlog} from "../utils/mappers/blogMapper";
@@ -7,9 +6,16 @@ import {queryValidator} from "../utils/queryValidators/sortQueryValidator";
 import {filterQueryValid} from "../utils/queryValidators/filterQueryValid";
 import {makePagination} from "../utils/paggination/paggination";
 import {SortOrder} from "mongoose";
-import {blogQ} from "../repositories/queryRepository/blogQ/blogQ";
+import {BlogQ} from "../repositories/queryRepository/blogQ/blogQ";
+import {BlogService} from "../services/blogService";
 
 class BlogController {
+    private blogService: BlogService;
+    private blogQ: BlogQ;
+    constructor() {
+        this.blogQ = new BlogQ
+        this.blogService = new BlogService
+    }
     async getAll(req: Request<{}, {}, {}, {
         searchNameTerm: string, sortBy: string,
         sortDirection: SortOrder, pageNumber: string, pageSize: string
@@ -22,7 +28,7 @@ class BlogController {
         const pagination = makePagination(pageNumber, pageSize)
 
         try {
-            const allBlogs = await blogQ.getAllBlogs(filter, sort, pagination)
+            const allBlogs = await this.blogQ.getAllBlogs(filter, sort, pagination)
             if (allBlogs.items.length === 0) {
                 res.sendStatus(404)
                 return
@@ -40,7 +46,7 @@ class BlogController {
         const id = req.params.id
 
         try {
-            const result = await blogQ.getOneBlog(id)
+            const result = await this.blogQ.getOneBlog(id)
             result ? res.status(200).send(mapBlog(result)) : res.sendStatus(404)
         } catch (err) {
             res.status(404).json({
@@ -54,7 +60,7 @@ class BlogController {
         const {name, description, websiteUrl} = req.body
 
         try {
-            let result: FinalDBBlog | null = await BlogService.createOneBlog(name, description, websiteUrl)
+            let result: FinalDBBlog | null = await this.blogService.createOneBlog(name, description, websiteUrl)
             if (result) {
                 const viewBlog: viewBlogModel = mapBlog(result)
                 res.status(201).send(viewBlog)
@@ -75,7 +81,7 @@ class BlogController {
         const {name, description, websiteUrl} = req.body
 
         try {
-            const result = await BlogService.updateOneBlog(id, name, description, websiteUrl)
+            const result = await this.blogService.updateOneBlog(id, name, description, websiteUrl)
             if (!result) {
                 res.status(404).json({
                     message: "NOT OK"
@@ -98,7 +104,7 @@ class BlogController {
         const id = req.params.id
         try {
 
-            const result = await BlogService.deleteOneBlog(id)
+            const result = await this.blogService.deleteOneBlog(id)
             if (!result) return res.send(404)
             res.send(204)
 

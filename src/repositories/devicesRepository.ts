@@ -2,7 +2,7 @@ import {DBDevice, FinalDBDevice} from "../schemas/dbSchemas/DeviceDBSchema";
 import {JwtPayload} from "jsonwebtoken";
 import {Device} from "../schemas/mongooseSchemas/mongooseDeviceSchema";
 
-class DevicesRepository{
+export class DevicesRepository{
     async createNewDevice(device: DBDevice): Promise<FinalDBDevice | null>{
         const result = await Device.create(device)
         return Device.findOne({_id: result._id});
@@ -33,4 +33,3 @@ class DevicesRepository{
         return result.modifiedCount === 1
     }
 }
-export const deviceRepository = new DevicesRepository()

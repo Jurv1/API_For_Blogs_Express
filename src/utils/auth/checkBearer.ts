@@ -1,7 +1,9 @@
 import {NextFunction, Request, Response} from "express";
 import {jwtService} from "../../application/jwtService";
-import {userQ} from "../../repositories/queryRepository/userQ/userQ";
+import {UserQ} from "../../repositories/queryRepository/userQ/userQ";
 
+const userQ = new UserQ
+const jwt = new jwtService
 export default async (req: Request, res: Response, next: NextFunction) => {
     if (!req.headers.authorization){
         res.sendStatus(401)
@@ -10,7 +12,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
     const token = (req.headers.authorization || '').replace(/Bearer\s?/, '')
 
-    const userId = await jwtService.getUserIdByToken(token)
+    const userId = await jwt.getUserIdByToken(token)
     if (userId) {
         try {
             req.user = await userQ.getOneUserById(userId.toString())

@@ -2,8 +2,6 @@ import express from 'express'
 import bodyParser from "body-parser";
 import cors from 'cors'
 import cookieParser from "cookie-parser";
-
-import * as VideoController from "./services/videoService";
 import * as testingController from "./services/testingService"
 
 import {postRouter} from "./routs/postRouter";
@@ -14,6 +12,7 @@ import {userRouter} from "./routs/userRouter";
 import {authRouter} from "./routs/authRouter";
 import {commentRouter} from "./routs/commentRouter";
 import {securityRouter} from "./routs/securityRouter";
+import {videoService} from "./services/videoService";
 
 export const app = express()
 const port = 3003
@@ -32,7 +31,7 @@ app.use(cookieParser())
 
 app.set('trust proxy', true)
 
-app.get('/', VideoController.getStart)
+app.get('/', videoService.getStart)
 
 app.use('/videos', videoRouter)
 

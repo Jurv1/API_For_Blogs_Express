@@ -1,14 +1,29 @@
 import {Request, Response} from "express";
-import {checkCredentials, createOneUser, makePasswordRecoveryMail, updateNewPassword} from "../services/userService";
 import {jwtService} from "../application/jwtService";
-import {confirmEmail, resendConfirmationEmail, } from "../services/authService";
-import { createNewDevice } from "../services/deviceService";
-import {deviceRepository} from "../repositories/devicesRepository";
 import { v4 as uuidv4 } from "uuid"
-import {userQ} from "../repositories/queryRepository/userQ/userQ";
+import {UserQ} from "../repositories/queryRepository/userQ/userQ";
+import {AuthService} from "../services/authService";
+import {UserService} from "../services/userService";
+import {DeviceService} from "../services/deviceService";
+import {DevicesRepository} from "../repositories/devicesRepository";
 
 
 class AuthController {
+    private userQ: UserQ;
+    private authService: AuthService;
+    private userService: UserService;
+    private deviceService: DeviceService;
+    private jwtService: jwtService;
+    private devicesRepository: DevicesRepository;
+
+    constructor() {
+        this.userQ = new UserQ
+        this.authService = new AuthService
+        this.userService = new UserService
+        this.deviceService = new DeviceService
+        this.jwtService = new jwtService
+        this.devicesRepository = new DevicesRepository
+    }
     async loginUser(req: Request, res: Response) {
 
         const {loginOrEmail, password} = req.body
@@ -19,17 +34,17 @@ class AuthController {
 
         try {
 
-            const checkMe = await checkCredentials(loginOrEmail, password)
+            const checkMe = await this.userService.checkCredentials(loginOrEmail, password)
             if (checkMe) {
-                const user = await userQ.getOneByLoginOrEmail(loginOrEmail)
+                const user = await this.userQ.getOneByLoginOrEmail(loginOrEmail)
                 console.log(user)
                 const deviceId = uuidv4()
-                const token = await jwtService.createJWT(user!, deviceId, "30m")
-                const refreshToken = await jwtService.createJWT(user!, deviceId, "1h")
+                const token = await this.jwtService.createJWT(user!, deviceId, "30m")
+                const refreshToken = await this.jwtService.createJWT(user!, deviceId, "1h")
 
-                const jwtPayload = await jwtService.getPayload(refreshToken)
+                const jwtPayload = await this.jwtService.getPayload(refreshToken)
 
-                await createNewDevice(ip, title, jwtPayload)
+                await this.deviceService.createNewDevice(ip, title, jwtPayload)
 
                 res.cookie('refreshToken', refreshToken, {httpOnly: true, secure: true})
                     .header('Authorization', token).status(200).json({accessToken: token})
@@ -66,7 +81,7 @@ class AuthController {
 
         const {login, password, email} = req.body
         try {
-            const user = await createOneUser(login, email, password, false)
+            const user = await this.userService.createOneUser(login, email, password, false)
             if (user) {
                 res.sendStatus(204)
             } else {
@@ -90,7 +105,7 @@ class AuthController {
         const email = req.body.email
 
         try {
-            await makePasswordRecoveryMail(email)
+            await this.userService.makePasswordRecoveryMail(email)
 
             res.status(204).send("Message sent")
 
@@ -107,7 +122,7 @@ class AuthController {
 
         try {
 
-            await updateNewPassword(newPassword, recoveryCode)
+            await this.userService.updateNewPassword(newPassword, recoveryCode)
 
             res.sendStatus(204)
 
@@ -122,7 +137,7 @@ class AuthController {
     async confirmRegistration(req: Request, res: Response) {
         const code = req.body.code
         try {
-            const result = await confirmEmail(code)
+            const result = await this.authService.confirmEmail(code)
             if (!result) {
                 res.status(400).json({
                     "errorsMessages": [
@@ -148,7 +163,7 @@ class AuthController {
         const email = req.body.email
 
         try {
-            const result = await resendConfirmationEmail(email)
+            const result = await this.authService.resendConfirmationEmail(email)
             if (!result) {
                 res.sendStatus(400)
                 return
@@ -167,15 +182,15 @@ class AuthController {
         const refreshToken = req.cookies.refreshToken
 
         try {
-            const userId = await jwtService.getUserIdByToken(refreshToken)
+            const userId = await this.jwtService.getUserIdByToken(refreshToken)
 
             if (userId) {
-                const user = await userQ.getOneUserById(userId.toString())
-                const payload = await jwtService.getPayload(refreshToken)
-                const accessToken = await jwtService.createJWT(user!, payload.deviceId, "10s")
-                const newRefreshToken = await jwtService.createJWT(user!, payload.deviceId, "20s")
-                const newRefreshTokenPayload = await jwtService.getPayload(newRefreshToken)
-                await deviceRepository.updateLastActivity(newRefreshTokenPayload)
+                const user = await this.userQ.getOneUserById(userId.toString())
+                const payload = await this.jwtService.getPayload(refreshToken)
+                const accessToken = await this.jwtService.createJWT(user!, payload.deviceId, "10s")
+                const newRefreshToken = await this.jwtService.createJWT(user!, payload.deviceId, "20s")
+                const newRefreshTokenPayload = await this.jwtService.getPayload(newRefreshToken)
+                await this.devicesRepository.updateLastActivity(newRefreshTokenPayload)
 
                 res.cookie('refreshToken', newRefreshToken, {httpOnly: true, secure: true})
                     .header('Authorization', accessToken).status(200).json({accessToken: accessToken})
@@ -194,8 +209,8 @@ class AuthController {
         const refreshToken = req.cookies.refreshToken
         if (!refreshToken) return res.sendStatus(401)
 
-        const payload = await jwtService.getPayload(refreshToken)
-        await deviceRepository.deleteOneDeviceById(payload.deviceId)
+        const payload = await this.jwtService.getPayload(refreshToken)
+        await this.devicesRepository.deleteOneDeviceById(payload.deviceId)
 
         return res.sendStatus(204)
     }

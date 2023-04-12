@@ -1,6 +1,7 @@
 import { body } from "express-validator";
-import {userQ} from "../../repositories/queryRepository/userQ/userQ";
+import {UserQ} from "../../repositories/queryRepository/userQ/userQ";
 
+const userQ = new UserQ
 export const isEmailOrLoginExists = (field: string) =>
     body(field).custom(async (value) => {
         const result = await userQ.getOneByLoginOrEmail(value);

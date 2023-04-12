@@ -3,7 +3,7 @@ import {mapComment} from "../../../utils/mappers/commentMapper";
 import {viewCommentModel} from "../../../schemas/presentationSchemas/commentSchemas";
 import {Comment} from "../../../schemas/mongooseSchemas/mongooseCommentSchema";
 
-class CommentQ {
+export class CommentQ {
     async getOneComment(id: ObjectId): Promise<viewCommentModel|null> {
 
         const result = await Comment.findOne({ _id: new ObjectId(id) })
@@ -16,5 +16,3 @@ class CommentQ {
 
     }
 }
-
-export const commentQ = new CommentQ()
