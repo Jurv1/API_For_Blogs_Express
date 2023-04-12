@@ -17,7 +17,7 @@ export const emailManager = {
         if (user){
             const login = user.accountData.login
             const subject = "Password Recovery"
-            const message = `<div>Hello ${login}</div><div>To finish password recovery please follow the link below:</div><a href = https://some-front.com/confirm-registration?code=${code}>click me</a>`
+            const message = `<div>Hello ${login}</div><div>To finish password recovery please follow the link below:</div><a href = https://somesite.com/password-recovery?recoveryCode=${code}>click me</a>`
 
             return await emailAdapter.send(user.accountData.email, subject, message)
         }
