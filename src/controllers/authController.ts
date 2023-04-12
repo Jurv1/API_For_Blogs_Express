@@ -17,12 +17,12 @@ class AuthController {
     private devicesRepository: DevicesRepository;
 
     constructor() {
-        this.userQ = new UserQ
-        this.authService = new AuthService
-        this.userService = new UserService
-        this.deviceService = new DeviceService
-        this.jwtService = new jwtService
-        this.devicesRepository = new DevicesRepository
+        this.userQ = new UserQ()
+        this.authService = new AuthService()
+        this.userService = new UserService()
+        this.deviceService = new DeviceService()
+        this.jwtService = new jwtService()
+        this.devicesRepository = new DevicesRepository()
     }
     async loginUser(req: Request, res: Response) {
 

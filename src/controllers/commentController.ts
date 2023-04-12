@@ -7,8 +7,8 @@ class CommentController {
     private commentQ: CommentQ;
     private commentService: CommentService;
     constructor() {
-        this.commentQ = new CommentQ
-        this.commentService = new CommentService
+        this.commentQ = new CommentQ()
+        this.commentService = new CommentService()
     }
     async getOneById(req: Request, res: Response) {
         const id = new ObjectId(req.params.id)

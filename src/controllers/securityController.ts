@@ -10,9 +10,9 @@ class SecurityController {
     private deviceService: DeviceService
     private jwtService: jwtService
     constructor() {
-        this.deviceQ = new DeviceQ
-        this.deviceService = new DeviceService
-        this.jwtService = new jwtService
+        this.deviceQ = new DeviceQ()
+        this.deviceService = new DeviceService()
+        this.jwtService = new jwtService()
     }
     async getAll(req: Request, res: Response) {
 

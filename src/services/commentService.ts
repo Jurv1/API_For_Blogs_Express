@@ -3,7 +3,7 @@ import {CommentRepository} from "../repositories/commentRepository";
 export class CommentService {
     private commentsRepository: CommentRepository;
     constructor() {
-        this.commentsRepository = new CommentRepository
+        this.commentsRepository = new CommentRepository()
     }
     async updateOneCommentById(id: string, content: string): Promise<boolean> {
         return await this.commentsRepository.updateOne(id, content)

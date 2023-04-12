@@ -4,7 +4,7 @@ import {FinalDBBlog} from "../schemas/dbSchemas/BlogDBSchema";
 export class BlogService {
     private blogsRepository: BlogsRepository;
     constructor() {
-        this.blogsRepository = new BlogsRepository
+        this.blogsRepository = new BlogsRepository()
     }
     async createOneBlog(name: string, description: string, websiteUrl: string): Promise<FinalDBBlog | null> {
 

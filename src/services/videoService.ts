@@ -5,7 +5,7 @@ export class VideoService {
     private videosRepository: VideosRepository;
 
     constructor() {
-        this.videosRepository = new VideosRepository
+        this.videosRepository = new VideosRepository()
     }
     getStart = async (req: Request, res: Response) => {
         await res.send("Hi")

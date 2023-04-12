@@ -13,8 +13,8 @@ export class UserService {
     private usersRepository: UsersRepository;
     private userQ: UserQ;
     constructor() {
-        this.userQ = new UserQ
-        this.usersRepository = new UsersRepository
+        this.userQ = new UserQ()
+        this.usersRepository = new UsersRepository()
     }
     async createOneUser(login: string, email: string, password: string, confirmed: boolean): Promise<FinalDBUser | null> {
 

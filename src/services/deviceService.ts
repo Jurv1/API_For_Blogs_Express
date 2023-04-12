@@ -4,7 +4,7 @@ export class DeviceService {
     private deviceRepository: DevicesRepository;
 
     constructor() {
-        this.deviceRepository = new DevicesRepository
+        this.deviceRepository = new DevicesRepository()
     }
     async deleteAllDevicesExceptActive(userId: string, deviceId: string) {
         return await this.deviceRepository.deleteAllExceptActive(userId, deviceId)

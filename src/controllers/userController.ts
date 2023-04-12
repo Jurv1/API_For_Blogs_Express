@@ -14,8 +14,8 @@ class UserController {
     private userQ: UserQ
     private userService: UserService
     constructor() {
-        this.userQ = new UserQ
-        this.userService = new UserService
+        this.userQ = new UserQ()
+        this.userService = new UserService()
     }
     async getAll(req: Request | Request<{}, {}, {}, {
         searchLoginTerm: string;

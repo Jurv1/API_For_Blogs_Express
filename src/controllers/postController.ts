@@ -16,8 +16,8 @@ class PostController {
     private postService: PostService;
     private postQ: PostQ;
     constructor() {
-        this.postQ = new PostQ
-        this.postService = new PostService
+        this.postQ = new PostQ()
+        this.postService = new PostService()
     }
     async getAll(req: Request<{}, {}, {}, {
         searchNameTerm: string, sortBy: string,

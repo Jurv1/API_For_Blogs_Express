@@ -10,9 +10,9 @@ export class PostService {
     private postsRepository: PostsRepository;
 
     constructor() {
-        this.postQ = new PostQ
-        this.blogQ = new BlogQ
-        this.postsRepository = new PostsRepository
+        this.postQ = new PostQ()
+        this.blogQ = new BlogQ()
+        this.postsRepository = new PostsRepository()
     }
     async createOnePost(id: string, title: string, shortDescription: string, content: string,
                                         blogId: string, blogName: string, createdAt: string): Promise<FinalDBPost | null> {

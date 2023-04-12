@@ -13,8 +13,8 @@ class BlogController {
     private blogService: BlogService;
     private blogQ: BlogQ;
     constructor() {
-        this.blogQ = new BlogQ
-        this.blogService = new BlogService
+        this.blogQ = new BlogQ()
+        this.blogService = new BlogService()
     }
     async getAll(req: Request<{}, {}, {}, {
         searchNameTerm: string, sortBy: string,
