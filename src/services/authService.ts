@@ -1,4 +1,4 @@
-import {getOneByConfirmationCode, getOneByLoginOrEmail} from "../repositories/queryRepository/userQ/userQ"
+import {userQ} from "../repositories/queryRepository/userQ/userQ"
 import {usersRepository} from "../repositories/usersRepository"
 import {emailManager} from "../managers/emailManager";
 import {v4 as uuidv4} from "uuid";
@@ -6,7 +6,7 @@ import {v4 as uuidv4} from "uuid";
 export async function confirmEmail(code: string): Promise<boolean>{
 
     try{
-        const user = await getOneByConfirmationCode(code)
+        const user = await userQ.getOneByConfirmationCode(code)
         if (!user) return false
         if(user.emailConfirmation.isConfirmed) return false
         if (user.emailConfirmation.confirmationCode !== code) return false
@@ -18,14 +18,11 @@ export async function confirmEmail(code: string): Promise<boolean>{
         return false
     }
 
-
-
-
 }
 
 export async function resendConfirmationEmail(email: string){
 
-    const user = await getOneByLoginOrEmail(email)
+    const user = await userQ.getOneByLoginOrEmail(email)
     if (!user || !user.emailConfirmation.confirmationCode) return false
     const newRegistrationCode = uuidv4()
     try {

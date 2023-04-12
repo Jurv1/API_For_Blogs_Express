@@ -6,14 +6,13 @@ import {CommentWithoutId} from "../schemas/presentationSchemas/commentSchemas";
 import {Post} from "../schemas/mongooseSchemas/mongoosePostSchema";
 import {Comment} from "../schemas/mongooseSchemas/mongooseCommentSchema";
 
-export const postsRepository = {
-
+class PostsRepository {
     async createOne(newPostTmp: PostWithoutId): Promise<FinalDBPost | null> {
 
         const resultId = await Post.create(newPostTmp)
         return Post.findOne({_id: resultId._id});
 
-    },
+    }
 
     async updateOne(id: string,  title: string, shortDescription: string,
                     content: string, blogId: string): Promise<boolean> {
@@ -29,7 +28,7 @@ export const postsRepository = {
                 }
             })
         return updatedEl.matchedCount === 1;
-    },
+    }
 
     async deleteOne(id: string): Promise<boolean> {
 
@@ -37,10 +36,11 @@ export const postsRepository = {
         const result = await Post.deleteOne({ _id: myId })
         return result.deletedCount === 1
 
-    },
+    }
 
     async createOneCommentByPostId(newCommentTmp: CommentWithoutId): Promise<FinalDBComment | null>{
         const resultId = await Comment.create(newCommentTmp)
         return Comment.findOne({_id: resultId._id});
     }
 }
+export const postsRepository = new PostsRepository()

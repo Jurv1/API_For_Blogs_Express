@@ -1,18 +1,18 @@
 import {Video} from "../schemas/presentationSchemas/videoSchemas";
 import {VideoModel} from "../schemas/mongooseSchemas/mongooseVideoSchema";
 
-export const videosRepository = {
+class VideosRepository {
     async getAll() {
 
         return VideoModel.find({}, {projection: {_id: 0}}).lean();
 
-    },
+    }
 
     async getOne(id: number): Promise<Video | null> {
 
         return VideoModel.findOne({id: id}, {projection: {_id: 0}});
 
-    },
+    }
 
     async createOne(title: string, author: string, availableResolutions?: Array<string>,
                     canBeDownloaded?: boolean, minAgeRestriction?: number | null): Promise<Video|null> {
@@ -43,7 +43,7 @@ export const videosRepository = {
         await VideoModel.create(newVideo)
         return VideoModel.findOne({id: id}, {projection: {_id: 0}});
 
-    },
+    }
 
     async updateOne(id: number, title: string, author: string, availableResolutions?: Array<string>,
                     canBeDownloaded?: boolean, minAgeRestriction?: number | null): Promise<boolean> {
@@ -60,7 +60,7 @@ export const videosRepository = {
             })
         return updatedEl.matchedCount === 1
 
-    },
+    }
 
     async deleteOne(id: number): Promise<boolean> {
 
@@ -69,3 +69,4 @@ export const videosRepository = {
 
     }
 }
+export const videosRepository = new VideosRepository()

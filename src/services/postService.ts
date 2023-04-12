@@ -1,13 +1,13 @@
 import {postsRepository} from "../repositories/postsRepository";
 import {FinalDBPost} from "../schemas/dbSchemas/PostDBSchema";
-import * as BlogQueryRepo from "../repositories/queryRepository/blogQ/blogQ"
-import * as PostQueryRepo from "../repositories/queryRepository/postQ/postQ"
 import {FinalDBComment} from "../schemas/dbSchemas/CommentDBSchema";
+import {blogQ} from "../repositories/queryRepository/blogQ/blogQ";
+import {postQ} from "../repositories/queryRepository/postQ/postQ";
 
 export async function createOnePost(id: string, title: string, shortDescription: string, content: string,
                                     blogId: string, blogName: string, createdAt: string): Promise<FinalDBPost|null> {
 
-    const foundedEl = await BlogQueryRepo.getOneBlog(blogId)
+    const foundedEl = await blogQ.getOneBlog(blogId)
 
     if (foundedEl) {
         const blogName = foundedEl.name
@@ -30,7 +30,7 @@ export async function createOnePost(id: string, title: string, shortDescription:
 export async function createOnePostByBlogId(title: string, shortDescription: string, content: string, blogId: string):
     Promise<FinalDBPost|null>{
 
-    const foundedEl = await BlogQueryRepo.getOneBlog(blogId)
+    const foundedEl = await blogQ.getOneBlog(blogId)
     if (foundedEl) {
         const blogName = foundedEl.name
         const newPostTmp = {
@@ -48,7 +48,7 @@ export async function createOnePostByBlogId(title: string, shortDescription: str
 }
 
 export async function createOneCommentByPostId(postId: string, content: string, userId: string, userLogin: string): Promise<FinalDBComment | null> {
-    const foundedEl = await PostQueryRepo.getOnePost(postId)
+    const foundedEl = await postQ.getOnePost(postId)
     if (foundedEl) {
         const newCommentTmp = {
             content: content,

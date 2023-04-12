@@ -1,12 +1,12 @@
 import {Router} from "express";
-import * as UserController from "../controllers/userController"
 import checkAuth from "../utils/auth/checkAuth";
 import {userValidator} from "../validations/bodyValidations/user/userValidator";
 import handleErr from "../utils/handleErr";
+import {userController} from "../controllers/userController";
 export const userRouter = Router({})
 
-userRouter.get('/', checkAuth,   UserController.getAll) // UserController.getAll
-userRouter.post('/',checkAuth, userValidator, handleErr, UserController.createOne)
-userRouter.delete('/:id', checkAuth, UserController.deleteOne)
+userRouter.get('/', checkAuth,   userController.getAll) // UserController.getAll
+userRouter.post('/',checkAuth, userValidator, handleErr, userController.createOne)
+userRouter.delete('/:id', checkAuth, userController.deleteOne)
 
-userRouter.get('/', checkAuth, )
+// userRouter.get('/', checkAuth, )

@@ -1,11 +1,11 @@
 import {Router} from "express";
-import * as DeviceController from "../controllers/securityController"
 import {checkForSameDevice, checkForSameUser, checkIfDeviceIsYours} from "../utils/middlewares/checkIfDeviceIsYours";
 import {isRefreshTokenInBlackList} from "../utils/middlewares/isRefreshTokenInBlackList";
+import {securityController} from "../controllers/securityController";
 
 export const securityRouter = Router({})
 
-securityRouter.get('/devices', isRefreshTokenInBlackList, DeviceController.getAll)
+securityRouter.get('/devices', isRefreshTokenInBlackList, securityController.getAll)
 
-securityRouter.delete('/devices', isRefreshTokenInBlackList, DeviceController.deleteAllExceptActive)
-securityRouter.delete('/devices/:deviceId', isRefreshTokenInBlackList, checkForSameUser, DeviceController.deleteDeviceById)
+securityRouter.delete('/devices', isRefreshTokenInBlackList, securityController.deleteAllExceptActive)
+securityRouter.delete('/devices/:deviceId', isRefreshTokenInBlackList, checkForSameUser, securityController.deleteDeviceById)

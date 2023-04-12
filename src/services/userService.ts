@@ -4,11 +4,10 @@ import { v4 as uuidv4 } from "uuid"
 import add from "date-fns/add"
 import bcrypt from "bcrypt"
 import {generateHash} from "../utils/bcrypt/generateHash";
-
-import * as UserQueryRepo from "../repositories/queryRepository/userQ/userQ"
 import {emailManager} from "../managers/emailManager";
 import {User} from "../schemas/mongooseSchemas/mongooseUserSchema";
 import {ObjectId} from "mongodb";
+import {userQ} from "../repositories/queryRepository/userQ/userQ";
 
 export async function createOneUser( login: string, email: string, password: string, confirmed: boolean): Promise<FinalDBUser|null> {
 
@@ -50,7 +49,7 @@ export async function createOneUser( login: string, email: string, password: str
 
 export async function checkCredentials( loginOrEmail: string, password: string ): Promise<boolean> {
 
-    const user = await UserQueryRepo.getOneByLoginOrEmail(loginOrEmail)
+    const user = await userQ.getOneByLoginOrEmail(loginOrEmail)
 
     if (!user) return false
 
@@ -80,7 +79,7 @@ async function updatePassInfo(id: ObjectId, recoveryCode: string, expirationDate
 
 export async function makePasswordRecoveryMail(email: string){
 
-    const user = await UserQueryRepo.getOneByLoginOrEmail(email)
+    const user = await userQ.getOneByLoginOrEmail(email)
 
     if(!user) return false
     const userId = user._id;
@@ -104,7 +103,7 @@ export async function makePasswordRecoveryMail(email: string){
 
 export async function updateNewPassword(pass: string, code: string){
 
-    const user = await UserQueryRepo.getOneByPassCode(code)
+    const user = await userQ.getOneByPassCode(code)
     if (!user) return null
 
     const passwordSalt = await bcrypt.genSalt(10)

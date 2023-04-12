@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import {jwtService} from "../../application/jwtService";
-import * as UserQueryRepo from "../../repositories/queryRepository/userQ/userQ"
+import {userQ} from "../../repositories/queryRepository/userQ/userQ";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
     if (!req.headers.authorization){
@@ -13,7 +13,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const userId = await jwtService.getUserIdByToken(token)
     if (userId) {
         try {
-            req.user = await UserQueryRepo.getOneUserById(userId.toString())
+            req.user = await userQ.getOneUserById(userId.toString())
             next()
             return
         } catch (err){

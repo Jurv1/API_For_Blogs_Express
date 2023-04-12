@@ -3,20 +3,18 @@ import {ObjectId} from "mongodb";
 import {BlogWithoutId} from "../schemas/presentationSchemas/blogSchemas";
 import {Blog} from "../schemas/mongooseSchemas/mongooseBlogSchema";
 
-//todo разобраться с тем, что возвращает mongoose
-export const blogsRepository = {
-
+class BlogsRepository {
     async createOne(newBlogTmp: BlogWithoutId): Promise<FinalDBBlog|null> {
         const createdBlog = await Blog.create(newBlogTmp)
         return {
-             _id: createdBlog._id,
+            _id: createdBlog._id,
             name: newBlogTmp.name,
             description: newBlogTmp.description,
             websiteUrl: newBlogTmp.websiteUrl,
             createdAt: newBlogTmp.createdAt,
             isMembership: newBlogTmp.isMembership,
         }
-    },
+    }
 
     async updateOne(id: string, name: string, description: string, websiteUrl: string): Promise<boolean> {
         const myId  = new ObjectId(id)
@@ -30,12 +28,12 @@ export const blogsRepository = {
             })
         return updatedEl.matchedCount === 1;
 
-    },
+    }
 
     async deleteOne(id: string): Promise<boolean> {
         const result = await Blog.deleteOne({_id: id})
         return result.deletedCount === 1
 
-    },
-
+    }
 }
+export const blogsRepository = new BlogsRepository()
