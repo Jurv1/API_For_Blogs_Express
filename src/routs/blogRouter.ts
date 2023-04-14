@@ -3,8 +3,7 @@ import checkAuth from "../utils/auth/checkAuth";
 import {blogValidation} from "../validations/bodyValidations/blog/blogValidator";
 import handleErr from "../utils/handleErr";
 import {postValid} from "../validations/bodyValidations/post/postValidator";
-import {blogController} from "../controllers/blogController";
-import {postController} from "../controllers/postController";
+import {blogController, postController} from "../compositionRoot";
 
 export const blogRouter = Router({})
 

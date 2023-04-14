@@ -12,7 +12,7 @@ import {userRouter} from "./routs/userRouter";
 import {authRouter} from "./routs/authRouter";
 import {commentRouter} from "./routs/commentRouter";
 import {securityRouter} from "./routs/securityRouter";
-import {videoService} from "./services/videoService";
+import {videoService} from "./compositionRoot";
 
 export const app = express()
 const port = 3003

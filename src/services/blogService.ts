@@ -2,10 +2,7 @@ import {BlogsRepository} from "../repositories/blogsRepository";
 import {FinalDBBlog} from "../schemas/dbSchemas/BlogDBSchema";
 
 export class BlogService {
-    private blogsRepository: BlogsRepository;
-    constructor() {
-        this.blogsRepository = new BlogsRepository()
-    }
+    constructor(protected blogsRepository: BlogsRepository) {}
     async createOneBlog(name: string, description: string, websiteUrl: string): Promise<FinalDBBlog | null> {
 
         let newBlogTmp = {
@@ -31,5 +28,3 @@ export class BlogService {
 
     }
 }
-
-export const blogService = new BlogService()

@@ -1,9 +1,9 @@
 import {NextFunction, Request, Response} from "express";
-import {jwtService} from "../../application/jwtService";
+import {JWTService} from "../../application/jwtService";
 import {UserQ} from "../../repositories/queryRepository/userQ/userQ"
 
 const userQ = new UserQ
-const jwt = new jwtService
+const jwt = new JWTService
 export async function isRefreshTokenInBlackList( req: Request, res: Response, next: NextFunction){
     const refreshToken = req.cookies.refreshToken
     if (!refreshToken) return res.sendStatus(401)

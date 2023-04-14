@@ -4,7 +4,7 @@ import {commentValid} from "../validations/bodyValidations/comment/commentValid"
 import {checkWhoOwnerIs} from "../utils/middlewares/checkWhoOwnerIs"
 import handleErr from "../utils/handleErr";
 import {isCommentExists} from "../validations/checkOnExist/isCommentExists";
-import {commentController} from "../controllers/commentController";
+import {commentController} from "../compositionRoot";
 
 export const commentRouter = Router({})
 

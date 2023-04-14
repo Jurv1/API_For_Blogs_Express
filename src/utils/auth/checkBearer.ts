@@ -1,9 +1,9 @@
 import {NextFunction, Request, Response} from "express";
-import {jwtService} from "../../application/jwtService";
+import {JWTService} from "../../application/jwtService";
 import {UserQ} from "../../repositories/queryRepository/userQ/userQ";
 
 const userQ = new UserQ()
-const jwt = new jwtService()
+const jwt = new JWTService()
 export default async (req: Request, res: Response, next: NextFunction) => {
     if (!req.headers.authorization){
         res.sendStatus(401)

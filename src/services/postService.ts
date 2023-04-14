@@ -5,15 +5,8 @@ import {BlogQ} from "../repositories/queryRepository/blogQ/blogQ";
 import {PostQ} from "../repositories/queryRepository/postQ/postQ";
 
 export class PostService {
-    private postQ: PostQ;
-    private blogQ: BlogQ;
-    private postsRepository: PostsRepository;
 
-    constructor() {
-        this.postQ = new PostQ()
-        this.blogQ = new BlogQ()
-        this.postsRepository = new PostsRepository()
-    }
+    constructor( protected postQ: PostQ, protected blogQ: BlogQ, protected postsRepository: PostsRepository) {}
     async createOnePost(id: string, title: string, shortDescription: string, content: string,
                                         blogId: string, blogName: string, createdAt: string): Promise<FinalDBPost | null> {
 
@@ -86,5 +79,3 @@ export class PostService {
 
     }
 }
-
-export const postService = new PostService()

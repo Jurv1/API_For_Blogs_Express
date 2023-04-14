@@ -10,12 +10,7 @@ import {ObjectId} from "mongodb";
 import {UserQ} from "../repositories/queryRepository/userQ/userQ";
 
 export class UserService {
-    private usersRepository: UsersRepository;
-    private userQ: UserQ;
-    constructor() {
-        this.userQ = new UserQ()
-        this.usersRepository = new UsersRepository()
-    }
+    constructor(protected usersRepository: UsersRepository, protected userQ: UserQ) {}
     async createOneUser(login: string, email: string, password: string, confirmed: boolean): Promise<FinalDBUser | null> {
 
         const passwordSalt = await bcrypt.genSalt(10)
@@ -120,5 +115,3 @@ export class UserService {
 
     }
 }
-
-export const userService = new UserService()

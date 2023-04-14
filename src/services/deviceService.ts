@@ -1,11 +1,8 @@
 import {DevicesRepository} from "../repositories/devicesRepository";
 
 export class DeviceService {
-    private deviceRepository: DevicesRepository;
 
-    constructor() {
-        this.deviceRepository = new DevicesRepository()
-    }
+    constructor( protected deviceRepository: DevicesRepository) {}
     async deleteAllDevicesExceptActive(userId: string, deviceId: string) {
         return await this.deviceRepository.deleteAllExceptActive(userId, deviceId)
     }
@@ -27,5 +24,3 @@ export class DeviceService {
 
     }
 }
-
-export const deviceService = new DeviceService()

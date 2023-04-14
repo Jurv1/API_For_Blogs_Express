@@ -1,7 +1,7 @@
 import {Router} from "express";
 import {checkForSameUser} from "../utils/middlewares/checkIfDeviceIsYours";
 import {isRefreshTokenInBlackList} from "../utils/middlewares/isRefreshTokenInBlackList";
-import {securityController} from "../controllers/securityController";
+import {securityController} from "../compositionRoot";
 
 export const securityRouter = Router({})
 

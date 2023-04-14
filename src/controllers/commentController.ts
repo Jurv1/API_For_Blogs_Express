@@ -3,13 +3,8 @@ import {ObjectId} from "mongodb";
 import {CommentQ} from "../repositories/queryRepository/commentQ/commentQ";
 import {CommentService} from "../services/commentService";
 
-class CommentController {
-    private commentQ: CommentQ;
-    private commentService: CommentService;
-    constructor() {
-        this.commentQ = new CommentQ()
-        this.commentService = new CommentService()
-    }
+export class CommentController {
+    constructor( protected commentQ: CommentQ, protected commentService: CommentService) {}
     async getOneById(req: Request, res: Response) {
         const id = new ObjectId(req.params.id)
 
@@ -67,5 +62,3 @@ class CommentController {
         }
     }
 }
-
-export const commentController = new CommentController()

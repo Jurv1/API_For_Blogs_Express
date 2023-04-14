@@ -1,28 +1,21 @@
 import {Request, Response} from "express";
-import {jwtService} from "../application/jwtService";
 import { v4 as uuidv4 } from "uuid"
 import {UserQ} from "../repositories/queryRepository/userQ/userQ";
 import {AuthService} from "../services/authService";
 import {UserService} from "../services/userService";
 import {DeviceService} from "../services/deviceService";
 import {DevicesRepository} from "../repositories/devicesRepository";
+import {JWTService} from "../application/jwtService";
 
 
-class AuthController {
-    private userQ: UserQ;
-    private authService: AuthService;
-    private userService: UserService;
-    private deviceService: DeviceService;
-    private jwtService: jwtService;
-    private devicesRepository: DevicesRepository;
+export class AuthController {
 
-    constructor() {
-        this.userQ = new UserQ()
-        this.authService = new AuthService()
-        this.userService = new UserService()
-        this.deviceService = new DeviceService()
-        this.jwtService = new jwtService()
-        this.devicesRepository = new DevicesRepository()
+    constructor(protected userService: UserService,
+                protected userQ: UserQ,
+                protected authService: AuthService,
+                protected deviceService: DeviceService,
+                protected jwtService: JWTService,
+                protected devicesRepository: DevicesRepository) {
     }
     async loginUser(req: Request, res: Response) {
 
@@ -215,5 +208,3 @@ class AuthController {
         return res.sendStatus(204)
     }
 }
-
-export const authController = new AuthController()

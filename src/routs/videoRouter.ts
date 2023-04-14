@@ -1,7 +1,7 @@
 import {Router} from "express";
 import {videoValidation} from "../validations/bodyValidations/video/videoValidation";
 import handleErr from "../utils/handleErr";
-import {videoService} from "../services/videoService";
+import {videoService} from "../compositionRoot";
 
 export const videoRouter = Router({})
 

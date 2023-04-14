@@ -9,14 +9,8 @@ import {makePagination} from "../utils/paggination/paggination";
 import {UserQ} from "../repositories/queryRepository/userQ/userQ";
 import {UserService} from "../services/userService";
 
-class UserController {
-
-    private userQ: UserQ
-    private userService: UserService
-    constructor() {
-        this.userQ = new UserQ()
-        this.userService = new UserService()
-    }
+export class UserController {
+    constructor(protected userService: UserService, protected userQ: UserQ) {}
     async getAll(req: Request | Request<{}, {}, {}, {
         searchLoginTerm: string;
         searchEmailTerm: string;
@@ -87,5 +81,3 @@ class UserController {
         }
     }
 }
-
-export const userController = new UserController()

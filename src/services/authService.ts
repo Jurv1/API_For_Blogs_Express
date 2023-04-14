@@ -4,13 +4,8 @@ import {emailManager} from "../managers/emailManager";
 import {v4 as uuidv4} from "uuid";
 
 export class AuthService {
-    private usersRepository: UsersRepository
-    private userQ: UserQ
 
-    constructor() {
-        this.usersRepository = new UsersRepository()
-        this.userQ = new UserQ()
-    }
+    constructor( protected usersRepository: UsersRepository, protected userQ: UserQ ) {}
     async confirmEmail(code: string): Promise<boolean> {
 
         try {
@@ -43,5 +38,3 @@ export class AuthService {
 
     }
 }
-
-export const authService = new AuthService()

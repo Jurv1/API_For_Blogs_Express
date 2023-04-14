@@ -4,7 +4,7 @@ import {postValidation} from "../validations/bodyValidations/post/postValidator"
 import handleErr from "../utils/handleErr";
 import checkBearer from "../utils/auth/checkBearer";
 import {commentValid} from "../validations/bodyValidations/comment/commentValid";
-import {postController} from "../controllers/postController";
+import {postController} from "../compositionRoot";
 
 export const postRouter = Router({})
 

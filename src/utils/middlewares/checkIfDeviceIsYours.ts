@@ -1,11 +1,11 @@
 import {NextFunction, Request, Response} from "express";
 import {DeviceQ} from "../../repositories/queryRepository/deviceQ/deviceQ";
-import {jwtService} from "../../application/jwtService";
+import {JWTService} from "../../application/jwtService";
 import {UserQ} from "../../repositories/queryRepository/userQ/userQ";
 
 const userQ = new UserQ
 const deviceQ = new DeviceQ
-const jwt = new jwtService
+const jwt = new JWTService
 export async function checkIfDeviceIsYours( req: Request, res: Response, next: NextFunction){
 
     const refreshToken = req.cookies.refreshToken

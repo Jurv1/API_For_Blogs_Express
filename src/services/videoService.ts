@@ -2,11 +2,7 @@ import {Request, Response} from "express";
 import {VideosRepository} from "../repositories/videosRepository";
 
 export class VideoService {
-    private videosRepository: VideosRepository;
-
-    constructor() {
-        this.videosRepository = new VideosRepository()
-    }
+    constructor( protected videosRepository: VideosRepository) {}
     getStart = async (req: Request, res: Response) => {
         await res.send("Hi")
     }
@@ -84,5 +80,3 @@ export class VideoService {
         }
     }
 }
-
-export const videoService =  new VideoService()

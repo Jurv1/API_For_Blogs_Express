@@ -49,7 +49,7 @@ const userRouter_1 = require("./routs/userRouter");
 const authRouter_1 = require("./routs/authRouter");
 const commentRouter_1 = require("./routs/commentRouter");
 const securityRouter_1 = require("./routs/securityRouter");
-const videoService_1 = require("./services/videoService");
+const compositionRoot_1 = require("./compositionRoot");
 exports.app = (0, express_1.default)();
 const port = 3003;
 const parserMiddleware = (0, body_parser_1.default)({});
@@ -62,7 +62,7 @@ const options = {
 exports.app.use((0, cors_1.default)(options));
 exports.app.use((0, cookie_parser_1.default)());
 exports.app.set('trust proxy', true);
-exports.app.get('/', videoService_1.videoService.getStart);
+exports.app.get('/', compositionRoot_1.videoService.getStart);
 exports.app.use('/videos', videoRouter_1.videoRouter);
 exports.app.use('/blogs', blogRouter_1.blogRouter);
 exports.app.use('/posts', postRouter_1.postRouter);

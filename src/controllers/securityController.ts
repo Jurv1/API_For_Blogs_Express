@@ -1,19 +1,11 @@
 import {Request, Response} from "express";
 import {mapDevices} from "../utils/mappers/deviceMapper";
-import {jwtService} from "../application/jwtService";
+import {JWTService} from "../application/jwtService";
 import {DeviceQ} from "../repositories/queryRepository/deviceQ/deviceQ";
 import {DeviceService} from "../services/deviceService";
 
-class SecurityController {
-
-    private deviceQ: DeviceQ
-    private deviceService: DeviceService
-    private jwtService: jwtService
-    constructor() {
-        this.deviceQ = new DeviceQ()
-        this.deviceService = new DeviceService()
-        this.jwtService = new jwtService()
-    }
+export class SecurityController {
+    constructor( protected deviceQ: DeviceQ, protected deviceService: DeviceService, protected jwtService: JWTService) {}
     async getAll(req: Request, res: Response) {
 
         const refreshToken = req.cookies.refreshToken
@@ -73,5 +65,3 @@ class SecurityController {
         }
     }
 }
-
-export const securityController = new SecurityController()

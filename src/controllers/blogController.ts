@@ -9,13 +9,8 @@ import {SortOrder} from "mongoose";
 import {BlogQ} from "../repositories/queryRepository/blogQ/blogQ";
 import {BlogService} from "../services/blogService";
 
-class BlogController {
-    private blogService: BlogService;
-    private blogQ: BlogQ;
-    constructor() {
-        this.blogQ = new BlogQ()
-        this.blogService = new BlogService()
-    }
+export class BlogController {
+    constructor( protected blogService: BlogService,  protected blogQ: BlogQ) {}
     async getAll(req: Request<{}, {}, {}, {
         searchNameTerm: string, sortBy: string,
         sortDirection: SortOrder, pageNumber: string, pageSize: string
@@ -118,5 +113,3 @@ class BlogController {
         }
     }
 }
-
-export const blogController = new BlogController()

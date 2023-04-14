@@ -12,13 +12,8 @@ import {PostService} from "../services/postService";
 
 //todo сделать функцию для трай кэтч (вынести обертку в фун-ию)
 
-class PostController {
-    private postService: PostService;
-    private postQ: PostQ;
-    constructor() {
-        this.postQ = new PostQ()
-        this.postService = new PostService()
-    }
+export class PostController {
+    constructor( protected postService: PostService, protected postQ: PostQ) {}
     async getAll(req: Request<{}, {}, {}, {
         searchNameTerm: string, sortBy: string,
         sortDirection: SortDirection, pageNumber: string, pageSize: string
@@ -228,5 +223,3 @@ class PostController {
         }
     }
 }
-
-export const postController = new PostController()

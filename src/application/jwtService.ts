@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken"
 import {settings} from "../settings";
 import {ObjectId} from "mongodb";
 
-export class jwtService {
+export class JWTService {
     async createJWT(user: FinalDBUser, deviceId: string, exp: string) {
         const userId = user!._id.toString()
         return jwt.sign({userId: userId, deviceId: deviceId}, settings.JWT_SECRET, {expiresIn: exp})

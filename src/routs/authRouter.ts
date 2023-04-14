@@ -11,7 +11,7 @@ import {isRefreshTokenInBlackList} from "../utils/middlewares/isRefreshTokenInBl
 import {countAttemptsToRequest} from "../utils/middlewares/countAttemptsToRequest";
 import {passAndCodeValid} from "../validations/bodyValidations/auth/passAndCodeValid";
 import {isPassCodeValid} from "../validations/bodyValidations/auth/isPassCodeValid";
-import {authController} from "../controllers/authController";
+import {authController} from "../compositionRoot";
 
 export const authRouter = Router({})
 
