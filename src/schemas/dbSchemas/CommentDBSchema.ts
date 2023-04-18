@@ -1,10 +1,16 @@
 import {MongoId} from "./MongoIdSchema";
+import {DBUser} from "./UserDBSchema";
 
 export type DBComment = {
     content: string,
     commentatorInfo: {
         userId: string,
         userLogin: string
+    },
+    likesInfo: {
+        likesCount: number,
+        dislikesCount: number,
+        whoLikedIt: Array<DBUser>
     },
     postId: string,
     createdAt: string

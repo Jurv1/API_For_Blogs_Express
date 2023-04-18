@@ -12,6 +12,7 @@ commentRouter.get('/:id', commentController.getOneById.bind(commentController))
 
 commentRouter.put('/:id', isCommentExists, handleErr, checkBearer, checkWhoOwnerIs, commentValid, handleErr,
     commentController.updateOneById.bind(commentController))
+commentRouter.put("/:id/like-status", commentController.likeComment.bind(commentController))
 
 commentRouter.delete('/:id', isCommentExists, handleErr, checkBearer, checkWhoOwnerIs,
     commentController.deleteOneById.bind(commentController))

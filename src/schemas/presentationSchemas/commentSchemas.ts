@@ -16,5 +16,9 @@ export type viewCommentModel = myId & {
         userId: string,
         userLogin: string
     },
-    createdAt: string
+    createdAt: string,
+    likesInfo: {
+        likesCount: number,
+        dislikesCount: number
+    }
 }

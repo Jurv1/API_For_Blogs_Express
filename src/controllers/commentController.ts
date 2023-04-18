@@ -61,4 +61,38 @@ export class CommentController {
             })
         }
     }
+
+    async likeComment(req: Request, res: Response){
+        const id = req.params.id
+        const likeStatus = req.body.likeStatus
+        try {
+            let result
+            if(likeStatus === "Like"){
+                 result = await this.commentService.likeComment(id, likeStatus)
+            }
+            if(likeStatus === "Dislike"){
+                 result = await this.commentService.likeComment(id, likeStatus)
+            }
+
+            res.status(200).send(result)
+        } catch (err){
+
+        }
+    }
+    async updateLikeStatus(req: Request, res: Response){
+        const id = req.params.id
+        const likeStatus = req.body.likeStatus
+        let increment: number = 0
+        likeStatus === "Like" ? increment = 1 : increment = -1
+        try {
+            const result = await this.commentService.updateLikeStatus(id, increment, likeStatus)
+
+            if (result){
+                res.sendStatus(204)
+            }
+            res.sendStatus(404)
+        } catch (err){
+
+        }
+    }
 }

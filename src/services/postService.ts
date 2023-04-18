@@ -1,6 +1,6 @@
 import {PostsRepository} from "../repositories/postsRepository";
 import {FinalDBPost} from "../schemas/dbSchemas/PostDBSchema";
-import {FinalDBComment} from "../schemas/dbSchemas/CommentDBSchema";
+import {DBComment, FinalDBComment} from "../schemas/dbSchemas/CommentDBSchema";
 import {BlogQ} from "../repositories/queryRepository/blogQ/blogQ";
 import {PostQ} from "../repositories/queryRepository/postQ/postQ";
 
@@ -53,11 +53,16 @@ export class PostService {
     async createOneCommentByPostId(postId: string, content: string, userId: string, userLogin: string): Promise<FinalDBComment | null> {
         const foundedEl = await this.postQ.getOnePost(postId)
         if (foundedEl) {
-            const newCommentTmp = {
+            const newCommentTmp: DBComment = {
                 content: content,
                 commentatorInfo: {
                     userId: userId,
                     userLogin: userLogin
+                },
+                likesInfo:{
+                    likesCount: 0,
+                    dislikesCount: 0,
+                    whoLikedIt: []
                 },
                 postId: postId,
                 createdAt: new Date().toISOString()

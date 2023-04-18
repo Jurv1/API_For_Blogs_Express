@@ -40,6 +40,6 @@ export class PostsRepository {
 
     async createOneCommentByPostId(newCommentTmp: CommentWithoutId): Promise<FinalDBComment | null>{
         const resultId = await Comment.create(newCommentTmp)
-        return Comment.findOne({_id: resultId._id});
+        return Comment.findOne({_id: resultId._id}).lean()
     }
 }

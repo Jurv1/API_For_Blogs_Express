@@ -39,11 +39,13 @@ export class UserService {
 
         }
         const result = await this.usersRepository.createOne(newUserTmp)
-        try {
-            if (result) await emailManager.sendEmailConfirmationMessage(result, result.emailConfirmation.confirmationCode)
-        } catch (err) {
-            console.log(err)
-            return null
+        if (!confirmed) {
+            try {
+                if (result) await emailManager.sendEmailConfirmationMessage(result, result.emailConfirmation.confirmationCode)
+            } catch (err) {
+                console.log(err)
+                return null
+            }
         }
         return result
 
