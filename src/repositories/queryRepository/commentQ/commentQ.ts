@@ -12,24 +12,32 @@ export class CommentQ {
         const allDislikes = await Like.countDocuments({$and:[{commentId: id}, {userStatus: "Dislike"}] })
         console.log(allLikes, allDislikes)
 
-        const result = await Comment.findOne({ _id: new ObjectId(id) })
+        const result = await Comment.findById({ _id: id })
+
+        const like = await this.getUserStatusForComment(result!.commentatorInfo.userId)
+
+        let userStatus = like?.userStatus
+
+        if(!userStatus){
+            userStatus = "None"
+        }
 
         if(!result){
-            return null
+            console.log("SEX")
         }
 
         return {
-            id: result._id.toString(),
-            content: result.content,
+            id: result!._id.toString(),
+            content: result!.content,
             commentatorInfo: {
-                userId: result.commentatorInfo.userId,
-                userLogin: result.commentatorInfo.userLogin
+                userId: result!.commentatorInfo.userId,
+                userLogin: result!.commentatorInfo.userLogin
             },
-            createdAt: result.createdAt,
+            createdAt: result!.createdAt,
             likesInfo: {
                 likesCount: allLikes,
                 dislikesCount: allDislikes,
-                myStatus: ""
+                myStatus: userStatus
             }
         }
         //return mapComment(result)

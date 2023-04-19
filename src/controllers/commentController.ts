@@ -84,7 +84,7 @@ export class CommentController {
                     const result = await this.commentService.likeComment(id,
                         likeStatus, userId)
                     if (result){
-                        res.status(200).send(result)
+                        res.sendStatus(204)
                         return
                     }
                     return res.sendStatus(404)
@@ -113,7 +113,7 @@ export class CommentController {
                     const result = await this.commentService.likeComment(id,
                         likeStatus, userId)
                     if (result){
-                        res.status(200).send(result)
+                        res.sendStatus(204)
                         return
                     }
                     return res.sendStatus(404)
@@ -144,20 +144,5 @@ export class CommentController {
 
         }
     }
-    async updateLikeStatus(req: Request, res: Response){
-        const id = req.params.id
-        const likeStatus = req.body.likeStatus
-        let increment: number = 0
-        likeStatus === "Like" ? increment = 1 : increment = -1
-        try {
-            const result = await this.commentService.updateLikeStatus(id, increment, likeStatus)
 
-            if (result){
-                res.sendStatus(204)
-            }
-            res.sendStatus(404)
-        } catch (err){
-
-        }
-    }
 }

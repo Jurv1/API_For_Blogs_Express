@@ -40,4 +40,8 @@ export class CommentRepository{
     async makeLikeForPost(newLike: DBLike){
         return await Like.create(newLike)
     }
+
+    async updateUserStatus(userId: string, status: string){
+
+    }
 }

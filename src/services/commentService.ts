@@ -27,6 +27,7 @@ export class CommentService {
                 userStatus: likeStatus,
                 commentId: commentId
             }
+            await this.commentsRepository
             return await this.commentsRepository.makeLikeForPost(LikeTmp)
     }
 
