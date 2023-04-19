@@ -3,6 +3,7 @@ import {mapComment} from "../../../utils/mappers/commentMapper";
 import {viewCommentModel} from "../../../schemas/presentationSchemas/commentSchemas";
 import {Comment} from "../../../schemas/mongooseSchemas/mongooseCommentSchema";
 import {Like} from "../../../schemas/mongooseSchemas/mongooseLikesSchema";
+import {DBLike} from "../../../schemas/dbSchemas/LikesDBSchema";
 
 export class CommentQ {
     async getOneComment(id: ObjectId): Promise<viewCommentModel|null> {
@@ -17,7 +18,25 @@ export class CommentQ {
             return null
         }
 
-        return mapComment(result)
+        return {
+            id: result._id.toString(),
+            content: result.content,
+            commentatorInfo: {
+                userId: result.commentatorInfo.userId,
+                userLogin: result.commentatorInfo.userLogin
+            },
+            createdAt: result.createdAt,
+            likesInfo: {
+                likesCount: allLikes,
+                dislikesCount: allDislikes,
+                myStatus: ""
+            }
+        }
+        //return mapComment(result)
 
+    }
+
+    async getUserStatusForComment(userId: string): Promise<DBLike | null>{
+        return Like.findOne({userId: userId})
     }
 }

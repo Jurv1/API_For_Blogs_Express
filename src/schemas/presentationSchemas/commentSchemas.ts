@@ -19,6 +19,7 @@ export type viewCommentModel = myId & {
     createdAt: string,
     likesInfo: {
         likesCount: number,
-        dislikesCount: number
+        dislikesCount: number,
+        myStatus: string
     }
 }

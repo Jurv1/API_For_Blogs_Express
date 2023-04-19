@@ -14,23 +14,20 @@ export class CommentService {
 
     }
 
-    async likeComment(commentId: string, likeStatus: string){
-        if (likeStatus === "Like"){
+    async deleteLikeDislike(userId: string, commentId: string, userStatus: string){
+
+        return await this.commentsRepository.deleteLikeDislike(userId, commentId, userStatus)
+
+    }
+
+    async likeComment(commentId: string, likeStatus: string, userId: string){
+
             const LikeTmp: DBLike = {
-                userId: "",
-                userStatus: likeStatus,
-                commentId: commentId
-            }
-           return await this.commentsRepository.makeLikeForPost(LikeTmp)
-        }
-        if (likeStatus === "Dislike"){
-            const LikeTmp: DBLike = {
-                userId: "",
+                userId: userId,
                 userStatus: likeStatus,
                 commentId: commentId
             }
             return await this.commentsRepository.makeLikeForPost(LikeTmp)
-        }
     }
 
     async updateLikeStatus(id: string, increment: number, likeStatus: string){

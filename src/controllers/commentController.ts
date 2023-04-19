@@ -65,16 +65,81 @@ export class CommentController {
     async likeComment(req: Request, res: Response){
         const id = req.params.id
         const likeStatus = req.body.likeStatus
+        const userId = req.user!._id.toString()
         try {
-            let result
+            const userStatus = await this.commentQ.getUserStatusForComment(userId)
+            if (likeStatus === "None"){
+                const result = await this.commentService.deleteLikeDislike(userId, id, userStatus!.userStatus)
+                if(result){
+                    res.sendStatus(204)
+                    return
+                }
+                return res.sendStatus(404)
+
+            }
             if(likeStatus === "Like"){
-                 result = await this.commentService.likeComment(id, likeStatus)
+                if(userStatus?.userStatus === "Dislike"){
+                    //remove dislike and create like
+                    await this.commentService.deleteLikeDislike(userId, id, userStatus.userStatus)
+                    const result = await this.commentService.likeComment(id,
+                        likeStatus, userId)
+                    if (result){
+                        res.status(200).send(result)
+                        return
+                    }
+                    return res.sendStatus(404)
+                }
+                else if (userStatus?.userStatus === "Like"){
+                    const result = await this.commentService.deleteLikeDislike(userId, id, userStatus.userStatus)
+                    if (result){
+                        res.sendStatus(204)
+                        return
+                    }
+                    res.sendStatus(404)
+                    //remove Like
+                }
+                else {
+                    const result = await this.commentService.likeComment(id, likeStatus, userId)
+                    if (result){
+                        res.sendStatus(204)
+                        return
+                    }
+                    res.sendStatus(404)
+                }
             }
             if(likeStatus === "Dislike"){
-                 result = await this.commentService.likeComment(id, likeStatus)
+                if(userStatus?.userStatus === "Like"){
+                    await this.commentService.deleteLikeDislike(userId, id, userStatus.userStatus)
+                    const result = await this.commentService.likeComment(id,
+                        likeStatus, userId)
+                    if (result){
+                        res.status(200).send(result)
+                        return
+                    }
+                    return res.sendStatus(404)
+                    //remove like and create dislike
+                }
+                else if (userStatus?.userStatus === "Dislike"){
+                    //remove dislike
+                    const result = await this.commentService.deleteLikeDislike(userId, id, userStatus.userStatus)
+                    if (result){
+                        res.sendStatus(204)
+                        return
+                    }
+                    res.sendStatus(404)
+                }
+                else {
+                    //create Dislike
+                    const result = await this.commentService.likeComment(id, likeStatus, userId)
+                    if (result){
+                        res.sendStatus(204)
+                        return
+                    }
+                    res.sendStatus(404)
+                }
             }
 
-            res.status(200).send(result)
+            res.sendStatus(404)
         } catch (err){
 
         }
