@@ -7,9 +7,9 @@ export class CommentController {
     constructor( protected commentQ: CommentQ, protected commentService: CommentService) {}
     async getOneById(req: Request, res: Response) {
         const id = new ObjectId(req.params.id)
-
+        const userId = req.user?._id
         try {
-            const result = await this.commentQ.getOneComment(id)
+            const result = await this.commentQ.getOneComment(id, userId)
 
             if (result) {
                 res.status(200).send(result)

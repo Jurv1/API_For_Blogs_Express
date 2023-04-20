@@ -6,10 +6,11 @@ import handleErr from "../utils/handleErr";
 import {isCommentExists} from "../validations/checkOnExist/isCommentExists";
 import {commentController} from "../compositionRoot";
 import {likeValid} from "../validations/bodyValidations/comment/likeValid";
+import {checkToken} from "../utils/middlewares/checkToken";
 
 export const commentRouter = Router({})
 
-commentRouter.get('/:id', commentController.getOneById.bind(commentController))
+commentRouter.get('/:id', checkToken, commentController.getOneById.bind(commentController))
 
 commentRouter.put('/:id', isCommentExists, handleErr, checkBearer, checkWhoOwnerIs, commentValid, handleErr,
     commentController.updateOneById.bind(commentController))
