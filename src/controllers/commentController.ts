@@ -90,13 +90,15 @@ export class CommentController {
                     return res.sendStatus(404)
                 }
                 else if (userStatus?.userStatus === "Like"){
-                    const result = await this.commentService.deleteLikeDislike(userId, id, userStatus.userStatus)
-                    if (result){
-                        res.sendStatus(204)
-                        return
-                    }
-                    res.sendStatus(404)
+                    //const result = await this.commentService.deleteLikeDislike(userId, id, userStatus.userStatus)
+                    //if (result){
+                    //    res.sendStatus(204)
+                    //    return
+                    //}
+                    //res.sendStatus(404)
                     //remove Like
+                    res.sendStatus(204)
+                    return
                 }
                 else {
                     const result = await this.commentService.likeComment(id, likeStatus, userId)
@@ -121,12 +123,14 @@ export class CommentController {
                 }
                 else if (userStatus?.userStatus === "Dislike"){
                     //remove dislike
-                    const result = await this.commentService.deleteLikeDislike(userId, id, userStatus.userStatus)
-                    if (result){
-                        res.sendStatus(204)
-                        return
-                    }
-                    res.sendStatus(404)
+                    //const result = await this.commentService.deleteLikeDislike(userId, id, userStatus.userStatus)
+                    //if (result){
+                    //    res.sendStatus(204)
+                    //    return
+                    //}
+                    //res.sendStatus(404)
+                    res.sendStatus(204)
+                    return
                 }
                 else {
                     //create Dislike
