@@ -12,7 +12,7 @@ export const commentSchema = new Schema<DBComment>({
     likesInfo: {
       likesCount: Number,
       dislikesCount: Number,
-      whoLikedIt: Array<DBUser>
+      myStatus: String
     },
     createdAt: String
 })

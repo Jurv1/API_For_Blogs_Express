@@ -62,7 +62,7 @@ export class PostService {
                 likesInfo:{
                     likesCount: 0,
                     dislikesCount: 0,
-                    whoLikedIt: []
+                    myStatus: "None"
                 },
                 postId: postId,
                 createdAt: new Date().toISOString()

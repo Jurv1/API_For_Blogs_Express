@@ -10,7 +10,7 @@ export function mapComment(obj: FinalDBComment): viewCommentModel{
         likesInfo: {
             likesCount: obj.likesInfo.likesCount,
             dislikesCount: obj.likesInfo.dislikesCount,
-            myStatus: ""
+            myStatus: obj.likesInfo.myStatus
         }
     }
 }
@@ -26,7 +26,7 @@ export function mapComments(objs: FinalDBComment[]): viewCommentModel[]{
             likesInfo: {
                 likesCount: el.likesInfo.likesCount,
                 dislikesCount: el.likesInfo.dislikesCount,
-                myStatus: ""
+                myStatus: el.likesInfo.myStatus
             }
 
         }
