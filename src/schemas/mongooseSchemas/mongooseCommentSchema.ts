@@ -1,6 +1,5 @@
 import {model, Schema} from "mongoose";
 import {DBComment} from "../dbSchemas/CommentDBSchema";
-import {DBUser} from "../dbSchemas/UserDBSchema";
 
 export const commentSchema = new Schema<DBComment>({
     content: {type: String, required: true},
@@ -12,7 +11,7 @@ export const commentSchema = new Schema<DBComment>({
     likesInfo: {
       likesCount: Number,
       dislikesCount: Number,
-      myStatus: String
+      myStatus: String,
     },
     createdAt: String
 })

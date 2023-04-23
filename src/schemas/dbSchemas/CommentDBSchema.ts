@@ -10,7 +10,7 @@ export type DBComment = {
     likesInfo: {
         likesCount: number,
         dislikesCount: number,
-        myStatus: string
+        myStatus: string,
     },
     postId: string,
     createdAt: string

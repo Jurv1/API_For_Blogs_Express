@@ -67,7 +67,7 @@ export class CommentController {
         const likeStatus = req.body.likeStatus
         const userId = req.user!._id.toString()
         try {
-            const userStatus = await this.commentQ.getUserStatusForComment(userId)
+            const userStatus = await this.commentQ.getUserStatusForComment(userId, id)
             if (likeStatus === "None"){
                 const result = await this.commentService.deleteLikeDislike(userId, id, userStatus!.userStatus)
                 if(result){
@@ -81,13 +81,15 @@ export class CommentController {
                 if(userStatus?.userStatus === "Dislike"){
                     //remove dislike and create like
                     await this.commentService.deleteLikeDislike(userId, id, userStatus.userStatus)
-                    const result = await this.commentService.likeComment(id,
-                        likeStatus, userId)
-                    if (result){
-                        res.sendStatus(204)
-                        return
-                    }
-                    return res.sendStatus(404)
+                    res.sendStatus(204)
+                    return
+                    // const result = await this.commentService.likeComment(id,
+                    //     likeStatus, userId)
+                    // if (result){
+                    //     res.sendStatus(204)
+                    //     return
+                    // }
+                    // return res.sendStatus(404)
                 }
                 else if (userStatus?.userStatus === "Like"){
                     //const result = await this.commentService.deleteLikeDislike(userId, id, userStatus.userStatus)

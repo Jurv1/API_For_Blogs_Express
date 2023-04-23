@@ -16,12 +16,8 @@ export class CommentQ {
         const result = await Comment.findById({ _id: id })
 
         if (userId){
-            const like = await this.getUserStatusForComment(userId.toString())
+            const like = await this.getUserStatusForComment(userId.toString(), id.toString())
             userStatus = like?.userStatus
-        }
-
-        if(!result){
-            console.log("SEX")
         }
 
         return {
@@ -42,7 +38,7 @@ export class CommentQ {
 
     }
 
-    async getUserStatusForComment(userId: string): Promise<DBLike | null>{
-        return Like.findOne({userId: userId})
+    async getUserStatusForComment(userId: string, commentId: string): Promise<DBLike | null>{
+        return Like.findOne(  { $and: [{userId: userId}, {commentId: commentId}]})
     }
 }
