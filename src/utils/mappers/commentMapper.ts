@@ -30,7 +30,8 @@ export async function mapComments(objs: FinalDBComment[], userId?: ObjectId | nu
             const allLikes = await Like.countDocuments({$and: [{commentId: el._id.toString()}, {userStatus: "Like"}]})
             const allDislikes = await Like.countDocuments({$and: [{commentId: el._id.toString()}, {userStatus: "Dislike"}]})
             if(userId){
-                like = await commentQ.getUserStatusForComment(userId.toString(), el._id.toString())
+                like = await Like.findOne({$and: [ {commentId: el._id}, { userId: userId } ]})
+                //like = await commentQ.getUserStatusForComment(userId.toString(), el._id.toString())
                 if(like){
                     userStatus = like.userStatus
                 }
