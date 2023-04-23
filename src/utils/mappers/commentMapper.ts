@@ -23,7 +23,7 @@ export async function mapComments(objs: FinalDBComment[], userId?: ObjectId | nu
 
     const commentQ = new CommentQ()
     let like: DBLike|null
-    let userStatus: string
+    let userStatus = "None"
 
     return await Promise.all(objs.map(async el => {
 
@@ -45,7 +45,7 @@ export async function mapComments(objs: FinalDBComment[], userId?: ObjectId | nu
                 likesInfo: {
                     likesCount: allLikes,
                     dislikesCount: allDislikes,
-                    myStatus: userStatus || "None"
+                    myStatus: userStatus
                 }
 
             }
