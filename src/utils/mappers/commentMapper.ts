@@ -23,21 +23,19 @@ export async function mapComments(objs: FinalDBComment[], userId?: ObjectId | nu
 
     const commentQ = new CommentQ()
     let like: DBLike|null
-    let userStatus = "None"
+    let userStatus: string | undefined = "None"
 
     return await Promise.all(objs.map(async el => {
 
             const allLikes = await Like.countDocuments({$and: [{commentId: el._id.toString()}, {userStatus: "Like"}]})
             const allDislikes = await Like.countDocuments({$and: [{commentId: el._id.toString()}, {userStatus: "Dislike"}]})
-            if(userId){
-                like = await Like.findOne({$and: [ {commentId: el._id}, { userId: userId } ]})
-                //like = await commentQ.getUserStatusForComment(userId.toString(), el._id.toString())
-                if(like){
-                    userStatus = like.userStatus
-                }
-            }
+        if (userId){
+            const like = await commentQ.getUserStatusForComment(userId.toString(), el._id.toString())
+            userStatus = like?.userStatus
+        }
 
-            return {
+
+        return {
 
                 id: el._id.toString(),
                 content: el.content,
@@ -46,7 +44,7 @@ export async function mapComments(objs: FinalDBComment[], userId?: ObjectId | nu
                 likesInfo: {
                     likesCount: allLikes,
                     dislikesCount: allDislikes,
-                    myStatus: userStatus
+                    myStatus: userStatus || "None"
                 }
 
             }
