@@ -5,6 +5,7 @@ import handleErr from "../utils/handleErr";
 import checkBearer from "../utils/auth/checkBearer";
 import {commentValid} from "../validations/bodyValidations/comment/commentValid";
 import {postController} from "../compositionRoot";
+import {checkToken} from "../utils/middlewares/checkToken";
 
 export const postRouter = Router({})
 

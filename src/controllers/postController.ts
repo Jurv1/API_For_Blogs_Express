@@ -9,6 +9,9 @@ import {FinalDBComment} from "../schemas/dbSchemas/CommentDBSchema";
 import {mapComment} from "../utils/mappers/commentMapper";
 import {PostQ} from "../repositories/queryRepository/postQ/postQ";
 import {PostService} from "../services/postService";
+import {JWTService} from "../application/jwtService";
+import {UserQ} from "../repositories/queryRepository/userQ/userQ";
+import {DBUser} from "../schemas/dbSchemas/UserDBSchema";
 
 //todo сделать функцию для трай кэтч (вынести обертку в фун-ию)
 
@@ -93,6 +96,15 @@ export class PostController {
         sortBy: string,
         sortDirection: SortDirection, pageNumber: string, pageSize: string
     }>, res: Response) {
+        let userId
+        if (req.headers.authorization){
+            const token = (req.headers.authorization || '').replace(/Bearer\s?/, '')
+
+            const jwt = new JWTService()
+
+            userId = await jwt.getUserIdByToken(token)
+        }
+
 
         const postId = req.params.postId
 
@@ -103,7 +115,8 @@ export class PostController {
 
         try {
 
-            const allComments = await this.postQ.getAllCommentsByPostId(postId, sort, pagination)
+            const allComments = await this.postQ.getAllCommentsByPostId(postId, sort, pagination,
+                userId)
             if (allComments.items.length === 0) {
                 res.sendStatus(404)
                 return

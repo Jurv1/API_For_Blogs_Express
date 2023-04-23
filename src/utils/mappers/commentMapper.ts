@@ -1,5 +1,9 @@
 import {FinalDBComment} from "../../schemas/dbSchemas/CommentDBSchema";
 import {viewCommentModel} from "../../schemas/presentationSchemas/commentSchemas";
+import {Like} from "../../schemas/mongooseSchemas/mongooseLikesSchema";
+import {ObjectId} from "mongodb";
+import {CommentQ} from "../../repositories/queryRepository/commentQ/commentQ";
+import {DBLike} from "../../schemas/dbSchemas/LikesDBSchema";
 
 export function mapComment(obj: FinalDBComment): viewCommentModel{
     return {
@@ -15,20 +19,37 @@ export function mapComment(obj: FinalDBComment): viewCommentModel{
     }
 }
 
-export function mapComments(objs: FinalDBComment[]): viewCommentModel[]{
-    return objs.map(el => {
-        return {
+export async function mapComments(objs: FinalDBComment[], userId?: ObjectId | null): Promise<any> {
 
-            id: el._id.toString(),
-            content: el.content,
-            commentatorInfo: el.commentatorInfo,
-            createdAt: el.createdAt,
-            likesInfo: {
-                likesCount: el.likesInfo.likesCount,
-                dislikesCount: el.likesInfo.dislikesCount,
-                myStatus: el.likesInfo.myStatus
+    const commentQ = new CommentQ()
+    let like: DBLike|null
+    let userStatus: string
+
+    return await Promise.all(objs.map(async el => {
+
+            const allLikes = await Like.countDocuments({$and: [{commentId: el._id.toString()}, {userStatus: "Like"}]})
+            const allDislikes = await Like.countDocuments({$and: [{commentId: el._id.toString()}, {userStatus: "Dislike"}]})
+            if(userId){
+                like = await commentQ.getUserStatusForComment(userId.toString(), el._id.toString())
+                if(like){
+                    userStatus = like.userStatus
+                }
             }
 
-        }
-    })
+            return {
+
+                id: el._id.toString(),
+                content: el.content,
+                commentatorInfo: el.commentatorInfo,
+                createdAt: el.createdAt,
+                likesInfo: {
+                    likesCount: allLikes,
+                    dislikesCount: allDislikes,
+                    myStatus: userStatus || "None"
+                }
+
+            }
+        })
+    )
+
 }

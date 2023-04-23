@@ -7,6 +7,9 @@ import {mapComments} from "../../../utils/mappers/commentMapper";
 import {Post} from "../../../schemas/mongooseSchemas/mongoosePostSchema";
 import {Comment} from "../../../schemas/mongooseSchemas/mongooseCommentSchema";
 import {SortOrder} from "mongoose";
+import {DBUser} from "../../../schemas/dbSchemas/UserDBSchema";
+import {Like} from "../../../schemas/mongooseSchemas/mongooseLikesSchema";
+import {CommentQ} from "../commentQ/commentQ";
 
 export class PostQ {
     async getAllPosts(filter: Document, sort: { [key: string]: SortOrder; }, pagination: {
@@ -57,7 +60,8 @@ export class PostQ {
     async getAllCommentsByPostId(postId: string, sort: { [key: string]: SortOrder; }, pagination: {
         skipValue: number, limitValue: number,
         pageSize: number, pageNumber: number
-    }): Promise<CommentPagination> {
+    }, userId?: ObjectId | null): Promise<CommentPagination> {
+
         const countDoc = await Comment.countDocuments({postId: postId})
         const pagesCount = Math.ceil(countDoc / pagination["pageSize"])
         const allComments = await Comment.find({postId: postId}).sort(sort)
@@ -68,7 +72,7 @@ export class PostQ {
             page: pagination["pageNumber"],
             pageSize: pagination["pageSize"],
             totalCount: countDoc,
-            items: mapComments(allComments)
+            items: await mapComments(allComments, userId)
         }
     }
 }
