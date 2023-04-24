@@ -2,7 +2,9 @@ import {ObjectId} from "mongodb";
 import {Comment} from "../schemas/mongooseSchemas/mongooseCommentSchema";
 import {DBLike} from "../schemas/dbSchemas/LikesDBSchema";
 import {Like} from "../schemas/mongooseSchemas/mongooseLikesSchema";
+import {injectable} from "inversify";
 
+@injectable()
 export class CommentRepository{
     async updateOne(id: string, content: string): Promise<boolean> {
         const myId  = new ObjectId(id)
@@ -39,9 +41,5 @@ export class CommentRepository{
 
     async makeLikeForPost(newLike: DBLike){
         return await Like.create(newLike)
-    }
-
-    async updateUserStatus(userId: string, status: string){
-
     }
 }

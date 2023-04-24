@@ -2,7 +2,9 @@ import {UserQ} from "../repositories/queryRepository/userQ/userQ"
 import {UsersRepository} from "../repositories/usersRepository"
 import {emailManager} from "../managers/emailManager";
 import {v4 as uuidv4} from "uuid";
+import {injectable} from "inversify";
 
+@injectable()
 export class AuthService {
 
     constructor( protected usersRepository: UsersRepository, protected userQ: UserQ ) {}

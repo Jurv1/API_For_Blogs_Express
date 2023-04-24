@@ -1,6 +1,8 @@
 import {BlogsRepository} from "../repositories/blogsRepository";
 import {FinalDBBlog} from "../schemas/dbSchemas/BlogDBSchema";
+import {injectable} from "inversify";
 
+@injectable()
 export class BlogService {
     constructor(protected blogsRepository: BlogsRepository) {}
     async createOneBlog(name: string, description: string, websiteUrl: string): Promise<FinalDBBlog | null> {

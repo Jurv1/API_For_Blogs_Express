@@ -1,6 +1,8 @@
 import {Request, Response} from "express";
 import {VideosRepository} from "../repositories/videosRepository";
+import {injectable} from "inversify";
 
+@injectable()
 export class VideoService {
     constructor( protected videosRepository: VideosRepository) {}
     getStart = async (req: Request, res: Response) => {

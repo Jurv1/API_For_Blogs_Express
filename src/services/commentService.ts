@@ -1,7 +1,8 @@
 import {CommentRepository} from "../repositories/commentRepository";
-import {SortOrder} from "mongoose";
 import {DBLike} from "../schemas/dbSchemas/LikesDBSchema";
+import {injectable} from "inversify";
 
+@injectable()
 export class CommentService {
     constructor( protected commentsRepository: CommentRepository) {}
     async updateOneCommentById(id: string, content: string): Promise<boolean> {
@@ -32,7 +33,6 @@ export class CommentService {
     }
 
     async updateLikeStatus(id: string, increment: number, likeStatus: string){
-        let incField = "None"
         let updateField: { [key: string]: number } = {}
         if (likeStatus === "Like"){
             updateField['likesInfo.likesCount'] = increment

@@ -1,9 +1,12 @@
 import {Router} from "express";
 import {videoValidation} from "../validations/bodyValidations/video/videoValidation";
 import handleErr from "../utils/handleErr";
-import {videoService} from "../compositionRoot";
+import {container} from "../compositionRoot";
+import {VideoService} from "../services/videoService";
 
 export const videoRouter = Router({})
+
+export const videoService = container.resolve(VideoService)
 
 videoRouter.get('/', videoService.getAllVideos.bind(videoService))
 videoRouter.get('/:id', videoService.getOneVideo.bind(videoService))

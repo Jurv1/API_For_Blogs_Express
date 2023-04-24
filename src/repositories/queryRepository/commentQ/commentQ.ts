@@ -1,10 +1,11 @@
 import {ObjectId} from "mongodb";
-import {mapComment} from "../../../utils/mappers/commentMapper";
 import {viewCommentModel} from "../../../schemas/presentationSchemas/commentSchemas";
 import {Comment} from "../../../schemas/mongooseSchemas/mongooseCommentSchema";
 import {Like} from "../../../schemas/mongooseSchemas/mongooseLikesSchema";
 import {DBLike} from "../../../schemas/dbSchemas/LikesDBSchema";
+import {injectable} from "inversify";
 
+@injectable()
 export class CommentQ {
     async getOneComment(id: ObjectId, userId?: ObjectId): Promise<viewCommentModel|null> {
 

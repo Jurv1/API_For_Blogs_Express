@@ -4,7 +4,9 @@ import {mapUsers} from "../../../utils/mappers/userMapper";
 import {FinalDBUser} from "../../../schemas/dbSchemas/UserDBSchema";
 import {SortOrder} from "mongoose";
 import {User} from "../../../schemas/mongooseSchemas/mongooseUserSchema";
+import {injectable} from "inversify";
 
+@injectable()
 export class UserQ {
     async getAllUsers(filter: Document, sort: { [key: string]: SortOrder; }, pagination: {
         skipValue: number, limitValue: number,

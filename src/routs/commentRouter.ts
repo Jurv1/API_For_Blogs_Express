@@ -4,11 +4,14 @@ import {commentValid} from "../validations/bodyValidations/comment/commentValid"
 import {checkWhoOwnerIs} from "../utils/middlewares/checkWhoOwnerIs"
 import handleErr from "../utils/handleErr";
 import {isCommentExists} from "../validations/checkOnExist/isCommentExists";
-import {commentController} from "../compositionRoot";
 import {likeValid} from "../validations/bodyValidations/comment/likeValid";
 import {checkToken} from "../utils/middlewares/checkToken";
+import {container} from "../compositionRoot";
+import {CommentController} from "../controllers/commentController";
 
 export const commentRouter = Router({})
+
+const commentController = container.resolve(CommentController)
 
 commentRouter.get('/:id', checkToken, commentController.getOneById.bind(commentController))
 

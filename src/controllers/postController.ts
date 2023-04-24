@@ -10,11 +10,11 @@ import {mapComment} from "../utils/mappers/commentMapper";
 import {PostQ} from "../repositories/queryRepository/postQ/postQ";
 import {PostService} from "../services/postService";
 import {JWTService} from "../application/jwtService";
-import {UserQ} from "../repositories/queryRepository/userQ/userQ";
-import {DBUser} from "../schemas/dbSchemas/UserDBSchema";
+import {injectable} from "inversify";
 
 //todo сделать функцию для трай кэтч (вынести обертку в фун-ию)
 
+@injectable()
 export class PostController {
     constructor( protected postService: PostService, protected postQ: PostQ) {}
     async getAll(req: Request<{}, {}, {}, {

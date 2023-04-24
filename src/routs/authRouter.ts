@@ -11,11 +11,15 @@ import {isRefreshTokenInBlackList} from "../utils/middlewares/isRefreshTokenInBl
 import {countAttemptsToRequest} from "../utils/middlewares/countAttemptsToRequest";
 import {passAndCodeValid} from "../validations/bodyValidations/auth/passAndCodeValid";
 import {isPassCodeValid} from "../validations/bodyValidations/auth/isPassCodeValid";
-import {authController} from "../compositionRoot";
+import {container} from "../compositionRoot";
+import {AuthController} from "../controllers/authController";
+
 
 export const authRouter = Router({})
 
-authRouter.post('/login', countAttemptsToRequest, loginValid,  handleErr,
+const authController = container.resolve(AuthController)
+
+    authRouter.post('/login', countAttemptsToRequest, loginValid,  handleErr,
     authController.loginUser.bind(authController))
 
 authRouter.post('/registration', countAttemptsToRequest, isEmailOrLoginExists("email"),

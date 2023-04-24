@@ -2,7 +2,9 @@ import {FinalDBUser} from "../schemas/dbSchemas/UserDBSchema";
 import jwt from "jsonwebtoken"
 import {settings} from "../settings";
 import {ObjectId} from "mongodb";
+import {injectable} from "inversify";
 
+@injectable()
 export class JWTService {
     async createJWT(user: FinalDBUser, deviceId: string, exp: string) {
         const userId = user!._id.toString()

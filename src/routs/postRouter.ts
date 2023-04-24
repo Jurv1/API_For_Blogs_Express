@@ -4,10 +4,12 @@ import {postValidation} from "../validations/bodyValidations/post/postValidator"
 import handleErr from "../utils/handleErr";
 import checkBearer from "../utils/auth/checkBearer";
 import {commentValid} from "../validations/bodyValidations/comment/commentValid";
-import {postController} from "../compositionRoot";
-import {checkToken} from "../utils/middlewares/checkToken";
+import {container} from "../compositionRoot";
+import {PostController} from "../controllers/postController";
 
 export const postRouter = Router({})
+
+const postController = container.resolve(PostController)
 
 postRouter.get('/', postController.getAll.bind(postController))
 postRouter.get('/:id', postController.getOne.bind(postController))

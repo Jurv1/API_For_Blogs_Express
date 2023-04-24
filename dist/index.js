@@ -36,6 +36,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.app = void 0;
+require("reflect-metadata");
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
@@ -49,7 +50,6 @@ const userRouter_1 = require("./routs/userRouter");
 const authRouter_1 = require("./routs/authRouter");
 const commentRouter_1 = require("./routs/commentRouter");
 const securityRouter_1 = require("./routs/securityRouter");
-const compositionRoot_1 = require("./compositionRoot");
 exports.app = (0, express_1.default)();
 const port = 3003;
 const parserMiddleware = (0, body_parser_1.default)({});
@@ -62,7 +62,7 @@ const options = {
 exports.app.use((0, cors_1.default)(options));
 exports.app.use((0, cookie_parser_1.default)());
 exports.app.set('trust proxy', true);
-exports.app.get('/', compositionRoot_1.videoService.getStart);
+exports.app.get('/', videoRouter_1.videoService.getStart);
 exports.app.use('/videos', videoRouter_1.videoRouter);
 exports.app.use('/blogs', blogRouter_1.blogRouter);
 exports.app.use('/posts', postRouter_1.postRouter);

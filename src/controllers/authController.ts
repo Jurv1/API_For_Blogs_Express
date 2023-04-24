@@ -6,8 +6,9 @@ import {UserService} from "../services/userService";
 import {DeviceService} from "../services/deviceService";
 import {DevicesRepository} from "../repositories/devicesRepository";
 import {JWTService} from "../application/jwtService";
+import {injectable} from "inversify";
 
-
+@injectable()
 export class AuthController {
 
     constructor(protected userService: UserService,

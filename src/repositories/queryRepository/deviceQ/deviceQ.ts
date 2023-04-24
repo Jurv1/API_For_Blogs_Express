@@ -1,5 +1,7 @@
 import {Device} from "../../../schemas/mongooseSchemas/mongooseDeviceSchema";
+import {injectable} from "inversify";
 
+@injectable()
 export class DeviceQ {
     async getAllDevicesByUserId(userId: string) {
         return Device.find({userId: userId}).lean();

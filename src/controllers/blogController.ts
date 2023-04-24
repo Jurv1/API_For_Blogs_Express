@@ -8,7 +8,9 @@ import {makePagination} from "../utils/paggination/paggination";
 import {SortOrder} from "mongoose";
 import {BlogQ} from "../repositories/queryRepository/blogQ/blogQ";
 import {BlogService} from "../services/blogService";
+import {injectable} from "inversify";
 
+@injectable()
 export class BlogController {
     constructor( protected blogService: BlogService,  protected blogQ: BlogQ) {}
     async getAll(req: Request<{}, {}, {}, {

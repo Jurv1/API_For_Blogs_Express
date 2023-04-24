@@ -8,7 +8,9 @@ import {filterQueryValid} from "../utils/queryValidators/filterQueryValid";
 import {makePagination} from "../utils/paggination/paggination";
 import {UserQ} from "../repositories/queryRepository/userQ/userQ";
 import {UserService} from "../services/userService";
+import {injectable} from "inversify";
 
+@injectable()
 export class UserController {
     constructor(protected userService: UserService, protected userQ: UserQ) {}
     async getAll(req: Request | Request<{}, {}, {}, {

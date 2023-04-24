@@ -7,10 +7,9 @@ import {mapComments} from "../../../utils/mappers/commentMapper";
 import {Post} from "../../../schemas/mongooseSchemas/mongoosePostSchema";
 import {Comment} from "../../../schemas/mongooseSchemas/mongooseCommentSchema";
 import {SortOrder} from "mongoose";
-import {DBUser} from "../../../schemas/dbSchemas/UserDBSchema";
-import {Like} from "../../../schemas/mongooseSchemas/mongooseLikesSchema";
-import {CommentQ} from "../commentQ/commentQ";
+import {injectable} from "inversify";
 
+@injectable()
 export class PostQ {
     async getAllPosts(filter: Document, sort: { [key: string]: SortOrder; }, pagination: {
         skipValue: number, limitValue: number,

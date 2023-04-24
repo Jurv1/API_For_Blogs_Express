@@ -1,11 +1,12 @@
 import {Document, ObjectId} from "mongodb";
 import {BlogPagination} from "../../../schemas/paginationSchemas/blogPaginationSchema";
-//import {blogDBController} from "../../../db/db";
 import {mapBlogs} from "../../../utils/mappers/blogMapper";
 import {FinalDBBlog} from "../../../schemas/dbSchemas/BlogDBSchema";
 import {Blog} from "../../../schemas/mongooseSchemas/mongooseBlogSchema";
 import {SortOrder} from "mongoose";
+import {injectable} from "inversify";
 
+@injectable()
 export class BlogQ {
     async getAllBlogs(filter: Document,sort: { [key: string]: SortOrder; }, pagination: {skipValue: number, limitValue: number,
         pageSize: number, pageNumber: number}): Promise<BlogPagination>{

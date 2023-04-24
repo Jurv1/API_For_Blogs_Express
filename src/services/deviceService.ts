@@ -1,5 +1,7 @@
 import {DevicesRepository} from "../repositories/devicesRepository";
+import {injectable} from "inversify";
 
+@injectable()
 export class DeviceService {
 
     constructor( protected deviceRepository: DevicesRepository) {}

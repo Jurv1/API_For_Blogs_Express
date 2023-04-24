@@ -2,7 +2,9 @@ import {FinalDBBlog} from "../schemas/dbSchemas/BlogDBSchema";
 import {ObjectId} from "mongodb";
 import {BlogWithoutId} from "../schemas/presentationSchemas/blogSchemas";
 import {Blog} from "../schemas/mongooseSchemas/mongooseBlogSchema";
+import {injectable} from "inversify";
 
+@injectable()
 export class BlogsRepository {
     async createOne(newBlogTmp: BlogWithoutId): Promise<FinalDBBlog|null> {
         const createdBlog = await Blog.create(newBlogTmp)

@@ -1,6 +1,8 @@
 import {Video} from "../schemas/presentationSchemas/videoSchemas";
 import {VideoModel} from "../schemas/mongooseSchemas/mongooseVideoSchema";
+import {injectable} from "inversify";
 
+@injectable()
 export class VideosRepository {
     async getAll() {
 

@@ -2,7 +2,9 @@ import {Request, Response} from "express";
 import {ObjectId} from "mongodb";
 import {CommentQ} from "../repositories/queryRepository/commentQ/commentQ";
 import {CommentService} from "../services/commentService";
+import {injectable} from "inversify";
 
+@injectable()
 export class CommentController {
     constructor( protected commentQ: CommentQ, protected commentService: CommentService) {}
     async getOneById(req: Request, res: Response) {

@@ -5,7 +5,9 @@ import {FinalDBComment} from "../schemas/dbSchemas/CommentDBSchema";
 import {CommentWithoutId} from "../schemas/presentationSchemas/commentSchemas";
 import {Post} from "../schemas/mongooseSchemas/mongoosePostSchema";
 import {Comment} from "../schemas/mongooseSchemas/mongooseCommentSchema";
+import {injectable} from "inversify";
 
+@injectable()
 export class PostsRepository {
     async createOne(newPostTmp: PostWithoutId): Promise<FinalDBPost | null> {
 

@@ -3,7 +3,9 @@ import {mapDevices} from "../utils/mappers/deviceMapper";
 import {JWTService} from "../application/jwtService";
 import {DeviceQ} from "../repositories/queryRepository/deviceQ/deviceQ";
 import {DeviceService} from "../services/deviceService";
+import {injectable} from "inversify";
 
+@injectable()
 export class SecurityController {
     constructor( protected deviceQ: DeviceQ, protected deviceService: DeviceService, protected jwtService: JWTService) {}
     async getAll(req: Request, res: Response) {

@@ -3,7 +3,9 @@ import {FinalDBPost} from "../schemas/dbSchemas/PostDBSchema";
 import {DBComment, FinalDBComment} from "../schemas/dbSchemas/CommentDBSchema";
 import {BlogQ} from "../repositories/queryRepository/blogQ/blogQ";
 import {PostQ} from "../repositories/queryRepository/postQ/postQ";
+import {injectable} from "inversify";
 
+@injectable()
 export class PostService {
 
     constructor( protected postQ: PostQ, protected blogQ: BlogQ, protected postsRepository: PostsRepository) {}

@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import {UsersRepository} from "./repositories/usersRepository";
 import {UserService} from "./services/userService";
 import {UserQ} from "./repositories/queryRepository/userQ/userQ";
@@ -23,37 +25,41 @@ import {SecurityController} from "./controllers/securityController";
 import {DeviceQ} from "./repositories/queryRepository/deviceQ/deviceQ";
 import {VideoService} from "./services/videoService";
 import {VideosRepository} from "./repositories/videosRepository";
+import {Container} from "inversify";
 
-//Repositories
-const userRepository = new UsersRepository
-const devicesRepository = new DevicesRepository()
-const blogsRepository = new BlogsRepository()
-const postsRepository = new PostsRepository()
-const commentsRepository = new CommentRepository()
-const videosRepository = new VideosRepository()
+export const container = new Container()
 
-//Query Repositories
-const userQ = new UserQ()
-const blogQ = new BlogQ()
-const postQ = new PostQ()
-const commentQ = new CommentQ()
-const deviceQ = new DeviceQ()
+//controllers registrations
+container.bind(UserController).toSelf()
+container.bind(AuthController).toSelf()
+container.bind(CommentController).toSelf()
+container.bind(BlogController).toSelf()
+container.bind(SecurityController).toSelf()
+container.bind(PostController).toSelf()
 
-//Services
-const userService = new UserService(userRepository, userQ)
-const authService = new AuthService(userRepository, userQ)
-const deviceService = new DeviceService(devicesRepository)
-const blogService = new BlogService(blogsRepository)
-const postService = new PostService(postQ, blogQ, postsRepository)
-const commentService = new CommentService(commentsRepository)
-export const videoService = new VideoService(videosRepository)
-const jwtService = new JWTService()
 
-//Controllers
-export const authController = new AuthController(userService, userQ, authService, deviceService,
-    jwtService, devicesRepository)
-export const userController = new UserController(userService, userQ)
-export const blogController = new BlogController(blogService, blogQ)
-export const postController = new PostController(postService, postQ)
-export const commentController = new CommentController(commentQ, commentService)
-export const securityController = new SecurityController(deviceQ, deviceService, jwtService)
+//services registrations
+container.bind(UserService).toSelf()
+container.bind(CommentService).toSelf()
+container.bind(AuthService).toSelf()
+container.bind(BlogService).toSelf()
+container.bind(PostService).toSelf()
+container.bind(VideoService).toSelf()
+container.bind(JWTService).toSelf()
+container.bind(DeviceService).toSelf()
+
+
+//repositories registrations
+container.bind(UsersRepository).toSelf()
+container.bind(CommentRepository).toSelf()
+container.bind(BlogsRepository).toSelf()
+container.bind(PostsRepository).toSelf()
+container.bind(VideosRepository).toSelf()
+container.bind(DevicesRepository).toSelf()
+
+//query Repositories registrations
+container.bind(UserQ).toSelf()
+container.bind(CommentQ).toSelf()
+container.bind(BlogQ).toSelf()
+container.bind(DeviceQ).toSelf()
+container.bind(PostQ).toSelf()

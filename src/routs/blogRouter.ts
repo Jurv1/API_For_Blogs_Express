@@ -3,9 +3,14 @@ import checkAuth from "../utils/auth/checkAuth";
 import {blogValidation} from "../validations/bodyValidations/blog/blogValidator";
 import handleErr from "../utils/handleErr";
 import {postValid} from "../validations/bodyValidations/post/postValidator";
-import {blogController, postController} from "../compositionRoot";
+import {container} from "../compositionRoot";
+import {BlogController} from "../controllers/blogController";
+import {PostController} from "../controllers/postController";
 
 export const blogRouter = Router({})
+
+const blogController = container.resolve(BlogController)
+const postController = container.resolve(PostController)
 
 blogRouter.get('/', blogController.getAll.bind(blogController))
 blogRouter.get('/:id', blogController.getOne.bind(blogController))

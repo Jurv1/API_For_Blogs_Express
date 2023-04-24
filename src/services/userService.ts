@@ -8,7 +8,9 @@ import {emailManager} from "../managers/emailManager";
 import {User} from "../schemas/mongooseSchemas/mongooseUserSchema";
 import {ObjectId} from "mongodb";
 import {UserQ} from "../repositories/queryRepository/userQ/userQ";
+import {injectable} from "inversify";
 
+@injectable()
 export class UserService {
     constructor(protected usersRepository: UsersRepository, protected userQ: UserQ) {}
     async createOneUser(login: string, email: string, password: string, confirmed: boolean): Promise<FinalDBUser | null> {

@@ -1,7 +1,9 @@
 import {DBDevice, FinalDBDevice} from "../schemas/dbSchemas/DeviceDBSchema";
 import {JwtPayload} from "jsonwebtoken";
 import {Device} from "../schemas/mongooseSchemas/mongooseDeviceSchema";
+import {injectable} from "inversify";
 
+@injectable()
 export class DevicesRepository{
     async createNewDevice(device: DBDevice): Promise<FinalDBDevice | null>{
         const result = await Device.create(device)

@@ -1,18 +1,19 @@
+import "reflect-metadata"
 import express from 'express'
 import bodyParser from "body-parser";
 import cors from 'cors'
 import cookieParser from "cookie-parser";
 import * as testingController from "./services/testingService"
 
+
 import {postRouter} from "./routs/postRouter";
 import {blogRouter} from "./routs/blogRouter";
-import {videoRouter} from "./routs/videoRouter";
+import {videoRouter, videoService} from "./routs/videoRouter";
 import {runDb} from "./db/db";
 import {userRouter} from "./routs/userRouter";
 import {authRouter} from "./routs/authRouter";
 import {commentRouter} from "./routs/commentRouter";
 import {securityRouter} from "./routs/securityRouter";
-import {videoService} from "./compositionRoot";
 
 export const app = express()
 const port = 3003

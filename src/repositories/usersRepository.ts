@@ -1,7 +1,9 @@
 import {DBUser, FinalDBUser} from "../schemas/dbSchemas/UserDBSchema";
 import {ObjectId} from "mongodb";
 import {User} from "../schemas/mongooseSchemas/mongooseUserSchema";
+import {injectable} from "inversify";
 
+@injectable()
 export class UsersRepository {
     async createOne(newUserTmp: DBUser): Promise<FinalDBUser|null> {
 
