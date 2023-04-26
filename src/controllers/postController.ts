@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
 import {FinalDBPost} from "../schemas/dbSchemas/PostDBSchema";
-import {mapPost} from "../utils/mappers/postMapper";
+//import {mapPost} from "../utils/mappers/postMapper";
 import {SortDirection} from "mongodb";
 import {queryValidator} from "../utils/queryValidators/sortQueryValidator";
 import {filterQueryValid} from "../utils/queryValidators/filterQueryValid";
@@ -11,12 +11,15 @@ import {PostQ} from "../repositories/queryRepository/postQ/postQ";
 import {PostService} from "../services/postService";
 import {JWTService} from "../application/jwtService";
 import {injectable} from "inversify";
+import {CommentQ} from "../repositories/queryRepository/commentQ/commentQ";
+import {LikesRepository} from "../repositories/likesRepository";
 
 //todo сделать функцию для трай кэтч (вынести обертку в фун-ию)
 
 @injectable()
 export class PostController {
-    constructor( protected postService: PostService, protected postQ: PostQ) {}
+    constructor( protected postService: PostService, protected postQ: PostQ, protected commentQ: CommentQ,
+                 protected likesRepo: LikesRepository ) {}
     async getAll(req: Request<{}, {}, {}, {
         searchNameTerm: string, sortBy: string,
         sortDirection: SortDirection, pageNumber: string, pageSize: string
@@ -50,7 +53,7 @@ export class PostController {
             const id = req.params.id
             const result = await this.postQ.getOnePost(id)
             if (result) {
-                res.status(200).send(mapPost(result));
+                res.status(200).send(result);
             } else {
                 res.sendStatus(404)
             }
@@ -137,7 +140,7 @@ export class PostController {
             const {title, shortDescription, content, blogId, blogName, createdAt} = req.body
             const result: FinalDBPost | null = await this.postService.createOnePost(id, title, shortDescription,
                 content, blogId, blogName, createdAt)
-            result ? res.status(201).send(mapPost(result)) : res.status(400).json({
+            result ? res.status(201).send(result) : res.status(400).json({
                 errorsMessages: [
                     {
                         message: "No such blog",
@@ -159,7 +162,7 @@ export class PostController {
         const {title, shortDescription, content} = req.body
         try {
             const result: FinalDBPost | null = await this.postService.createOnePostByBlogId(title, shortDescription, content, blogId)
-            result ? res.status(201).send(mapPost(result)) : res.status(404).json({
+            result ? res.status(201).send(result) : res.status(404).json({
                 errorsMessages: [
                     {
                         message: "No such blog",
@@ -235,4 +238,79 @@ export class PostController {
             })
         }
     }
+
+    async likePost(req: Request, res: Response){
+
+        const id = req.params.id
+        const likeStatus = req.body.likeStatus
+        const userId = req.user!._id.toString()
+        const userLogin  = req.user!.accountData.login
+
+        try {
+            const userStatus = await this.likesRepo.getUserStatusForComment(userId, id)
+            if (likeStatus === "None"){
+                const result = await this.likesRepo.deleteLikeDislike(userId, id, userStatus!.userStatus)
+                if(result){
+                    res.sendStatus(204)
+                    return
+                }
+                return res.sendStatus(404)
+
+            }
+            if(likeStatus === "Like"){
+                if(userStatus?.userStatus === "Dislike"){
+                    //remove dislike and create like
+                    await this.likesRepo.deleteLikeDislike(userId, id, userStatus.userStatus)
+                    res.sendStatus(204)
+                    return
+                }
+                else if (userStatus?.userStatus === "Like"){
+                    res.sendStatus(204)
+                    return
+                }
+                else {
+                    const result =
+                        await this.likesRepo.likePostOrComment(id, likeStatus, userId, userLogin)
+                    if (result){
+                        res.sendStatus(204)
+                        return
+                    }
+                    res.sendStatus(404)
+                }
+            }
+            if(likeStatus === "Dislike"){
+                if(userStatus?.userStatus === "Like"){
+                    await this.likesRepo.deleteLikeDislike(userId, id, userStatus.userStatus)
+                    const result = await this.likesRepo.likePostOrComment(id,
+                        likeStatus, userId, userLogin)
+                    if (result){
+                        res.sendStatus(204)
+                        return
+                    }
+                    return res.sendStatus(404)
+                    //remove like and create dislike
+                }
+                else if (userStatus?.userStatus === "Dislike"){
+                    res.sendStatus(204)
+                    return
+                }
+                else {
+                    //create Dislike
+                    const result =
+                        await this.likesRepo.likePostOrComment(id, likeStatus, userId, userLogin)
+                    if (result){
+                        res.sendStatus(204)
+                        return
+                    }
+                    res.sendStatus(404)
+                }
+            }
+
+            res.sendStatus(404)
+
+        } catch (err){
+
+        }
+    }
+
 }

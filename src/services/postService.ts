@@ -1,14 +1,16 @@
 import {PostsRepository} from "../repositories/postsRepository";
-import {FinalDBPost} from "../schemas/dbSchemas/PostDBSchema";
+import {DBPost, FinalDBPost} from "../schemas/dbSchemas/PostDBSchema";
 import {DBComment, FinalDBComment} from "../schemas/dbSchemas/CommentDBSchema";
 import {BlogQ} from "../repositories/queryRepository/blogQ/blogQ";
 import {PostQ} from "../repositories/queryRepository/postQ/postQ";
 import {injectable} from "inversify";
+import {CommentService} from "./commentService";
 
 @injectable()
 export class PostService {
 
-    constructor( protected postQ: PostQ, protected blogQ: BlogQ, protected postsRepository: PostsRepository) {}
+    constructor( protected postQ: PostQ, protected blogQ: BlogQ, protected postsRepository: PostsRepository,
+                 protected commentsService: CommentService ) {}
     async createOnePost(id: string, title: string, shortDescription: string, content: string,
                                         blogId: string, blogName: string, createdAt: string): Promise<FinalDBPost | null> {
 
@@ -16,12 +18,18 @@ export class PostService {
 
         if (foundedEl) {
             const blogName = foundedEl.name
-            let newPostTmp = {
+            let newPostTmp: DBPost = {
                 title: title.toString(),
                 shortDescription: shortDescription.toString(),
                 content: content,
                 blogId: blogId,
                 blogName: blogName,
+                extendedLikesInfo: {
+                    likesCount: 0,
+                    dislikesCount: 0,
+                    myStatus: "None",
+                    newestLikes: []
+                },
                 createdAt: new Date().toISOString()
             }
             return await this.postsRepository.createOne(newPostTmp)
@@ -44,6 +52,12 @@ export class PostService {
                 content: content,
                 blogId: blogId,
                 blogName: blogName,
+                extendedLikesInfo: {
+                    likesCount: 0,
+                    dislikesCount: 0,
+                    myStatus: "None",
+                    newestLikes: []
+                },
                 createdAt: new Date().toISOString()
             }
             return await this.postsRepository.createOne(newPostTmp)
@@ -80,9 +94,10 @@ export class PostService {
 
     }
 
-    async deleteOnePost(id: string) {
+    async deleteOnePost(id: string): Promise<boolean> {
 
         return await this.postsRepository.deleteOne(id)
 
     }
+
 }

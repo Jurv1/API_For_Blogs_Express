@@ -1,4 +1,4 @@
-import {FinalDBPost} from "../schemas/dbSchemas/PostDBSchema";
+import {DBPost, FinalDBPost} from "../schemas/dbSchemas/PostDBSchema";
 import {ObjectId} from "mongodb";
 import {PostWithoutId} from "../schemas/presentationSchemas/postSchemas";
 import {FinalDBComment} from "../schemas/dbSchemas/CommentDBSchema";
@@ -9,7 +9,7 @@ import {injectable} from "inversify";
 
 @injectable()
 export class PostsRepository {
-    async createOne(newPostTmp: PostWithoutId): Promise<FinalDBPost | null> {
+    async createOne(newPostTmp: DBPost): Promise<FinalDBPost | null> {
 
         const resultId = await Post.create(newPostTmp)
         return Post.findOne({_id: resultId._id});

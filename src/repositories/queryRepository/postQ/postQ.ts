@@ -8,9 +8,19 @@ import {Post} from "../../../schemas/mongooseSchemas/mongoosePostSchema";
 import {Comment} from "../../../schemas/mongooseSchemas/mongooseCommentSchema";
 import {SortOrder} from "mongoose";
 import {injectable} from "inversify";
+import {Like} from "../../../schemas/mongooseSchemas/mongooseLikesSchema";
+import {CommentQ} from "../commentQ/commentQ";
+import {viewPostModel} from "../../../schemas/presentationSchemas/postSchemas";
+import {DBNewestLikes} from "../../../schemas/dbSchemas/NewestLikesDBSchema";
+import {DBLike} from "../../../schemas/dbSchemas/LikesDBSchema";
+import {mapLikes} from "../../../utils/mappers/likesMapper";
+import {LikesRepository} from "../../likesRepository";
 
 @injectable()
 export class PostQ {
+
+    constructor(protected commentQ: CommentQ, protected likesRepo: LikesRepository) {
+    }
     async getAllPosts(filter: Document, sort: { [key: string]: SortOrder; }, pagination: {
         skipValue: number, limitValue: number,
         pageSize: number, pageNumber: number
@@ -27,14 +37,47 @@ export class PostQ {
             page: pagination["pageNumber"],
             pageSize: pagination["pageSize"],
             totalCount: countDocs,
-            items: mapPosts(allPosts)
+            items: await mapPosts(allPosts)
         }
 
     }
 
-    async getOnePost(id: string): Promise<FinalDBPost | null> {
+    async getOnePost(id: string, userId?: ObjectId): Promise<viewPostModel | null> {
 
-        return Post.findOne({_id: new ObjectId(id)});
+        const allLikes = await Like.countDocuments({$and:[{commentPostId: id}, {userStatus: "Like"}] })
+        const allDislikes = await Like.countDocuments({$and:[{commentPostId: id}, {userStatus: "Dislike"}] })
+        let userStatus
+
+        const result = await Post.findOne({_id: new ObjectId(id)});
+
+        if (result) {
+            const lastThreeLikes: Array<DBLike> = await Like.find({_id: result._id}).limit(3).lean()
+            if (userId) {
+                const like = await this.likesRepo.getUserStatusForComment(userId.toString(), id)
+                userStatus = like?.userStatus
+
+            }
+
+            const newLikesArr = mapLikes(lastThreeLikes)
+
+            return {
+                id: result._id.toString(),
+                title: result.title,
+                shortDescription: result.shortDescription,
+                content: result.content,
+                blogId: result.blogId,
+                blogName: result.blogName,
+                extendedLikesInfo: {
+                    likesCount: allLikes,
+                    dislikesCount: allDislikes,
+                    myStatus: userStatus || "None",
+                    newestLikes: newLikesArr
+                },
+                createdAt: result.createdAt,
+            }
+        }
+
+        return null
 
     }
 
@@ -52,7 +95,7 @@ export class PostQ {
             page: pagination["pageNumber"],
             pageSize: pagination["pageSize"],
             totalCount: countDoc,
-            items: mapPosts(allPosts)
+            items: await mapPosts(allPosts)
         }
     }
 

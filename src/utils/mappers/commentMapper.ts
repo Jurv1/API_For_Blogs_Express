@@ -4,6 +4,7 @@ import {Like} from "../../schemas/mongooseSchemas/mongooseLikesSchema";
 import {ObjectId} from "mongodb";
 import {CommentQ} from "../../repositories/queryRepository/commentQ/commentQ";
 import {DBLike} from "../../schemas/dbSchemas/LikesDBSchema";
+import {LikesRepository} from "../../repositories/likesRepository";
 
 export function mapComment(obj: FinalDBComment): viewCommentModel{
     return {
@@ -21,7 +22,7 @@ export function mapComment(obj: FinalDBComment): viewCommentModel{
 
 export async function mapComments(objs: FinalDBComment[], userId?: ObjectId | null): Promise<any> {
 
-    const commentQ = new CommentQ()
+    const likesRepo = new LikesRepository()
     let like: DBLike|null
     let userStatus: string | undefined = "None"
 
@@ -30,7 +31,7 @@ export async function mapComments(objs: FinalDBComment[], userId?: ObjectId | nu
             const allLikes = await Like.countDocuments({$and: [{commentId: el._id.toString()}, {userStatus: "Like"}]})
             const allDislikes = await Like.countDocuments({$and: [{commentId: el._id.toString()}, {userStatus: "Dislike"}]})
         if (userId){
-            const like = await commentQ.getUserStatusForComment(userId.toString(), el._id.toString())
+            const like = await likesRepo.getUserStatusForComment(userId.toString(), el._id.toString())
             userStatus = like?.userStatus
         }
 

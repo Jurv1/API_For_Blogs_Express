@@ -1,10 +1,11 @@
 import {CommentRepository} from "../repositories/commentRepository";
 import {DBLike} from "../schemas/dbSchemas/LikesDBSchema";
 import {injectable} from "inversify";
+import {LikesRepository} from "../repositories/likesRepository";
 
 @injectable()
 export class CommentService {
-    constructor( protected commentsRepository: CommentRepository) {}
+    constructor( protected commentsRepository: CommentRepository, protected likesRepo: LikesRepository) {}
     async updateOneCommentById(id: string, content: string): Promise<boolean> {
         return await this.commentsRepository.updateOne(id, content)
     }
@@ -17,30 +18,22 @@ export class CommentService {
 
     async deleteLikeDislike(userId: string, commentId: string, userStatus: string){
 
-        return await this.commentsRepository.deleteLikeDislike(userId, commentId, userStatus)
+        return await this.likesRepo.deleteLikeDislike(userId, commentId, userStatus)
 
     }
 
-    async likeComment(commentId: string, likeStatus: string, userId: string){
+    // async likePostOrComment(commentPostId: string, likeStatus: string, userId: string, userLogin: string){
+    //
+    //         const LikeTmp: DBLike = {
+    //             userId: userId,
+    //             userLogin: userLogin,
+    //             userStatus: likeStatus,
+    //             commentPostId: commentPostId,
+    //             addedAt: (new Date()).toISOString()
+    //         }
+    //         //await this.commentsRepository
+    //         return await this.commentsRepository.makeLikeForPost(LikeTmp)
+    // }
 
-            const LikeTmp: DBLike = {
-                userId: userId,
-                userStatus: likeStatus,
-                commentId: commentId
-            }
-            await this.commentsRepository
-            return await this.commentsRepository.makeLikeForPost(LikeTmp)
-    }
 
-    async updateLikeStatus(id: string, increment: number, likeStatus: string){
-        let updateField: { [key: string]: number } = {}
-        if (likeStatus === "Like"){
-            updateField['likesInfo.likesCount'] = increment
-        }
-        if (likeStatus === "Dislike"){
-            updateField['likesInfo.dislikesCount'] = increment
-        }
-        console.log(updateField)
-        return await this.commentsRepository.updateLikeStatus(id, updateField)
-    }
 }

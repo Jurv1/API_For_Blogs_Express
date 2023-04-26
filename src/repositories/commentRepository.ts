@@ -1,7 +1,5 @@
 import {ObjectId} from "mongodb";
 import {Comment} from "../schemas/mongooseSchemas/mongooseCommentSchema";
-import {DBLike} from "../schemas/dbSchemas/LikesDBSchema";
-import {Like} from "../schemas/mongooseSchemas/mongooseLikesSchema";
 import {injectable} from "inversify";
 
 @injectable()
@@ -32,14 +30,6 @@ export class CommentRepository{
         return result.modifiedCount == 1
     }
 
-    async deleteLikeDislike(userId: string, commentId: string, userStatus: string){
-        const result = await Like.deleteOne({ $and: [ {userId: userId}, {commentId: commentId},
-                { userStatus: userStatus }] })
 
-        return result.deletedCount === 1
-    }
 
-    async makeLikeForPost(newLike: DBLike){
-        return await Like.create(newLike)
-    }
 }

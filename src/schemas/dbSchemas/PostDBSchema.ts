@@ -1,4 +1,5 @@
 import {MongoId} from "./MongoIdSchema";
+import {DBNewestLikes} from "./NewestLikesDBSchema";
 
 export type DBPost = {
     title: string,
@@ -6,7 +7,13 @@ export type DBPost = {
     content: string,
     blogId: string,
     blogName: string,
-    createdAt: string
+    extendedLikesInfo: {
+        likesCount: number,
+        dislikesCount: number,
+        myStatus: string,
+        newestLikes: Array<DBNewestLikes>
+    }
+    createdAt: string,
 }
 
 export type FinalDBPost = MongoId & DBPost

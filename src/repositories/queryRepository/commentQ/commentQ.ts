@@ -2,22 +2,25 @@ import {ObjectId} from "mongodb";
 import {viewCommentModel} from "../../../schemas/presentationSchemas/commentSchemas";
 import {Comment} from "../../../schemas/mongooseSchemas/mongooseCommentSchema";
 import {Like} from "../../../schemas/mongooseSchemas/mongooseLikesSchema";
-import {DBLike} from "../../../schemas/dbSchemas/LikesDBSchema";
 import {injectable} from "inversify";
+import {LikesRepository} from "../../likesRepository";
 
 @injectable()
 export class CommentQ {
+
+    constructor(protected likesRepo: LikesRepository) {
+    }
     async getOneComment(id: ObjectId, userId?: ObjectId): Promise<viewCommentModel|null> {
 
-        const allLikes = await Like.countDocuments({$and:[{commentId: id}, {userStatus: "Like"}] })
-        const allDislikes = await Like.countDocuments({$and:[{commentId: id}, {userStatus: "Dislike"}] })
+        const allLikes = await Like.countDocuments({$and:[{commentPostId: id}, {userStatus: "Like"}] })
+        const allDislikes = await Like.countDocuments({$and:[{commentPostId: id}, {userStatus: "Dislike"}] })
         console.log(allLikes, allDislikes)
         let userStatus
 
         const result = await Comment.findById({ _id: id })
 
         if (userId){
-            const like = await this.getUserStatusForComment(userId.toString(), id.toString())
+            const like = await this.likesRepo.getUserStatusForComment(userId.toString(), id.toString())
             userStatus = like?.userStatus
         }
 
@@ -39,7 +42,5 @@ export class CommentQ {
 
     }
 
-    async getUserStatusForComment(userId: string, commentId: string): Promise<DBLike | null>{
-        return Like.findOne(  { $and: [{userId: userId}, {commentId: commentId}]})
-    }
+
 }

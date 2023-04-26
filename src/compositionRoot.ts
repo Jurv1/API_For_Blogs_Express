@@ -26,6 +26,7 @@ import {DeviceQ} from "./repositories/queryRepository/deviceQ/deviceQ";
 import {VideoService} from "./services/videoService";
 import {VideosRepository} from "./repositories/videosRepository";
 import {Container} from "inversify";
+import {LikesRepository} from "./repositories/likesRepository";
 
 export const container = new Container()
 
@@ -56,6 +57,7 @@ container.bind(BlogsRepository).toSelf()
 container.bind(PostsRepository).toSelf()
 container.bind(VideosRepository).toSelf()
 container.bind(DevicesRepository).toSelf()
+container.bind(LikesRepository).toSelf()
 
 //query Repositories registrations
 container.bind(UserQ).toSelf()

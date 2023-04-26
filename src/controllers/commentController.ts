@@ -3,10 +3,11 @@ import {ObjectId} from "mongodb";
 import {CommentQ} from "../repositories/queryRepository/commentQ/commentQ";
 import {CommentService} from "../services/commentService";
 import {injectable} from "inversify";
+import {LikesRepository} from "../repositories/likesRepository";
 
 @injectable()
 export class CommentController {
-    constructor( protected commentQ: CommentQ, protected commentService: CommentService) {}
+    constructor( protected commentQ: CommentQ, protected commentService: CommentService, protected likesRepo: LikesRepository) {}
     async getOneById(req: Request, res: Response) {
         const id = new ObjectId(req.params.id)
         const userId = req.user?._id
@@ -64,12 +65,15 @@ export class CommentController {
         }
     }
 
-    async likeComment(req: Request, res: Response){
+    async likeCommentOrPost(req: Request, res: Response){
+
         const id = req.params.id
         const likeStatus = req.body.likeStatus
         const userId = req.user!._id.toString()
+        const userLogin  = req.user!.accountData.login
+
         try {
-            const userStatus = await this.commentQ.getUserStatusForComment(userId, id)
+            const userStatus = await this.likesRepo.getUserStatusForComment(userId, id)
             if (likeStatus === "None"){
                 const result = await this.commentService.deleteLikeDislike(userId, id, userStatus!.userStatus)
                 if(result){
@@ -85,27 +89,14 @@ export class CommentController {
                     await this.commentService.deleteLikeDislike(userId, id, userStatus.userStatus)
                     res.sendStatus(204)
                     return
-                    // const result = await this.commentService.likeComment(id,
-                    //     likeStatus, userId)
-                    // if (result){
-                    //     res.sendStatus(204)
-                    //     return
-                    // }
-                    // return res.sendStatus(404)
                 }
                 else if (userStatus?.userStatus === "Like"){
-                    //const result = await this.commentService.deleteLikeDislike(userId, id, userStatus.userStatus)
-                    //if (result){
-                    //    res.sendStatus(204)
-                    //    return
-                    //}
-                    //res.sendStatus(404)
-                    //remove Like
                     res.sendStatus(204)
                     return
                 }
                 else {
-                    const result = await this.commentService.likeComment(id, likeStatus, userId)
+                    const result =
+                        await this.likesRepo.likePostOrComment(id, likeStatus, userId, userLogin)
                     if (result){
                         res.sendStatus(204)
                         return
@@ -116,8 +107,8 @@ export class CommentController {
             if(likeStatus === "Dislike"){
                 if(userStatus?.userStatus === "Like"){
                     await this.commentService.deleteLikeDislike(userId, id, userStatus.userStatus)
-                    const result = await this.commentService.likeComment(id,
-                        likeStatus, userId)
+                    const result = await this.likesRepo.likePostOrComment(id,
+                        likeStatus, userId, userLogin)
                     if (result){
                         res.sendStatus(204)
                         return
@@ -126,19 +117,13 @@ export class CommentController {
                     //remove like and create dislike
                 }
                 else if (userStatus?.userStatus === "Dislike"){
-                    //remove dislike
-                    //const result = await this.commentService.deleteLikeDislike(userId, id, userStatus.userStatus)
-                    //if (result){
-                    //    res.sendStatus(204)
-                    //    return
-                    //}
-                    //res.sendStatus(404)
                     res.sendStatus(204)
                     return
                 }
                 else {
                     //create Dislike
-                    const result = await this.commentService.likeComment(id, likeStatus, userId)
+                    const result =
+                        await this.likesRepo.likePostOrComment(id, likeStatus, userId, userLogin)
                     if (result){
                         res.sendStatus(204)
                         return

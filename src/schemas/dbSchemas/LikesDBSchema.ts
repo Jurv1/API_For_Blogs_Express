@@ -1,5 +1,7 @@
 export type DBLike = {
     userId: string,
+    userLogin: string,
     userStatus: string,
-    commentId: string
+    commentPostId: string,
+    addedAt: string
 }

@@ -18,7 +18,7 @@ commentRouter.get('/:id', checkToken, commentController.getOneById.bind(commentC
 commentRouter.put('/:id', isCommentExists, handleErr, checkBearer, checkWhoOwnerIs, commentValid, handleErr,
     commentController.updateOneById.bind(commentController))
 commentRouter.put("/:id/like-status", checkBearer, likeValid, isCommentExists, handleErr,
-    commentController.likeComment.bind(commentController))
+    commentController.likeCommentOrPost.bind(commentController))
 
 commentRouter.delete('/:id', isCommentExists, handleErr, checkBearer, checkWhoOwnerIs,
     commentController.deleteOneById.bind(commentController))
