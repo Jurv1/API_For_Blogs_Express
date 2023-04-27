@@ -6,22 +6,23 @@ import {DBLike} from "../../schemas/dbSchemas/LikesDBSchema";
 import {LikesRepository} from "../../repositories/likesRepository";
 import {mapLikes} from "./likesMapper";
 
-// export function mapPost(obj: FinalDBPost): viewPostModel{
-//     return {
-//         id: obj._id.toString(),
-//         title: obj.title,
-//         shortDescription: obj.shortDescription,
-//         content: obj.content,
-//         blogId: obj.blogId,
-//         blogName: obj.blogName,
-//         extendedLikesInfo: {
-//             likesCount: obj.extendedLikesInfo.likesCount,
-//             dislikesCount: obj.extendedLikesInfo.dislikesCount,
-//             myStatus: obj.extendedLikesInfo.myStatus,
-//         },
-//         createdAt: obj.createdAt
-//     }
-// }
+export function mapPost(obj: FinalDBPost): viewPostModel{
+    return {
+        id: obj._id.toString(),
+        title: obj.title,
+        shortDescription: obj.shortDescription,
+        content: obj.content,
+        blogId: obj.blogId,
+        blogName: obj.blogName,
+        extendedLikesInfo: {
+            likesCount: obj.extendedLikesInfo.likesCount,
+            dislikesCount: obj.extendedLikesInfo.dislikesCount,
+            myStatus: obj.extendedLikesInfo.myStatus,
+            newestLikes: obj.extendedLikesInfo.newestLikes
+        },
+        createdAt: obj.createdAt
+    }
+}
 
 export async function mapPosts(objs: FinalDBPost[], userId?: ObjectId | null): Promise<viewPostModel[]>{
 

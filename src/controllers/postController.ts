@@ -13,6 +13,7 @@ import {JWTService} from "../application/jwtService";
 import {injectable} from "inversify";
 import {CommentQ} from "../repositories/queryRepository/commentQ/commentQ";
 import {LikesRepository} from "../repositories/likesRepository";
+import {mapPost} from "../utils/mappers/postMapper";
 
 //todo сделать функцию для трай кэтч (вынести обертку в фун-ию)
 
@@ -171,7 +172,7 @@ export class PostController {
             const {title, shortDescription, content, blogId, blogName, createdAt} = req.body
             const result: FinalDBPost | null = await this.postService.createOnePost(id, title, shortDescription,
                 content, blogId, blogName, createdAt)
-            result ? res.status(201).send(result) : res.status(400).json({
+            result ? res.status(201).send(mapPost(result)) : res.status(400).json({
                 errorsMessages: [
                     {
                         message: "No such blog",
@@ -193,7 +194,7 @@ export class PostController {
         const {title, shortDescription, content} = req.body
         try {
             const result: FinalDBPost | null = await this.postService.createOnePostByBlogId(title, shortDescription, content, blogId)
-            result ? res.status(201).send(result) : res.status(404).json({
+            result ? res.status(201).send(mapPost(result)) : res.status(404).json({
                 errorsMessages: [
                     {
                         message: "No such blog",
