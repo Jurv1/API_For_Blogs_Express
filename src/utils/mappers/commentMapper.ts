@@ -2,7 +2,6 @@ import {FinalDBComment} from "../../schemas/dbSchemas/CommentDBSchema";
 import {viewCommentModel} from "../../schemas/presentationSchemas/commentSchemas";
 import {Like} from "../../schemas/mongooseSchemas/mongooseLikesSchema";
 import {ObjectId} from "mongodb";
-import {CommentQ} from "../../repositories/queryRepository/commentQ/commentQ";
 import {DBLike} from "../../schemas/dbSchemas/LikesDBSchema";
 import {LikesRepository} from "../../repositories/likesRepository";
 
@@ -28,12 +27,12 @@ export async function mapComments(objs: FinalDBComment[], userId?: ObjectId | nu
 
     return await Promise.all(objs.map(async el => {
 
-            const allLikes = await Like.countDocuments({$and: [{commentId: el._id.toString()}, {userStatus: "Like"}]})
-            const allDislikes = await Like.countDocuments({$and: [{commentId: el._id.toString()}, {userStatus: "Dislike"}]})
-        if (userId){
-            const like = await likesRepo.getUserStatusForComment(userId.toString(), el._id.toString())
-            userStatus = like?.userStatus
-        }
+            const allLikes = await Like.countDocuments({$and: [{commentPostId: el._id.toString()}, {userStatus: "Like"}]})
+            const allDislikes = await Like.countDocuments({$and: [{commentPostId: el._id.toString()}, {userStatus: "Dislike"}]})
+            if (userId){
+                like = await likesRepo.getUserStatusForComment(userId.toString(), el._id.toString())
+                userStatus = like?.userStatus
+            }
 
 
         return {

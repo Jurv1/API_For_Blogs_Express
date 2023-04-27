@@ -9,7 +9,7 @@ export class LikesRepository{
     }
 
     async deleteLikeDislike(userId: string, commentId: string, userStatus: string){
-        const result = await Like.deleteOne({ $and: [ {userId: userId}, {commentId: commentId},
+        const result = await Like.deleteOne({ $and: [ {userId: userId}, {commentPostId: commentId},
                 { userStatus: userStatus }] })
 
         return result.deletedCount === 1

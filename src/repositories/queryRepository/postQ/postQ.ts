@@ -1,7 +1,6 @@
 import {Document, ObjectId} from "mongodb";
 import {PostPagination} from "../../../schemas/paginationSchemas/postPaginationSchema";
 import {mapPosts} from "../../../utils/mappers/postMapper";
-import {FinalDBPost} from "../../../schemas/dbSchemas/PostDBSchema";
 import {CommentPagination} from "../../../schemas/paginationSchemas/commentPaginationSchema";
 import {mapComments} from "../../../utils/mappers/commentMapper";
 import {Post} from "../../../schemas/mongooseSchemas/mongoosePostSchema";
@@ -11,7 +10,6 @@ import {injectable} from "inversify";
 import {Like} from "../../../schemas/mongooseSchemas/mongooseLikesSchema";
 import {CommentQ} from "../commentQ/commentQ";
 import {viewPostModel} from "../../../schemas/presentationSchemas/postSchemas";
-import {DBNewestLikes} from "../../../schemas/dbSchemas/NewestLikesDBSchema";
 import {DBLike} from "../../../schemas/dbSchemas/LikesDBSchema";
 import {mapLikes} from "../../../utils/mappers/likesMapper";
 import {LikesRepository} from "../../likesRepository";
@@ -24,7 +22,7 @@ export class PostQ {
     async getAllPosts(filter: Document, sort: { [key: string]: SortOrder; }, pagination: {
         skipValue: number, limitValue: number,
         pageSize: number, pageNumber: number
-    }): Promise<PostPagination> {
+    }, userId?: ObjectId | null): Promise<PostPagination> {
 
         const allPosts = await Post.find(filter).sort(sort).skip(pagination["skipValue"])
             .limit(pagination["limitValue"]).lean()
@@ -37,12 +35,12 @@ export class PostQ {
             page: pagination["pageNumber"],
             pageSize: pagination["pageSize"],
             totalCount: countDocs,
-            items: await mapPosts(allPosts)
+            items: await mapPosts(allPosts, userId)
         }
 
     }
 
-    async getOnePost(id: string, userId?: ObjectId): Promise<viewPostModel | null> {
+    async getOnePost(id: string, userId?: ObjectId | null): Promise<viewPostModel | null> {
 
         const allLikes = await Like.countDocuments({$and:[{commentPostId: id}, {userStatus: "Like"}] })
         const allDislikes = await Like.countDocuments({$and:[{commentPostId: id}, {userStatus: "Dislike"}] })
@@ -84,7 +82,7 @@ export class PostQ {
     async getAllPostsByBlogId(id: string, sort: { [key: string]: SortOrder; }, pagination: {
         skipValue: number, limitValue: number,
         pageSize: number, pageNumber: number
-    }): Promise<PostPagination> {
+    }, userId?: ObjectId | null): Promise<PostPagination> {
         const countDoc = await Post.countDocuments({blogId: id})
         const pagesCount = Math.ceil(countDoc / pagination["pageSize"])
         const allPosts = await Post.find({blogId: id}).sort(sort)
@@ -95,7 +93,7 @@ export class PostQ {
             page: pagination["pageNumber"],
             pageSize: pagination["pageSize"],
             totalCount: countDoc,
-            items: await mapPosts(allPosts)
+            items: await mapPosts(allPosts, userId)
         }
     }
 

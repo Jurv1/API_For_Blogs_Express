@@ -2,10 +2,9 @@ import {FinalDBPost} from "../../schemas/dbSchemas/PostDBSchema";
 import {viewPostModel} from "../../schemas/presentationSchemas/postSchemas";
 import {Like} from "../../schemas/mongooseSchemas/mongooseLikesSchema";
 import {ObjectId} from "mongodb";
-import {CommentQ} from "../../repositories/queryRepository/commentQ/commentQ";
 import {DBLike} from "../../schemas/dbSchemas/LikesDBSchema";
-import {DBNewestLikes} from "../../schemas/dbSchemas/NewestLikesDBSchema";
 import {LikesRepository} from "../../repositories/likesRepository";
+import {mapLikes} from "./likesMapper";
 
 // export function mapPost(obj: FinalDBPost): viewPostModel{
 //     return {
@@ -33,16 +32,17 @@ export async function mapPosts(objs: FinalDBPost[], userId?: ObjectId | null): P
 
 
     return await Promise.all( objs.map(async el => {
-            const allLikes = await Like.countDocuments({$and: [{commentId: el._id.toString()}, {userStatus: "Like"}]})
-            const allDislikes = await Like.countDocuments({$and: [{commentId: el._id.toString()}, {userStatus: "Dislike"}]})
-            const lastThreeLikes: Array<DBNewestLikes> = await Like.find({_id: el._id}).limit(3).lean()
+            const allLikes = await Like.countDocuments({$and: [{commentPostId: el._id.toString()}, {userStatus: "Like"}]})
+            const allDislikes = await Like.countDocuments({$and: [{commentPostId: el._id.toString()}, {userStatus: "Dislike"}]})
+            console.log(allLikes, allDislikes)
+            const lastThreeLikes: any = await Like.find({commentPostId: el._id.toString()}).limit(3).lean()
 
             if (userId){
-                const like = await likesRepo.getUserStatusForComment(userId.toString(), el._id.toString())
+                like = await likesRepo.getUserStatusForComment(userId.toString(), el._id.toString())
                 userStatus = like?.userStatus
             }
 
-
+            const newestLikes = mapLikes(lastThreeLikes)
         return {
             id: el._id.toString(),
             title: el.title,
@@ -54,7 +54,7 @@ export async function mapPosts(objs: FinalDBPost[], userId?: ObjectId | null): P
                 likesCount: allLikes,
                 dislikesCount: allDislikes,
                 myStatus: userStatus || "None",
-                newestLikes: lastThreeLikes
+                newestLikes: newestLikes
             },
             createdAt: el.createdAt
         }

@@ -32,7 +32,17 @@ export class PostController {
         const pagination = makePagination(pageNumber, pageSize)
 
         try {
-            const allPosts = await this.postQ.getAllPosts(filter, sort, pagination)
+
+            let userId
+            if (req.headers.authorization){
+                const token = (req.headers.authorization || '').replace(/Bearer\s?/, '')
+
+                const jwt = new JWTService()
+
+                userId = await jwt.getUserIdByToken(token)
+            }
+
+            const allPosts = await this.postQ.getAllPosts(filter, sort, pagination, userId)
             if (allPosts.items.length === 0) {
                 res.sendStatus(404)
                 return
@@ -49,9 +59,21 @@ export class PostController {
     }
 
     async getOne(req: Request, res: Response) {
+        let userId
+
+        const id = req.params.id
+
         try {
-            const id = req.params.id
-            const result = await this.postQ.getOnePost(id)
+
+            if (req.headers.authorization){
+                const token = (req.headers.authorization || '').replace(/Bearer\s?/, '')
+
+                const jwt = new JWTService()
+
+                userId = await jwt.getUserIdByToken(token)
+            }
+
+            const result = await this.postQ.getOnePost(id, userId)
             if (result) {
                 res.status(200).send(result);
             } else {
@@ -70,6 +92,8 @@ export class PostController {
         searchNameTerm: string, sortBy: string,
         sortDirection: SortDirection, pageNumber: string, pageSize: string
     }>, res: Response) {
+        let userId
+
         const id = req.params.blogId
         let {sortBy, sortDirection, pageNumber, pageSize} = req.query
 
@@ -77,7 +101,14 @@ export class PostController {
         const pagination = makePagination(pageNumber, pageSize)
 
         try {
-            const allPosts = await this.postQ.getAllPostsByBlogId(id, sort, pagination)
+            if (req.headers.authorization){
+                const token = (req.headers.authorization || '').replace(/Bearer\s?/, '')
+
+                const jwt = new JWTService()
+
+                userId = await jwt.getUserIdByToken(token)
+            }
+            const allPosts = await this.postQ.getAllPostsByBlogId(id, sort, pagination, userId)
 
             if (allPosts.items.length === 0) {
                 res.sendStatus(404)
