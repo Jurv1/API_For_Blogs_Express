@@ -18,7 +18,7 @@ export function mapPost(obj: FinalDBPost): viewPostModel{
             likesCount: obj.extendedLikesInfo.likesCount,
             dislikesCount: obj.extendedLikesInfo.dislikesCount,
             myStatus: obj.extendedLikesInfo.myStatus,
-            newestLikes: obj.extendedLikesInfo.newestLikes
+            newestLikes: obj.extendedLikesInfo.newestLikes || []
         },
         createdAt: obj.createdAt
     }
