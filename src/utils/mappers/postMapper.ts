@@ -36,7 +36,7 @@ export async function mapPosts(objs: FinalDBPost[], userId?: ObjectId | null): P
             const allLikes = await Like.countDocuments({$and: [{commentPostId: el._id.toString()}, {userStatus: "Like"}]})
             const allDislikes = await Like.countDocuments({$and: [{commentPostId: el._id.toString()}, {userStatus: "Dislike"}]})
             console.log(allLikes, allDislikes)
-            const lastThreeLikes: any = await Like.find({ $and: [{commentPostId: el._id.toString()}, {userStatus: "Like"}] }).limit(3).lean()
+            const lastThreeLikes: any = await Like.find({ $and: [{commentPostId: el._id.toString()}, {userStatus: "Like"}] }).sort({addedAt: -1}).limit(3).lean()
 
             if (userId){
                 like = await likesRepo.getUserStatusForComment(userId.toString(), el._id.toString())
@@ -55,7 +55,7 @@ export async function mapPosts(objs: FinalDBPost[], userId?: ObjectId | null): P
                 likesCount: allLikes,
                 dislikesCount: allDislikes,
                 myStatus: userStatus || "None",
-                newestLikes: newestLikes
+                newestLikes: newestLikes || []
             },
             createdAt: el.createdAt
         }
