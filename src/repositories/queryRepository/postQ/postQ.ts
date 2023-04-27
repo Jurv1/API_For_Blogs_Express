@@ -49,7 +49,7 @@ export class PostQ {
         const result = await Post.findOne({_id: new ObjectId(id)});
 
         if (result) {
-            const lastThreeLikes: Array<DBLike> = await Like.find({commentPostId: result._id}).limit(3).lean()
+            const lastThreeLikes: Array<DBLike> = await Like.find({ $and: [{commentPostId: result._id}, {userStatus: "Like"}] } ).limit(3).lean()
             if (userId) {
                 const like = await this.likesRepo.getUserStatusForComment(userId.toString(), id)
                 userStatus = like?.userStatus
