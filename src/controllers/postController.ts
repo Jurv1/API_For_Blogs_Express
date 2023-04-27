@@ -1,6 +1,5 @@
 import {Request, Response} from "express";
 import {FinalDBPost} from "../schemas/dbSchemas/PostDBSchema";
-//import {mapPost} from "../utils/mappers/postMapper";
 import {SortDirection} from "mongodb";
 import {queryValidator} from "../utils/queryValidators/sortQueryValidator";
 import {filterQueryValid} from "../utils/queryValidators/filterQueryValid";
