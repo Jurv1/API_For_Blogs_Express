@@ -1,6 +1,8 @@
 import request from "supertest";
 import {app} from "../../src";
-import mongoose from "mongoose";
+import mongoose, {Schema} from "mongoose";
+import {v4 as uuidv4} from "uuid";
+import add from "date-fns/add";
 
 //todo finish this at the end of it all
 
@@ -500,6 +502,140 @@ describe("Posts", () => {
 
         })
 
+
+    })
+
+})
+
+describe("Users", () => {
+
+    describe("Testing good CRD on users", () => {
+
+        beforeAll(async () => {
+            await request(app).delete('/testing/all-data')
+        })
+
+        it('should get all users', async () => {
+
+            const result = await request(app).get('/users').set(
+                    "Authorization",
+                    "Basic YWRtaW46cXdlcnR5"
+                )
+                    .expect(200)
+
+            expect(result.body.items).toEqual([])
+
+        });
+
+        it('should create a new user by Admin (without email confirmation)', async () => {
+
+            const result = await request(app).post('/users').set(
+                "Authorization",
+                "Basic YWRtaW46cXdlcnR5"
+            )
+                .send({
+                    login: "Nick",
+                    email: "abdulallah228322@gmail.com",
+                    password: "1234567"
+                }).expect(201)
+
+            expect(result.body).toStrictEqual({
+                    id: expect.any(String),
+                    login: "Nick",
+                    email: "abdulallah228322@gmail.com",
+                    createdAt: expect.stringMatching(/\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/)
+                })
+
+        });
+
+        it('should delete one user by Id', async () => {
+
+            const users = await request(app).get('/users').set(
+                "Authorization",
+                "Basic YWRtaW46cXdlcnR5"
+            ).expect(200)
+
+            await request(app).delete('/users/' + users.body.items[0].id).set(
+                "Authorization",
+                "Basic YWRtaW46cXdlcnR5"
+            ).expect(204)
+
+            const usersAfterDeleting = await request(app).get('/users').set(
+                "Authorization",
+                "Basic YWRtaW46cXdlcnR5"
+            ).expect(200)
+
+            expect(usersAfterDeleting.body.items).toEqual([])
+
+        });
+
+    })
+
+    describe("Testing bad CRD on users", () => {
+
+        it('should not create user with bad body', async () => {
+
+            let badUser
+
+            badUser = await request(app).post('/users').set(
+                "Authorization",
+                "Basic YWRtaW46cXdlcnR5"
+            ).send({
+                login: "",
+                email: "abdulallah228322@gmail.com",
+                password: "1234567"
+            }).expect(400)
+
+            expect(badUser.body).toStrictEqual({
+                errorsMessages: [{
+                    message: expect.any(String),
+                    field: "login"
+                }]
+            })
+
+            badUser = await request(app).post('/users').set(
+                "Authorization",
+                "Basic YWRtaW46cXdlcnR5"
+            ).send({
+                login: "Nick",
+                email: "gmail.com",
+                password: "1234567"
+            }).expect(400)
+
+            expect(badUser.body).toStrictEqual({
+                errorsMessages: [{
+                    message: expect.any(String),
+                    field: "email"
+                }]
+            })
+
+            badUser = await request(app).post('/users').set(
+                "Authorization",
+                "Basic YWRtaW46cXdlcnR5"
+            ).send({
+                login: "Nick",
+                email: "abdulallah228322@gmail.com",
+                password: "123"
+            }).expect(400)
+
+            expect(badUser.body).toStrictEqual({
+                errorsMessages: [{
+                    message: expect.any(String),
+                    field: "password"
+                }]
+            })
+
+        });
+
+        it('should get 401', async () => {
+
+            await request(app).get('/users').expect(401)
+
+            await request(app).post('/users').expect(401)
+
+            await request(app).delete('/users/' + "asfnanlfksalnkfs").expect(401)
+
+        });
 
     })
 
