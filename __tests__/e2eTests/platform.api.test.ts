@@ -178,13 +178,19 @@ describe("Blogs", () => {
                 })
             })
 
-            it("should return 404 codes for non-existent blogs", async () => {
+            it("should return 400 codes for non-existent blogs and 404 for put query", async () => {
 
                 await request(app).get('/blogs/' + "sfafasfasgfknaw;l").expect(404)
 
-                await request(app).put('/blogs/').expect(404)
+                await request(app).put('/blogs/' + "sfafasfasgfknaw;l").set(
+                    "Authorization",
+                    "Basic YWRtaW46cXdlcnR5"
+                ).expect(400)
 
-                await request(app).delete('/blogs/').expect(404)
+                await request(app).delete('/blogs/' + "sfafasfasgfknaw;l").set(
+                    "Authorization",
+                    "Basic YWRtaW46cXdlcnR5"
+                ).expect(404)
 
             })
 
@@ -234,6 +240,269 @@ describe("Blogs", () => {
 
 
     })
+})
+
+describe("Posts", () => {
+
+    describe("Testing good CRUD Operations on posts", () => {
+
+        beforeAll(async () => {
+            await request(app).delete('/testing/all-data')
+        })
+
+        it("should not get all posts cause /testing/all-data and there no posts", async () => {
+            await request(app).get('/posts').expect(404)
+        })
+
+        it("should create blog and then create post for blog by blog Id in body and in params from query",
+            async () => {
+
+                const blog = await request(app).post('/blogs').send({
+                    name: "string",
+                    description: "string",
+                    websiteUrl: "https://_xZJtiwiHdtYnwp.xbcUd8i.ok4Rykgg2GAjjiFacZtuGCDB8FDwVs.2o2a-ZridI0a-xrbW6BsqC_EaCcSwjZXqzdqP"
+                }).set(
+                    "Authorization",
+                    "Basic YWRtaW46cXdlcnR5"
+                ).expect(201)
+
+                const post = await request(app).post('/posts').send({
+                    title: "string",
+                    shortDescription: "string",
+                    content: "string",
+                    blogId: blog.body.id
+                }).set(
+                    "Authorization",
+                    "Basic YWRtaW46cXdlcnR5"
+                ).expect(201)
+
+                expect(post.body).toStrictEqual(
+                    {
+                        id: expect.any(String),
+                        title: "string",
+                        shortDescription: "string",
+                        content: "string",
+                        blogName: blog.body.name,
+                        blogId: blog.body.id,
+                        createdAt: expect.stringMatching(/\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/),
+                       extendedLikesInfo:{
+                         dislikesCount: 0,
+                             likesCount: 0,
+                             myStatus: "None",
+                             newestLikes: [],
+                           },
+                    }
+                )
+
+                const postFromBlogId = await request(app).post('/blogs/' + blog.body.id + '/posts')
+                    .send({
+                        title: "string",
+                        shortDescription: "It was created from Id in URI params",
+                        content: "string",
+                    }).set(
+                        "Authorization",
+                        "Basic YWRtaW46cXdlcnR5"
+                    ).expect(201)
+
+                expect(postFromBlogId.body).toStrictEqual(
+                    {
+                        id: expect.any(String),
+                        title: "string",
+                        shortDescription: "It was created from Id in URI params",
+                        content: "string",
+                        blogName: blog.body.name,
+                        blogId: blog.body.id,
+                        createdAt: expect.stringMatching(/\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/),
+                        extendedLikesInfo:{
+                            dislikesCount: 0,
+                            likesCount: 0,
+                            myStatus: "None",
+                            newestLikes: [],
+                        },
+                    }
+                )
+
+            })
+
+        it("should get One post by Id", async () => {
+
+            const posts = await request(app).get('/posts').expect(200)
+
+            const post = await request(app).get('/posts/' + posts.body.items[0].id).expect(200)
+            expect(post.body).toStrictEqual(posts.body.items[0])
+
+        })
+
+        it('should update One post', async () => {
+
+            const posts = await request(app).get('/posts').expect(200)
+
+            await request(app).put('/posts/' + posts.body.items[0].id)
+                .send({
+                    title: "It's was updated",
+                    shortDescription: "It's was updated",
+                    content: "It's was updated",
+                    blogId: posts.body.items[0].blogId
+                }).set(
+                    "Authorization",
+                    "Basic YWRtaW46cXdlcnR5"
+                ).expect(204)
+
+            const updatedPosts = await request(app).get('/posts').expect(200)
+            expect(updatedPosts.body.items[0]).toStrictEqual({
+
+                    id: expect.any(String),
+                    title: "It's was updated",
+                    shortDescription: "It's was updated",
+                    content: "It's was updated",
+                    blogName: posts.body.items[0].blogName,
+                    blogId: posts.body.items[0].blogId,
+                    createdAt: expect.stringMatching(/\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/),
+                    extendedLikesInfo:{
+                        dislikesCount: 0,
+                        likesCount: 0,
+                        myStatus: "None",
+                        newestLikes: [],
+
+                },
+            })
+
+        });
+
+        it('should delete ONE post by Id', async () => {
+
+            const posts = await request(app).get('/posts').expect(200)
+
+            await request(app).delete('/posts/' + posts.body.items[0].id).set(
+                "Authorization",
+                "Basic YWRtaW46cXdlcnR5"
+            ).expect(204)
+
+            const postsAfterDelete = await request(app).get('/posts').expect(200)
+
+            expect(posts.body.items.length).not.toEqual(postsAfterDelete.body.items.length)
+
+        });
+
+    })
+
+    describe("Testing bad CRUD operations on posts", () => {
+
+        describe("Checking body validation", () => {
+            it('should not create posts with bad bodies and wrong blog id', async () => {
+
+                const blogs = await request(app).get('/blogs').expect(200)
+                let requestWithError
+
+                requestWithError = await request(app).post('/posts').set(
+                    "Authorization",
+                    "Basic YWRtaW46cXdlcnR5"
+                ).send({
+                    title: "",
+                    shortDescription: "It's was updated",
+                    content: "It's was updated",
+                    blogId: blogs.body.items[0].id
+                }).expect(400)
+
+                expect(requestWithError.body).toEqual({
+                    errorsMessages: [{
+                        message: expect.any(String),
+                        field: "title"
+                    }]
+                })
+
+                requestWithError = await request(app).post('/posts').set(
+                    "Authorization",
+                    "Basic YWRtaW46cXdlcnR5"
+                ).send({
+                    title: "string",
+                    shortDescription: "",
+                    content: "It's was updated",
+                    blogId: blogs.body.items[0].id
+                }).expect(400)
+
+                expect(requestWithError.body).toEqual({
+                    errorsMessages: [{
+                        message: expect.any(String),
+                        field: "shortDescription"
+                    }]
+                })
+
+                requestWithError = await request(app).post('/posts').set(
+                    "Authorization",
+                    "Basic YWRtaW46cXdlcnR5"
+                ).send({
+                    title: "string",
+                    shortDescription: "string",
+                    content: "",
+                    blogId: blogs.body.items[0].id
+                }).expect(400)
+
+                expect(requestWithError.body).toEqual({
+                    errorsMessages: [{
+                        message: expect.any(String),
+                        field: "content"
+                    }]
+                })
+
+                requestWithError = await request(app).post('/posts').set(
+                    "Authorization",
+                    "Basic YWRtaW46cXdlcnR5"
+                ).send({
+                    title: "string",
+                    shortDescription: "string",
+                    content: "string",
+                    blogId: "blogs.body.items[0].id"
+                }).expect(400)
+
+                expect(requestWithError.body).toEqual({
+                    errorsMessages: [{
+                        message: expect.any(String),
+                        field: "blogId"
+                    }]
+                })
+            });
+        })
+
+        describe("Testing operations with non-existing posts", () => {
+
+            it('should return 404 codes for non-existing posts and 400 for put query', async () => {
+
+                await request(app).get('/posts/' + 'salkfbnakslbf').expect(404)
+
+                await request(app).put('/posts/' + 'sfafsafweagasga').set(
+                    "Authorization",
+                    "Basic YWRtaW46cXdlcnR5"
+                ).expect(400)
+
+                await request(app).delete('/posts/' + 'sfagfwagasdgaw').set(
+                    "Authorization",
+                    "Basic YWRtaW46cXdlcnR5"
+                ).expect(404)
+
+            });
+
+        })
+
+        describe("Testing unAuthorized operations", ()=>{
+
+            it("should give 401 statuses for CUD operations", async () => {
+
+                const posts = await request(app).get('/posts').expect(200)
+
+                await request(app).post('/posts').expect(401)
+
+                await request(app).put('/posts/' + posts.body.items[0].id).expect(401)
+
+                await request(app).delete('/posts/' + posts.body.items[0].id).expect(401)
+
+            })
+
+        })
+
+
+    })
+
 })
 
 // describe("Testing CRUD on blogs", () => {
